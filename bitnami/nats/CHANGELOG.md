@@ -1,8 +1,28 @@
 # Changelog
 
-## 8.2.11 (2024-07-04)
+## 8.2.16 (2024-08-07)
 
-* [bitnami/nats] Release 8.2.11 ([#27788](https://github.com/bitnami/charts/pull/27788))
+* [bitnami/nats] Release 8.2.16 ([#28730](https://github.com/bitnami/charts/pull/28730))
+
+## <small>8.2.15 (2024-07-25)</small>
+
+* [bitnami/nats] Release 8.2.15 (#28462) ([7a00340](https://github.com/bitnami/charts/commit/7a0034030f93ff36c01c7ac144ade3db4e8441a6)), closes [#28462](https://github.com/bitnami/charts/issues/28462)
+
+## <small>8.2.14 (2024-07-24)</small>
+
+* [bitnami/nats] Release 8.2.14 (#28328) ([5eda2ca](https://github.com/bitnami/charts/commit/5eda2ca676cefb2226eafb615a5c359ae0d5f623)), closes [#28328](https://github.com/bitnami/charts/issues/28328)
+
+## <small>8.2.13 (2024-07-18)</small>
+
+* [bitnami/nats] Global StorageClass as default value (#28067) ([5656011](https://github.com/bitnami/charts/commit/56560114a9166e7912a8a25ab4c0db7805efd42a)), closes [#28067](https://github.com/bitnami/charts/issues/28067)
+
+## <small>8.2.12 (2024-07-17)</small>
+
+* [bitnami/nats] Release 8.2.12 (#28138) ([e4002d9](https://github.com/bitnami/charts/commit/e4002d94fbe0abe6014f9d7e8984c7f05b05801d)), closes [#28138](https://github.com/bitnami/charts/issues/28138)
+
+## <small>8.2.11 (2024-07-04)</small>
+
+* [bitnami/nats] Release 8.2.11 (#27788) ([aa648ed](https://github.com/bitnami/charts/commit/aa648ed3c9003d697dc74c9bd354101362e3c881)), closes [#27788](https://github.com/bitnami/charts/issues/27788)
 
 ## <small>8.2.10 (2024-07-03)</small>
 
