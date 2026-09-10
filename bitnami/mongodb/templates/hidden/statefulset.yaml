@@ -20,7 +20,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  serviceName: {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+  serviceName: {{ include "mongodb.hidden.service.nameOverride" . }}
   podManagementPolicy: {{ .Values.hidden.podManagementPolicy }}
   replicas: {{ .Values.hidden.replicaCount }}
   {{- if .Values.hidden.updateStrategy }}
@@ -34,10 +34,13 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: hidden
-      {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations }}
+      {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations .Values.passwordUpdateJob.enabled }}
       annotations:
         {{- if (include "mongodb.hidden.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/hidden/configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.passwordUpdateJob.enabled }}
+        charts.bitnami.com/password-last-update: {{ now | date "20060102150405" | quote }}
         {{- end }}
         {{- if .Values.hidden.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podAnnotations "context" $) | nindent 8 }}
@@ -93,7 +96,7 @@ spec:
         {{- if and .Values.externalAccess.hidden.enabled .Values.externalAccess.autoDiscovery.enabled (eq .Values.externalAccess.hidden.service.type "LoadBalancer") }}
         {{- include "mongodb.initContainers.autoDiscovery" . | indent 8 }}
         {{- end }}
-        {{- if and .Values.externalAccess.enabled ( or .Values.externalAccess.service.publicNames  .Values.externalAccess.service.domain ) }}
+        {{- if and .Values.externalAccess.enabled .Values.externalAccess.service.publicNames }}
         {{- include "mongodb.initContainers.dnsCheck" . | indent 8 }}
         {{- end }}
         {{- include "mongodb.initContainer.prepareLogDir" . | nindent 8 }}
@@ -134,7 +137,7 @@ spec:
           command:
             - /bitnami/scripts/generate-certs.sh
           args:
-            - -s {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
+            - -s {{ include "mongodb.hidden.service.nameOverride" . }}
             {{- if .Values.externalAccess.hidden.service.loadBalancerIPs }}
             - -i {{ join "," .Values.externalAccess.hidden.service.loadBalancerIPs }}
             {{- end }}
@@ -142,9 +145,12 @@ spec:
             - -n {{ join "," ( concat  .Values.tls.extraDnsNames .Values.externalAccess.service.publicNames ) }}
             {{- end }}
           {{- if .Values.tls.resources }}
-          resources: {{- toYaml .Values.tls.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.tls.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.tls.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.tls.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.tls.securityContext }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tls.securityContext "context" $) | nindent 12 }}
           {{- end }}
         {{- end }}
       containers:
@@ -189,10 +195,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: K8S_SERVICE_NAME
-              value: "{{ include "mongodb.service.nameOverride" . }}"
-            - name: K8S_HIDDEN_NODE_SERVICE_NAME
-              value: "{{ include "mongodb.fullname" . }}-hidden-headless"
             - name: MONGODB_REPLICA_SET_MODE
               value: "hidden"
             - name: MONGODB_INITIAL_PRIMARY_HOST
@@ -201,7 +203,7 @@ spec:
               value: {{ .Values.replicaSetName | quote }}
             {{- if and .Values.replicaSetHostnames (not .Values.externalAccess.hidden.enabled) }}
             - name: MONGODB_ADVERTISED_HOSTNAME
-              value: "$(MY_POD_NAME).$(K8S_HIDDEN_NODE_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
+              value: "$(MY_POD_NAME).{{ include "mongodb.hidden.service.nameOverride" . }}.$(MY_POD_NAMESPACE).svc.{{ .Values.clusterDomain }}"
             {{- end }}
             {{- $customUsers := include "mongodb.customUsers" . -}}
             {{- $customDatabases := include "mongodb.customDatabases" . -}}
@@ -215,14 +217,25 @@ spec:
             {{- end }}
             {{- if .Values.auth.enabled }}
             {{- if and (not (empty $customUsers)) (not (empty $customDatabases)) }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_EXTRA_PASSWORDS_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-passwords"
+            {{- else }}
             - name: MONGODB_EXTRA_PASSWORDS
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-passwords
             {{- end }}
+            {{- end }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+            - name: MONGODB_REPLICA_SET_KEY_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-replica-set-key"
+            {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -234,15 +247,21 @@ spec:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-replica-set-key
             {{- end }}
+            {{- end }}
             {{- if and .Values.metrics.enabled (not (empty .Values.metrics.username)) }}
             - name: MONGODB_METRICS_USERNAME
               value: {{ .Values.metrics.username | quote }}
             {{- if .Values.auth.enabled }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_METRICS_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-metrics-password"
+            {{- else }}
             - name: MONGODB_METRICS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-metrics-password
+            {{- end }}
             {{- end }}
             {{- end }}
             - name: ALLOW_EMPTY_PASSWORD
@@ -320,7 +339,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.hidden.resources }}
-          resources: {{- toYaml .Values.hidden.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.hidden.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.hidden.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -330,6 +349,10 @@ spec:
               subPath: {{ .Values.hidden.persistence.subPath }}
             - name: common-scripts
               mountPath: /bitnami/scripts
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              mountPath: /opt/bitnami/mongodb/secrets
+            {{- end }}
             {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
@@ -391,6 +414,13 @@ spec:
           {{- else }}
           args:
             - |
+              {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+              {{- if .Values.metrics.username }}
+              export MONGODB_METRICS_PASSWORD="$(< $MONGODB_METRICS_PASSWORD_FILE)"
+              {{- else }}
+              export MONGODB_ROOT_PASSWORD="$(< $MONGODB_ROOT_PASSWORD_FILE)"
+              {{- end }}
+              {{- end }}
               /bin/mongodb_exporter {{ include "mongodb.exporterArgs" $ }} --mongodb.direct-connect --mongodb.global-conn-pool --mongodb.uri "{{ include "mongodb.mongodb_exporter.uri" . }}" {{ .Values.metrics.extraFlags }}
           {{- end }}
           env:
@@ -398,14 +428,23 @@ spec:
             {{- if not .Values.metrics.username }}
             - name: MONGODB_ROOT_USER
               value: {{ .Values.auth.rootUser | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_ROOT_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-root-password"
+            {{- else }}
             - name: MONGODB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "mongodb.secretName" . }}
                   key: mongodb-root-password
+            {{- end }}
             {{- else }}
             - name: MONGODB_METRICS_USERNAME
               value: {{ .Values.metrics.username | quote }}
+            {{- if .Values.usePasswordFiles }}
+            - name: MONGODB_METRICS_PASSWORD_FILE
+              value: "/opt/bitnami/mongodb/secrets/mongodb-metrics-password"
+            {{- else }}
             - name: MONGODB_METRICS_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -413,16 +452,21 @@ spec:
                   key: mongodb-metrics-password
             {{- end }}
             {{- end }}
+            {{- end }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
+            {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+            - name: mongodb-secrets
+              mountPath: /opt/bitnami/mongodb/secrets
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: certs
               mountPath: /certs
             {{- end }}
             - name: empty-dir
-              mountPath: /opt/bitnami/redis-cluster/tmp
+              mountPath: /opt/bitnami/mongodb/tmp
               subPath: app-tmp-dir
             {{- if .Values.metrics.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
@@ -455,7 +499,7 @@ spec:
           {{- end }}
           {{- end }}
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- else if ne .Values.metrics.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.metrics.resourcesPreset) | nindent 12 }}
           {{- end }}
@@ -470,6 +514,11 @@ spec:
           configMap:
             name: {{ printf "%s-common-scripts" (include "mongodb.fullname" .) }}
             defaultMode: 0555
+        {{- if and .Values.usePasswordFiles .Values.auth.enabled }}
+        - name: mongodb-secrets
+          secret:
+            secretName: {{ include "mongodb.secretName" . }}
+        {{- end }}
         {{- if or .Values.initdbScriptsConfigMap .Values.initdbScripts }}
         - name: custom-init-scripts
           configMap:

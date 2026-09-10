@@ -1,6 +1,6 @@
 <!--- app-name: NGINX Open Source -->
 
-# Bitnami package for NGINX Open Source
+# Bitnami Secure Images Helm chart for NGINX Open Source
 
 NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
-Looking to use NGINX Open Source in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [NGINX Open Source](https://github.com/bitnami/containers/tree/main/bitnami/nginx) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -49,9 +62,34 @@ These commands deploy NGINX Open Source on the Kubernetes cluster in the default
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [nginx-prometheus-exporter](https://github.com/nginxinc/nginx-prometheus-exporter) in all pods and will expose it via the Nginx service. This service will be have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Securing traffic using TLS
+
+Nginx can encrypt communications by setting `tls.enabled=true`. The chart allows two configuration options:
+
+- Provide your own secret using the `tls.certificatesSecret` value. Also set the correct name of the certificate files using the `tls.certFilename`, `tls.certKeyFilename` and `tls.certCAFilename` values.
+- Have the chart auto-generate the certificates using `tls.autoGenerated=true`.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -60,6 +98,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Use a different NGINX version
 
 To modify the application version used in this chart, specify a different version of the image using the `image.tag` parameter and/or a different repository using the `image.repository` parameter.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Deploying your custom web application
 
@@ -81,7 +123,7 @@ cloneStaticSiteFromGit.branch=master
 
 This helm chart supports using custom custom server block for NGINX to use.
 
-You can use the `serverBlock` value to provide a custom server block for NGINX to use. To do this, create a values files with your server block and install the chart using it:
+You can use the `serverBlock` or `streamServerBlock` value to provide a custom server block for NGINX to use. To do this, create a values files with your server block and install the chart using it:
 
 ```yaml
 serverBlock: |-
@@ -96,6 +138,80 @@ serverBlock: |-
 > Warning: The above example is not compatible with enabling Prometheus metrics since it affects the `/status` endpoint.
 
 In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingServerBlockConfigmap` parameter. Note that this will override the previous option.
+
+### Adding custom configuration by context
+
+The NGINX chart supports context-based configuration includes, allowing you to add custom directives to specific NGINX contexts. You can provide configuration for three contexts:
+
+- **Main context**: For global directives like module loading and worker processes
+- **Events context**: For event-related directives
+- **HTTP context**: For HTTP-related directives
+
+#### Inline Context Configuration
+
+You can provide inline configuration using the `contextIncludes` values:
+
+```yaml
+contextIncludes:
+  main: |
+    # Load additional modules
+    load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;
+
+    # Set worker processes
+    worker_processes auto;
+
+  events: |
+    # Increase worker connections
+    worker_connections 2048;
+
+    # Use epoll for better performance
+    use epoll;
+
+  http: |
+    # Enable gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_types text/plain application/json text/css;
+
+    # Security headers
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+```
+
+#### External ConfigMaps for Context Configuration
+
+You can also reference external ConfigMaps for each context using lists:
+
+```yaml
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+  - "nginx-main-directives"
+
+existingContextEventsConfigmaps:
+  - "nginx-events-tuning"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-headers"
+  - "nginx-compression-config"
+```
+
+#### Mixed Configuration
+
+You can combine inline configuration with external ConfigMaps:
+
+```yaml
+contextIncludes:
+  main: |
+    worker_processes auto;
+
+existingContextMainConfigmaps:
+  - "nginx-modules-config"
+
+existingContextHttpConfigmaps:
+  - "nginx-security-config"
+```
+
+All configuration files are mounted to the appropriate directories (`/opt/bitnami/nginx/conf/context.d/{main,events,http}/`) and included using wildcards in the nginx.conf.
 
 ### Adding extra environment variables
 
@@ -137,11 +253,12 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -169,6 +286,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `image.pullPolicy`             | NGINX image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`            | Specify docker-registry secret names as an array                                                      | `[]`                    |
 | `image.debug`                  | Set to true if you would like to see extra information on logs                                        | `false`                 |
+| `enableDefaultInitContainers`  | If set to false, disable all init containers except user-defined at `initContainer`.                  | `true`                  |
 | `automountServiceAccountToken` | Mount Service Account token in pod                                                                    | `false`                 |
 | `hostAliases`                  | Deployment pod host aliases                                                                           | `[]`                    |
 | `command`                      | Override default container command (useful when using custom images)                                  | `[]`                    |
@@ -218,7 +336,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `podSecurityContext.fsGroup`                        | Set NGINX pod's Security Context fsGroup                                                                                                                                                                          | `1001`           |
 | `podSecurityContext.sysctls`                        | sysctl settings of the NGINX pods                                                                                                                                                                                 | `[]`             |
 | `containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`           |
-| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `nil`            |
+| `containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`             |
 | `containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`           |
 | `containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`           |
@@ -296,7 +414,15 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `cloneStaticSiteFromGit.extraEnvVarsSecret`      | Secret with extra environment variables                                                                                                                                                                                                                                         | `""`                  |
 | `cloneStaticSiteFromGit.extraVolumeMounts`       | Add extra volume mounts for the Git containers                                                                                                                                                                                                                                  | `[]`                  |
 | `serverBlock`                                    | Custom server block to be added to NGINX configuration                                                                                                                                                                                                                          | `""`                  |
+| `streamServerBlock`                              | Custom stream server block to be added to NGINX configuration                                                                                                                                                                                                                   | `""`                  |
 | `existingServerBlockConfigmap`                   | ConfigMap with custom server block to be added to NGINX configuration                                                                                                                                                                                                           | `""`                  |
+| `existingStreamServerBlockConfigmap`             | ConfigMap with custom stream server block to be added to NGINX configuration                                                                                                                                                                                                    | `""`                  |
+| `contextIncludes.main`                           | Custom configuration for the main context                                                                                                                                                                                                                                       | `""`                  |
+| `contextIncludes.events`                         | Custom configuration for the events context                                                                                                                                                                                                                                     | `""`                  |
+| `contextIncludes.http`                           | Custom configuration for the http context                                                                                                                                                                                                                                       | `""`                  |
+| `existingContextMainConfigmaps`                  | List of existing ConfigMaps with custom main context configuration                                                                                                                                                                                                              | `[]`                  |
+| `existingContextEventsConfigmaps`                | List of existing ConfigMaps with custom events context configuration                                                                                                                                                                                                            | `[]`                  |
+| `existingContextHttpConfigmaps`                  | List of existing ConfigMaps with custom http context configuration                                                                                                                                                                                                              | `[]`                  |
 | `staticSiteConfigmap`                            | Name of existing ConfigMap with the server static site content                                                                                                                                                                                                                  | `""`                  |
 | `staticSitePVC`                                  | Name of existing PVC with the server static site content                                                                                                                                                                                                                        | `""`                  |
 
@@ -356,39 +482,61 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                                                                                                                                       | Value                            |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                                                                                                                                     | `false`                          |
-| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                                                                                                          | `REGISTRY_NAME`                  |
-| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                                                                                                        | `REPOSITORY_NAME/nginx-exporter` |
-| `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                         | `""`                             |
-| `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                                                                                                                       | `IfNotPresent`                   |
-| `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                                                                                                  | `[]`                             |
-| `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                                                                                                        | `""`                             |
-| `metrics.extraArgs`                        | Extra arguments for Prometheus exporter                                                                                                                                                                                           | `[]`                             |
-| `metrics.containerPorts.metrics`           | Prometheus exporter container port                                                                                                                                                                                                | `9113`                           |
-| `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                                                                                                                       | `{}`                             |
-| `metrics.securityContext.enabled`          | Enabled NGINX Exporter containers' Security Context                                                                                                                                                                               | `false`                          |
-| `metrics.securityContext.seLinuxOptions`   | Set SELinux options in container                                                                                                                                                                                                  | `nil`                            |
-| `metrics.securityContext.runAsUser`        | Set NGINX Exporter container's Security Context runAsUser                                                                                                                                                                         | `1001`                           |
-| `metrics.service.port`                     | NGINX Prometheus exporter service port                                                                                                                                                                                            | `9113`                           |
-| `metrics.service.annotations`              | Annotations for the Prometheus exporter service                                                                                                                                                                                   | `{}`                             |
-| `metrics.resourcesPreset`                  | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                           |
-| `metrics.resources`                        | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                             |
-| `metrics.serviceMonitor.enabled`           | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                                                                                                       | `false`                          |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                                                                                                          | `""`                             |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                                 | `""`                             |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                                                                                                                      | `""`                             |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                                                                                                           | `""`                             |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                                                                                                                                               | `{}`                             |
-| `metrics.serviceMonitor.labels`            | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                                                                                                                                 | `{}`                             |
-| `metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                                                                                                                | `[]`                             |
-| `metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                         | `[]`                             |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                                          | `false`                          |
-| `metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)                                                                                         | `false`                          |
-| `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                                                                                                                     | `""`                             |
-| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                                                                                                             | `{}`                             |
-| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                                                                                                                       | `[]`                             |
+| Name                                         | Description                                                                                                                                                                                                                       | Value                            |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `metrics.enabled`                            | Start a Prometheus exporter sidecar container                                                                                                                                                                                     | `false`                          |
+| `metrics.image.registry`                     | NGINX Prometheus exporter image registry                                                                                                                                                                                          | `REGISTRY_NAME`                  |
+| `metrics.image.repository`                   | NGINX Prometheus exporter image repository                                                                                                                                                                                        | `REPOSITORY_NAME/nginx-exporter` |
+| `metrics.image.digest`                       | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                         | `""`                             |
+| `metrics.image.pullPolicy`                   | NGINX Prometheus exporter image pull policy                                                                                                                                                                                       | `IfNotPresent`                   |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                                                                                                  | `[]`                             |
+| `metrics.port`                               | NGINX Container Status Port scraped by Prometheus Exporter                                                                                                                                                                        | `""`                             |
+| `metrics.extraArgs`                          | Extra arguments for Prometheus exporter                                                                                                                                                                                           | `[]`                             |
+| `metrics.containerPorts.metrics`             | Prometheus exporter container port                                                                                                                                                                                                | `9113`                           |
+| `metrics.podAnnotations`                     | Additional annotations for NGINX Prometheus exporter pod(s)                                                                                                                                                                       | `{}`                             |
+| `metrics.securityContext.enabled`            | Enabled NGINX Exporter containers' Security Context                                                                                                                                                                               | `false`                          |
+| `metrics.securityContext.seLinuxOptions`     | Set SELinux options in container                                                                                                                                                                                                  | `{}`                             |
+| `metrics.securityContext.runAsUser`          | Set NGINX Exporter container's Security Context runAsUser                                                                                                                                                                         | `1001`                           |
+| `metrics.service.port`                       | NGINX Prometheus exporter service port                                                                                                                                                                                            | `9113`                           |
+| `metrics.service.annotations`                | Annotations for the Prometheus exporter service                                                                                                                                                                                   | `{}`                             |
+| `metrics.resourcesPreset`                    | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if metrics.resources is set (metrics.resources is recommended for production). | `nano`                           |
+| `metrics.resources`                          | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                             |
+| `metrics.serviceMonitor.enabled`             | Creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                                                                                                       | `false`                          |
+| `metrics.serviceMonitor.namespace`           | Namespace in which Prometheus is running                                                                                                                                                                                          | `""`                             |
+| `metrics.serviceMonitor.tlsConfig`           | TLS configuration used for scrape endpoints used by Prometheus                                                                                                                                                                    | `{}`                             |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                                 | `""`                             |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped.                                                                                                                                                                                      | `""`                             |
+| `metrics.serviceMonitor.scrapeTimeout`       | Timeout after which the scrape is ended                                                                                                                                                                                           | `""`                             |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                                                                                                                               | `{}`                             |
+| `metrics.serviceMonitor.labels`              | Additional labels that can be used so PodMonitor will be discovered by Prometheus                                                                                                                                                 | `{}`                             |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                                                                                                                                | `[]`                             |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                                                                                                                                         | `[]`                             |
+| `metrics.serviceMonitor.honorLabels`         | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                                          | `false`                          |
+| `metrics.prometheusRule.enabled`             | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)                                                                                         | `false`                          |
+| `metrics.prometheusRule.namespace`           | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                                                                                                                     | `""`                             |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                                                                                                             | `{}`                             |
+| `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                                                                                                                       | `[]`                             |
+| `metrics.customLivenessProbe`                | Override default metrics liveness probe                                                                                                                                                                                           | `{}`                             |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                                                                                                                              | `true`                           |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                                                                                                           | `30`                             |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                                                                                                                                 | `5`                              |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                                                                                                                                  | `10`                             |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                                                                                                                               | `2`                              |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                                                                                                                               | `1`                              |
+| `metrics.customReadinessProbe`               | Override default metrics readiness probe                                                                                                                                                                                          | `{}`                             |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                                                                                                                             | `true`                           |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                                                                                                                          | `5`                              |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                                                                                                                                | `3`                              |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                                                                                                                                 | `30`                             |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                                                                                                                              | `2`                              |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                                                                                                                              | `1`                              |
+| `metrics.customStartupProbe`                 | Override default metrics startup probe                                                                                                                                                                                            | `{}`                             |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                                                                                                                               | `false`                          |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                                                                                                                            | `5`                              |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                                                                                                                                  | `3`                              |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                                                                                                                                   | `5`                              |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                                                                                                                                | `10`                             |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                                                                                                                                | `1`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -416,6 +564,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nginx
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+The [module ngx_http_dav_module](http://nginx.org/en/docs/http/ngx_http_dav_module.html), WebDAV protocol, has been converted into a dynamic module under the `/opt/bitnami/nginx/modules` directory. It is necessary to include the directive `load_module /opt/bitnami/nginx/modules/ngx_http_dav_module.so;` to enable its functionality.
+
+### To 18.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 16.0.0
 
@@ -468,7 +624,7 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -506,7 +662,7 @@ kubectl patch deployment nginx --type=json -p='[{"op": "remove", "path": "/spec/
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

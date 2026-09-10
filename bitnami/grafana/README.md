@@ -1,6 +1,6 @@
 <!--- app-name: Grafana -->
 
-# Bitnami package for Grafana
+# Bitnami Secure Images Helm chart for Grafana
 
 Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 
@@ -14,27 +14,40 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
-Looking to use Grafana in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [grafana](https://github.com/bitnami/containers/tree/main/bitnami/grafana) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
-
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The *bitnami/grafana* chart deploys a single Grafana installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.) or a Kubernetes StatefulSet object (with headless service, volumeClaimTemplate and ConfigMaps). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
 ```text
                     +--------------+             +-----+
                     |              |             |     |
  Service & Ingress  |    Grafana   +<------------+ PVC |
 <-------------------+              |             |     |
-                    |  Deployment  |             +-----+
-                    |              |
+                    |  Deployment/ |             +-----+
+                    |  StatefulSet |
                     +-----------+--+
                                 ^                +------------+
                                 |                |            |
@@ -132,13 +145,38 @@ These commands deploy grafana on the Kubernetes cluster in the default configura
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+The Bitnami Redis chart, when upgrading, reuses the secret previously rendered by the chart or the one specified in `auth.existingSecret`. To update credentials, use one of the following:
+
+- Run `helm upgrade` specifying a new password in `admin.password`
+- Run `helm upgrade` specifying a new secret in `admin.existingSecret`
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose Grafana native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
 
 ### Using custom configuration
 
@@ -345,6 +383,8 @@ imageRenderer:
 To support HA Grafana just need an external database where store dashboards, users and other persistent data.
 To configure the external database provide a configuration file containing the [database section](https://grafana.com/docs/installation/configuration/#database)
 
+It's also recommended to use a `StatefulSet` kind instead of a `Deployment` kind to leverage the `volumeClaimTemplates`.
+
 More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_setup/)
 
 ### Setting Pod's affinity
@@ -352,6 +392,10 @@ More information about Grafana HA [here](https://grafana.com/docs/tutorials/ha_s
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Persistence
 
@@ -364,12 +408,14 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -379,9 +425,11 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `extraDeploy`       | Array of extra objects to deploy with the release                                       | `[]`            |
 | `nameOverride`      | String to partially override grafana.fullname template (will maintain the release name) | `""`            |
 | `fullnameOverride`  | String to fully override grafana.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                         | `""`            |
 | `clusterDomain`     | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `commonLabels`      | Labels to add to all deployed objects                                                   | `{}`            |
 | `commonAnnotations` | Annotations to add to all deployed objects                                              | `{}`            |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                       | `true`          |
 
 ### Grafana parameters
 
@@ -446,6 +494,8 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | Name                                                        | Description                                                                                                                                                                                                                       | Value            |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `grafana.replicaCount`                                      | Number of Grafana nodes                                                                                                                                                                                                           | `1`              |
+| `grafana.kind`                                              | Use either Deployment or StatefulSet (default)                                                                                                                                                                                    | `Deployment`     |
+| `grafana.podManagementPolicy`                               | StatefulSet pod management policy                                                                                                                                                                                                 | `Parallel`       |
 | `grafana.updateStrategy.type`                               | Set up update strategy for Grafana installation.                                                                                                                                                                                  | `RollingUpdate`  |
 | `grafana.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                | `false`          |
 | `grafana.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                       | `[]`             |
@@ -514,7 +564,9 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `grafana.extraVolumes`                                      | Additional volumes for the Grafana pod                                                                                                                                                                                            | `[]`             |
 | `grafana.extraVolumeMounts`                                 | Additional volume mounts for the Grafana container                                                                                                                                                                                | `[]`             |
 | `grafana.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Grafana nodes                                                                                                                                                            | `""`             |
+| `grafana.extraEnvVarsCMOptional`                            | Whether to still run the Grafana node if the ConfigMap does not exist                                                                                                                                                             | `false`          |
 | `grafana.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Grafana nodes                                                                                                                                                               | `""`             |
+| `grafana.extraEnvVarsSecretOptional`                        | Whether to still run the Grafana node if the Secret does not exist                                                                                                                                                                | `false`          |
 | `grafana.extraEnvVars`                                      | Array containing extra env vars to configure Grafana                                                                                                                                                                              | `[]`             |
 | `grafana.extraConfigmaps`                                   | Array to mount extra ConfigMaps to configure Grafana                                                                                                                                                                              | `[]`             |
 | `grafana.command`                                           | Override default container command (useful when using custom images)                                                                                                                                                              | `[]`             |
@@ -525,15 +577,15 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Persistence parameters
 
-| Name                        | Description                                                                                               | Value           |
-| --------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `persistence.enabled`       | Enable persistence                                                                                        | `true`          |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                                       | `{}`            |
-| `persistence.accessMode`    | Persistent Volume Access Mode                                                                             | `ReadWriteOnce` |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                                                            | `[]`            |
-| `persistence.storageClass`  | Storage class to use with the PVC                                                                         | `""`            |
-| `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable | `""`            |
-| `persistence.size`          | Size for the PV                                                                                           | `10Gi`          |
+| Name                        | Description                                                                                                                                                                                           | Value           |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `persistence.enabled`       | Enable persistence                                                                                                                                                                                    | `true`          |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                                                                                                                                                   | `{}`            |
+| `persistence.accessMode`    | Persistent Volume Access Mode                                                                                                                                                                         | `ReadWriteOnce` |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                                                        | `[]`            |
+| `persistence.storageClass`  | Storage class to use with the PVC                                                                                                                                                                     | `""`            |
+| `persistence.existingClaim` | If you want to reuse an existing claim, you can pass the name of the PVC using the existingClaim variable. Please note that this setting will be ignored when `grafana.kind` is set to `StatefulSet`. | `""`            |
+| `persistence.size`          | Size for the PV                                                                                                                                                                                       | `10Gi`          |
 
 ### RBAC parameters
 
@@ -657,6 +709,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 11.0.0
 
 This major release only bumps the Grafana version to 11.x. No major issues are expected during the upgrade. See the upstream documentation <https://grafana.com/docs/grafana/latest/whatsnew/whats-new-in-v11-0/> for more info about the changes included in this new major version of the application
@@ -714,7 +770,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -730,7 +786,7 @@ This major version signifies this change.
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

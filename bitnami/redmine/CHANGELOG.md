@@ -1,8 +1,175 @@
 # Changelog
 
-## 28.2.7 (2024-07-03)
+## 34.0.0 (2025-08-18)
 
-* [bitnami/redmine] Release 28.2.7 ([#27717](https://github.com/bitnami/charts/pull/27717))
+* [bitnami/redmine] Upgrade to MariaDB 12.0 ([#36119](https://github.com/bitnami/charts/pull/36119))
+
+## <small>33.0.7 (2025-08-18)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#36106) ([94ae67e](https://github.com/bitnami/charts/commit/94ae67e6e7af69c91f61f1e110acfe43049e0555)), closes [#36106](https://github.com/bitnami/charts/issues/36106)
+
+## <small>33.0.6 (2025-08-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#35673) ([178057d](https://github.com/bitnami/charts/commit/178057d0d15edb4769ae4d4555df1fa3e5874396)), closes [#35673](https://github.com/bitnami/charts/issues/35673)
+
+## <small>33.0.5 (2025-08-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#35652) ([64acacf](https://github.com/bitnami/charts/commit/64acacffb2b7cb11928bee1812c2adf64b30a113)), closes [#35652](https://github.com/bitnami/charts/issues/35652)
+
+## <small>33.0.4 (2025-08-05)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/redmine] Remove references to deprecated helpers (#35411) ([945fe90](https://github.com/bitnami/charts/commit/945fe9002c88db38d41bc88581e14e27ece7208b)), closes [#35411](https://github.com/bitnami/charts/issues/35411)
+
+## <small>33.0.3 (2025-07-15)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#35127) ([8206761](https://github.com/bitnami/charts/commit/820676126056a853e4b830649cde5e57ee9b4d1d)), closes [#35127](https://github.com/bitnami/charts/issues/35127)
+
+## <small>33.0.2 (2025-07-08)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34847) ([301a39d](https://github.com/bitnami/charts/commit/301a39dbbf0c772f04e7f3e305ee3e5029baafd3)), closes [#34847](https://github.com/bitnami/charts/issues/34847)
+
+## <small>33.0.1 (2025-07-07)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34837) ([26290b7](https://github.com/bitnami/charts/commit/26290b7ac936fc95a3711efbbc790f1cb3c87581)), closes [#34837](https://github.com/bitnami/charts/issues/34837)
+
+## 33.0.0 (2025-06-25)
+
+* [bitnami/redmine] Upgrade MariaDB 11.8 (#34633) ([811e52e](https://github.com/bitnami/charts/commit/811e52eb9b2b2ea7e926b34993fe00a590761c15)), closes [#34633](https://github.com/bitnami/charts/issues/34633)
+
+## <small>32.2.6 (2025-06-19)</small>
+
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#34559) ([8ee6624](https://github.com/bitnami/charts/commit/8ee66248b6a8b285c1e29c0d4a7e06dd393efdce)), closes [#34559](https://github.com/bitnami/charts/issues/34559)
+
+## <small>32.2.5 (2025-05-21)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/redmine] :zap: :arrow_up: Update dependency references (#33809) ([a13bcca](https://github.com/bitnami/charts/commit/a13bcca6a5bcd85b3d82dd9db8635cb14e9bbd00)), closes [#33809](https://github.com/bitnami/charts/issues/33809)
+
+## <small>32.2.4 (2025-05-06)</small>
+
+* [bitnami/redmine] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33430 ([62bad3d](https://github.com/bitnami/charts/commit/62bad3d380fa3272eaf988d15b4f11062017531c)), closes [#33430](https://github.com/bitnami/charts/issues/33430)
+
+## <small>32.2.3 (2025-04-21)</small>
+
+* [bitnami/redmine] Release 32.2.3 (#33093) ([baa8b99](https://github.com/bitnami/charts/commit/baa8b99c67065cfb9647613242022b4ed0a47ecb)), closes [#33093](https://github.com/bitnami/charts/issues/33093)
+
+## <small>32.2.2 (2025-04-20)</small>
+
+* [bitnami/redmine] Release 32.2.2 (#33081) ([5449c12](https://github.com/bitnami/charts/commit/5449c12415df3b6cd8d69753b6ef5cc04d9fb813)), closes [#33081](https://github.com/bitnami/charts/issues/33081)
+
+## <small>32.2.1 (2025-04-15)</small>
+
+* [bitnami/redmine] Release 32.2.1 (#32947) ([774ba79](https://github.com/bitnami/charts/commit/774ba7969b41654f88748a1805f5d571cd4c875b)), closes [#32947](https://github.com/bitnami/charts/issues/32947)
+
+## 32.2.0 (2025-04-04)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/redmine] Set `usePasswordFiles=true` by default (#32771) ([aa11aae](https://github.com/bitnami/charts/commit/aa11aaeecb5604baea8dea51be186195212cfb41)), closes [#32771](https://github.com/bitnami/charts/issues/32771)
+
+## <small>32.1.6 (2025-03-11)</small>
+
+* [bitnami/redmine] Release 32.1.6 (#32389) ([15830e2](https://github.com/bitnami/charts/commit/15830e283f3cdfe6000a1366b2b7e52a1e2a85ea)), closes [#32389](https://github.com/bitnami/charts/issues/32389)
+
+## <small>32.1.5 (2025-02-28)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/redmine] Release 32.1.5 (#32212) ([0a274ed](https://github.com/bitnami/charts/commit/0a274ed096355dc04f6637ea1178b8b9d6a8fbc8)), closes [#32212](https://github.com/bitnami/charts/issues/32212)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>32.1.4 (2025-01-29)</small>
+
+* [bitnami/redmine] Release 32.1.4 (#31657) ([dc5cf8b](https://github.com/bitnami/charts/commit/dc5cf8bb759bbd72e6a46fd44ebfadd6a87902ca)), closes [#31657](https://github.com/bitnami/charts/issues/31657)
+
+## <small>32.1.3 (2025-01-29)</small>
+
+* [bitnami/redmine] Release 32.1.3 (#31652) ([b2e3e29](https://github.com/bitnami/charts/commit/b2e3e29653d0f9cc5530476b6325a308eecef954)), closes [#31652](https://github.com/bitnami/charts/issues/31652)
+
+## <small>32.1.2 (2025-01-21)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/redmine] Release 32.1.2 (#31487) ([28f93ad](https://github.com/bitnami/charts/commit/28f93ad2df0cb9b7f7879eb9eda2b7c20ef93247)), closes [#31487](https://github.com/bitnami/charts/issues/31487)
+
+## <small>32.1.1 (2024-12-12)</small>
+
+* [bitnami/redmine] Release 32.1.1 (#31001) ([211442a](https://github.com/bitnami/charts/commit/211442ab315fad505118ae4389ebc0056d3893d0)), closes [#31001](https://github.com/bitnami/charts/issues/31001)
+
+## 32.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/redmine] Detect non-standard images (#30964) ([40d4031](https://github.com/bitnami/charts/commit/40d40316d170fd37866797c2a3d269fa69b980c6)), closes [#30964](https://github.com/bitnami/charts/issues/30964)
+
+## <small>32.0.1 (2024-11-14)</small>
+
+* [bitnami/redmine] Release 32.0.1 (#30466) ([a679e2f](https://github.com/bitnami/charts/commit/a679e2fbefd2547bfd6576b18a31e7f19ccfd49d)), closes [#30466](https://github.com/bitnami/charts/issues/30466)
+
+## 32.0.0 (2024-11-14)
+
+* [bitnami/redmine] Release 32.0.0 (#30457) ([0c71f6a](https://github.com/bitnami/charts/commit/0c71f6a443a11358ee40aba45cf980a885c476b7)), closes [#30457](https://github.com/bitnami/charts/issues/30457)
+
+## 31.0.0 (2024-11-12)
+
+* [bitnami/redmine] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30357) ([21e69a1](https://github.com/bitnami/charts/commit/21e69a11ee24b940361f41c9fc2be1e262717ae4)), closes [#30357](https://github.com/bitnami/charts/issues/30357)
+
+## <small>30.0.4 (2024-11-10)</small>
+
+* [bitnami/redmine] Release 30.0.4 (#30384) ([0571e4a](https://github.com/bitnami/charts/commit/0571e4ad81a91503e6783435ed473c711942418c)), closes [#30384](https://github.com/bitnami/charts/issues/30384)
+
+## <small>30.0.3 (2024-11-08)</small>
+
+* [bitnami/redmine] Unify seLinuxOptions default value (#30329) ([e6ad759](https://github.com/bitnami/charts/commit/e6ad7591f8c63f6da36a4ed5a5090ce88a1c7786)), closes [#30329](https://github.com/bitnami/charts/issues/30329)
+
+## <small>30.0.2 (2024-11-04)</small>
+
+* [bitnami/redmine] Release 30.0.2 (#30183) ([f5b7139](https://github.com/bitnami/charts/commit/f5b7139c7809e68c5e2ada3eb8f36d3ea02d69da)), closes [#30183](https://github.com/bitnami/charts/issues/30183)
+
+## <small>30.0.1 (2024-10-29)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/redmine] Release 30.0.1 (#30123) ([9503088](https://github.com/bitnami/charts/commit/950308815e986948340cc81465955a553680c23d)), closes [#30123](https://github.com/bitnami/charts/issues/30123)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## 30.0.0 (2024-10-03)
+
+* [bitnami/redmine] feat!: :arrow_up: :boom: Bump PostgreSQL to 17.x (#29743) ([7b0d784](https://github.com/bitnami/charts/commit/7b0d7841496ab356434cef5bb5f17b784bd7e999)), closes [#29743](https://github.com/bitnami/charts/issues/29743)
+
+## <small>29.0.6 (2024-09-19)</small>
+
+* [bitnami/redmine] Release 29.0.6 (#29526) ([6af9c32](https://github.com/bitnami/charts/commit/6af9c3276a58da6f825461e32f21cfd54c459f85)), closes [#29526](https://github.com/bitnami/charts/issues/29526)
+
+## <small>29.0.5 (2024-09-16)</small>
+
+* [bitnami/redmine] Release 29.0.5 (#29436) ([462c294](https://github.com/bitnami/charts/commit/462c294bef1d2bc1047627532ebe80b9ea849cf2)), closes [#29436](https://github.com/bitnami/charts/issues/29436)
+
+## <small>29.0.4 (2024-08-22)</small>
+
+* [bitnami/redmine] Release 29.0.4 (#28967) ([27be3a8](https://github.com/bitnami/charts/commit/27be3a846b785cfa87b302acd98293f06405f9ff)), closes [#28967](https://github.com/bitnami/charts/issues/28967)
+
+## <small>29.0.3 (2024-07-25)</small>
+
+* [bitnami/redmine] Release 29.0.3 (#28485) ([8d5be0a](https://github.com/bitnami/charts/commit/8d5be0a078765d30054532eeb76de7909fe5fdc9)), closes [#28485](https://github.com/bitnami/charts/issues/28485)
+
+## <small>29.0.2 (2024-07-24)</small>
+
+* [bitnami/redmine] Release 29.0.2 (#28366) ([b7d9417](https://github.com/bitnami/charts/commit/b7d94172494debfab9061aaa355d39783e240dfe)), closes [#28366](https://github.com/bitnami/charts/issues/28366)
+
+## <small>29.0.1 (2024-07-18)</small>
+
+* [bitnami/redmine] Global StorageClass as default value (#28091) ([2771982](https://github.com/bitnami/charts/commit/2771982ba09c709df3fe0029b33d4823b3f2048d)), closes [#28091](https://github.com/bitnami/charts/issues/28091)
+
+## 29.0.0 (2024-07-13)
+
+* [bitnami/redmine] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27936) ([82701c8](https://github.com/bitnami/charts/commit/82701c851f09497545d061ec73d5f07ac332e719)), closes [#27936](https://github.com/bitnami/charts/issues/27936)
+
+## <small>28.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/redmine] Release 28.2.7 (#27717) ([34ba5f5](https://github.com/bitnami/charts/commit/34ba5f51aa4e678fc5511103d67987fd691dbf7b)), closes [#27717](https://github.com/bitnami/charts/issues/27717)
 
 ## <small>28.2.6 (2024-06-18)</small>
 

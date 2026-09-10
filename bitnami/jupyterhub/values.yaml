@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -77,10 +84,9 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.1.5-debian-12-r8
+    tag: 5.3.0-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -127,16 +133,19 @@ hub:
       config:
         JupyterHub:
           admin_access: true
-          authenticator_class: dummy
-          DummyAuthenticator:
+          authenticator_class: shared-password
+          SharedPasswordAuthenticator:
+            admin_users:
+              - {{ .Values.hub.adminUser }}
           {{- if .Values.hub.password }}
-            password: {{ .Values.hub.password | quote }}
+            admin_password: {{ .Values.hub.password | quote }}
           {{- else }}
-            password: {{ randAlphaNum 10 | quote }}
+            admin_password: {{ randAlphaNum 32 | quote }}
           {{- end }}
           Authenticator:
             admin_users:
               - {{ .Values.hub.adminUser }}
+            allow_all: true
       cookieSecret:
       concurrentSpawnLimit: 64
       consecutiveFailureLimit: 5
@@ -225,14 +234,14 @@ hub:
           - name: empty-dir
             emptyDir: {}
           {{- if .Values.singleuser.extraVolumes }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 6 }}
           {{- end }}
         extraVolumeMounts:
           - name: empty-dir
             mountPath: /tmp
             subPath: tmp-dir
           {{- if .Values.singleuser.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 4 }}
+          {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumeMounts "context" $ ) | nindent 6 }}
           {{- end }}
         capacity: {{ .Values.singleuser.persistence.size }}
         homeMountPath: {{ .Values.singleuser.notebookDir }}
@@ -703,10 +712,9 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.6.2-debian-12-r1
+    tag: 5.0.1-debian-12-r21
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1581,10 +1589,9 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.1.5-debian-12-r8
+    tag: 5.3.0-debian-12-r10
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     ##
@@ -1821,7 +1828,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r24
+  tag: 12-debian-12-r50
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

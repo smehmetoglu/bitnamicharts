@@ -1,8 +1,172 @@
 # Changelog
 
-## 11.1.7 (2024-07-02)
+## 14.0.5 (2025-12-01)
 
-* [bitnami/mysql] Release 11.1.7 ([#27635](https://github.com/bitnami/charts/pull/27635))
+* [bitnami/mysql] Improve MySQL chart comments to warn about insufficient nano and micro presets ([#36394](https://github.com/bitnami/charts/pull/36394))
+
+## <small>14.0.3 (2025-08-14)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35892) ([79196dc](https://github.com/bitnami/charts/commit/79196dc5824d51adce926b809c6f7ecb7f9f0a43)), closes [#35892](https://github.com/bitnami/charts/issues/35892)
+
+## <small>14.0.2 (2025-08-07)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35629) ([cc4c357](https://github.com/bitnami/charts/commit/cc4c3571291fc7e2e769b7222e3daffe5b342d23)), closes [#35629](https://github.com/bitnami/charts/issues/35629)
+
+## <small>14.0.1 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35509) ([e64bb2a](https://github.com/bitnami/charts/commit/e64bb2a9925055949a44c15e4738a3e4c6c0b1e5)), closes [#35509](https://github.com/bitnami/charts/issues/35509)
+* [bitnami/mysql] Add upgrade notes (#35253) ([62b2d4b](https://github.com/bitnami/charts/commit/62b2d4b4af4aa47e3d78c960968a061ef8388490)), closes [#35253](https://github.com/bitnami/charts/issues/35253)
+
+## 14.0.0 (2025-07-22)
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35247) ([ced0c0c](https://github.com/bitnami/charts/commit/ced0c0c7135866609f10f8362c3e82208c478023)), closes [#35247](https://github.com/bitnami/charts/issues/35247)
+
+## <small>13.0.4 (2025-07-15)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#35107) ([96ecfce](https://github.com/bitnami/charts/commit/96ecfce7c2fea20642cfc02c2bc661697022bf9e)), closes [#35107](https://github.com/bitnami/charts/issues/35107)
+
+## <small>13.0.3 (2025-07-09)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34931) ([78fdcbd](https://github.com/bitnami/charts/commit/78fdcbdc1d6ce5282b70db59e9ff3248269370a3)), closes [#34931](https://github.com/bitnami/charts/issues/34931)
+
+## <small>13.0.2 (2025-06-13)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34474) ([d72e326](https://github.com/bitnami/charts/commit/d72e326edaf5815cb306abf3cad2382716576228)), closes [#34474](https://github.com/bitnami/charts/issues/34474)
+
+## <small>13.0.1 (2025-06-06)</small>
+
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#34203) ([dd724f1](https://github.com/bitnami/charts/commit/dd724f14108510987ecc8ca81277c2ac5f0d85ad)), closes [#34203](https://github.com/bitnami/charts/issues/34203)
+* [bitnami/mysql] Update MySQL docs (#33613) ([b0ca2e2](https://github.com/bitnami/charts/commit/b0ca2e239a09b9e9eca7fe2f67b0f85b3f5d696c)), closes [#33613](https://github.com/bitnami/charts/issues/33613)
+
+## 13.0.0 (2025-05-12)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mysql] :zap: :arrow_up: Update dependency references (#33608) ([98a47b5](https://github.com/bitnami/charts/commit/98a47b5384cc63899673169e0768dd7bf0997271)), closes [#33608](https://github.com/bitnami/charts/issues/33608)
+
+## <small>12.3.5 (2025-05-06)</small>
+
+* [bitnami/mysql] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33409) ([aeeb08b](https://github.com/bitnami/charts/commit/aeeb08b9b6e4ebddd8ff9da3ef58073c504b7c96)), closes [#33409](https://github.com/bitnami/charts/issues/33409)
+
+## <small>12.3.4 (2025-04-15)</small>
+
+* [bitnami/mysql] Release 12.3.4 (#33017) ([86aa183](https://github.com/bitnami/charts/commit/86aa183ab6017410cdf02ade4ac9449791e5fb1b)), closes [#33017](https://github.com/bitnami/charts/issues/33017)
+
+## <small>12.3.3 (2025-04-09)</small>
+
+* [bitnami/mysql]  Allow setting externalIPs for services (#32858) ([a9077e0](https://github.com/bitnami/charts/commit/a9077e0501cbc9f4460b91866ced3bd4d789ecff)), closes [#32858](https://github.com/bitnami/charts/issues/32858)
+
+## <small>12.3.2 (2025-03-22)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mysql] Release 12.3.2 (#32558) ([6070eb2](https://github.com/bitnami/charts/commit/6070eb2d51c4200b3ecdf5e8f30c2742501fde6f)), closes [#32558](https://github.com/bitnami/charts/issues/32558)
+
+## <small>12.3.1 (2025-03-06)</small>
+
+* [bitnami/mysql] Fix network policy extraEgress bug (#32328) ([bceae22](https://github.com/bitnami/charts/commit/bceae22f78d550f8b33589e2579843ac2fad3629)), closes [#32328](https://github.com/bitnami/charts/issues/32328)
+
+## 12.3.0 (2025-02-24)
+
+* [bitnami/mysql] Set `usePasswordFiles=true` by default (#32113) ([b5b921b](https://github.com/bitnami/charts/commit/b5b921b063f21ec5e3c023869bd8bb01ffaf92a2)), closes [#32113](https://github.com/bitnami/charts/issues/32113)
+
+## <small>12.2.4 (2025-02-19)</small>
+
+* [bitnami/*] Fix typo in named template name (#31858) ([b739b69](https://github.com/bitnami/charts/commit/b739b69532e637bd33b4a44eeb422c3e749eac77)), closes [#31858](https://github.com/bitnami/charts/issues/31858)
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mysql] Release 12.2.4 (#32021) ([8c5baf6](https://github.com/bitnami/charts/commit/8c5baf6a53374260ce741b8565d87cbd53c0d781)), closes [#32021](https://github.com/bitnami/charts/issues/32021)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>12.2.2 (2025-01-22)</small>
+
+* [bitnami/mysql] Release 12.2.2 (#31512) ([289c6ca](https://github.com/bitnami/charts/commit/289c6caf9700c024f2b0202eb9a5dd3ec7c4d581)), closes [#31512](https://github.com/bitnami/charts/issues/31512)
+
+## <small>12.2.1 (2025-01-04)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/mysql] Release 12.2.1 (#31215) ([65fb2fa](https://github.com/bitnami/charts/commit/65fb2fa98b20f187dfecca09042fd8fbf70f6b95)), closes [#31215](https://github.com/bitnami/charts/issues/31215)
+
+## 12.2.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/mysql] Detect non-standard images (#30929) ([183be06](https://github.com/bitnami/charts/commit/183be06fea3080ab24f24c3c960efe79b186f5ef)), closes [#30929](https://github.com/bitnami/charts/issues/30929)
+
+## 12.1.0 (2024-11-27)
+
+* [bitnami/mysql] feat: :sparkles: Add TLS support (#30640) ([151c51c](https://github.com/bitnami/charts/commit/151c51cc2f297cf639d27b8eefbe5e98965cd3d5)), closes [#30640](https://github.com/bitnami/charts/issues/30640)
+
+## <small>12.0.1 (2024-11-25)</small>
+
+* [bitnami/mysql] Release 12.0.1 (#30614) ([cb712f4](https://github.com/bitnami/charts/commit/cb712f4fa72499975e813673edc0fa76927bbfd2)), closes [#30614](https://github.com/bitnami/charts/issues/30614)
+
+## 12.0.0 (2024-11-12)
+
+* [bitnami/mysql] fix!: :bug: :sparkles: :boom: Set correct serviceName and add Password Update Job (# ([21e98a5](https://github.com/bitnami/charts/commit/21e98a53e0163afef595094d9161509729db6fa4)), closes [#30351](https://github.com/bitnami/charts/issues/30351)
+
+## <small>11.1.20 (2024-11-04)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mysql] Drop unused `getValueFromSecret` local helper (#29962) ([1879393](https://github.com/bitnami/charts/commit/18793934bc234cab61b24c02497591f03e4b0beb)), closes [#29962](https://github.com/bitnami/charts/issues/29962)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.1.19 (2024-10-16)</small>
+
+* [bitnami/mysql] Release 11.1.19 (#29929) ([1381f66](https://github.com/bitnami/charts/commit/1381f665f7a58bd3c2abae738b05c3be1da0062b)), closes [#29929](https://github.com/bitnami/charts/issues/29929)
+
+## <small>11.1.18 (2024-10-14)</small>
+
+* [bitnami/mysql] Release 11.1.18 (#29887) ([57306e6](https://github.com/bitnami/charts/commit/57306e6212ae61b7140d67c41effb9e5fffb66d7)), closes [#29887](https://github.com/bitnami/charts/issues/29887)
+
+## <small>11.1.17 (2024-09-17)</small>
+
+* [bitnami/mysql] test: :white_check_mark: Improve reliability of ginkgo tests (#29470) ([a233966](https://github.com/bitnami/charts/commit/a233966beb176cddf29dfe71f19228873bd99bac)), closes [#29470](https://github.com/bitnami/charts/issues/29470)
+
+## <small>11.1.16 (2024-09-03)</small>
+
+* [bitnami/mysql] Release 11.1.16 (#29168) ([27551d7](https://github.com/bitnami/charts/commit/27551d76ef425175540319c9f14fef8e09530a0c)), closes [#29168](https://github.com/bitnami/charts/issues/29168)
+
+## <small>11.1.15 (2024-08-07)</small>
+
+* [bitnami/mysql] Include database in service binding secret when using root user (#28693) ([c93c50a](https://github.com/bitnami/charts/commit/c93c50a16e77320c87d242b8f63b1e7c843401ef)), closes [#28693](https://github.com/bitnami/charts/issues/28693) [#28627](https://github.com/bitnami/charts/issues/28627)
+
+## <small>11.1.14 (2024-07-25)</small>
+
+* [bitnami/mysql] Release 11.1.14 (#28478) ([2405890](https://github.com/bitnami/charts/commit/24058909b3d44a845a90ab63898076348c0fe1a6)), closes [#28478](https://github.com/bitnami/charts/issues/28478)
+* [bnitnami/mysql] Update documentation to use bash instead of sh (#28252) ([672cab7](https://github.com/bitnami/charts/commit/672cab7251e9aa1a0081aadedd6d8322ce2235b6)), closes [#28252](https://github.com/bitnami/charts/issues/28252) [#28195](https://github.com/bitnami/charts/issues/28195)
+
+## <small>11.1.13 (2024-07-24)</small>
+
+* [bitnami/mysql] Release 11.1.13 (#28338) ([3a1f9c0](https://github.com/bitnami/charts/commit/3a1f9c005b5890020ab09db6eeb5df52142efa1e)), closes [#28338](https://github.com/bitnami/charts/issues/28338)
+
+## <small>11.1.12 (2024-07-23)</small>
+
+* [bitnami/mysql] Release 11.1.12 (#28206) ([910b102](https://github.com/bitnami/charts/commit/910b1028b01ed667761888fd39a76209cb873fd9)), closes [#28206](https://github.com/bitnami/charts/issues/28206)
+
+## <small>11.1.11 (2024-07-22)</small>
+
+* [bitnami/mysql]: Remove duplicated ports in the network policies (#28136) ([99db50f](https://github.com/bitnami/charts/commit/99db50f52930a43525344f9739cba5a31f566147)), closes [#28136](https://github.com/bitnami/charts/issues/28136)
+
+## <small>11.1.10 (2024-07-18)</small>
+
+* [bitnami/mysql] Global StorageClass as default value (#28066) ([e92ae97](https://github.com/bitnami/charts/commit/e92ae976e916f66ce59736df3468f2e97d56b036)), closes [#28066](https://github.com/bitnami/charts/issues/28066)
+
+## <small>11.1.9 (2024-07-09)</small>
+
+* [bitnami/mysql] Release 11.1.9 (#27852) ([82141eb](https://github.com/bitnami/charts/commit/82141eb337f58773f0bcce2c33e33d0ac267996a)), closes [#27852](https://github.com/bitnami/charts/issues/27852)
+
+## <small>11.1.8 (2024-07-09)</small>
+
+* [bitnami/mysql] Modify mysql liveness/startup probes to check output (#27523) ([a26e779](https://github.com/bitnami/charts/commit/a26e7792554e763473efdb9da309c4eaa4f36edb)), closes [#27523](https://github.com/bitnami/charts/issues/27523)
+
+## <small>11.1.7 (2024-07-02)</small>
+
+* [bitnami/mysql] Release 11.1.7 (#27635) ([7da8288](https://github.com/bitnami/charts/commit/7da8288b834d35870554f3fcc3e3293589af70d8)), closes [#27635](https://github.com/bitnami/charts/issues/27635)
 
 ## <small>11.1.6 (2024-07-01)</small>
 
@@ -1180,7 +1344,7 @@
 ## <small>5.0.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>5.0.2 (2019-05-28)</small>

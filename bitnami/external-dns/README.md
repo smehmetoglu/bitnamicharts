@@ -1,6 +1,6 @@
 <!--- app-name: ExternalDNS -->
 
-# Bitnami package for ExternalDNS
+# Bitnami Secure Images Helm chart for ExternalDNS
 
 ExternalDNS is a Kubernetes addon that configures public DNS servers with information about exposed Kubernetes services to make them discoverable.
 
@@ -14,13 +14,26 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
-Looking to use ExternalDNS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [ExternalDNS](https://github.com/bitnami/containers/tree/main/bitnami/external-dns) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -47,13 +60,35 @@ The command deploys ExternalDNS on the Kubernetes cluster in the default configu
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will expose external-dns native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Setting Pod's affinity
 
@@ -69,6 +104,44 @@ You can use the following arguments:
 ```console
 --set podSecurityContext.fsGroup=65534 --set podSecurityContext.runAsUser=0
 ```
+
+### Webhook Providers
+
+Webhook providers allow integrating ExternalDNS with DNS providers through an HTTP interface. This approach decouples ExternalDNS and the Providers code which can be running in separate processes.
+
+With the Bitnami ExternalDNS chart, you can deploy Webhook Providers and configure ExternalDNS easely using `sidecars` and `extraArgs` values:
+
+```yaml
+provider: webhook
+
+extraArgs:
+  webhook-provider-url: http://localhost:8080
+  txt-prefix: reg-
+
+sidecars:
+  - name: my-webhook
+    image: <external-dns-webhook-image>
+    ports:
+      - containerPort: 8080
+        name: http
+    livenessProbe:
+      httpGet:
+        path: /
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      tcpSocket:
+        port: http
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    env:
+      - name: <WEBHOOK-CONFIG-ENV-VAR>
+        value: TEST
+      ...
+```
+
+More information about these new providers can be found in the [ExternalDNS documentation](https://github.com/kubernetes-sigs/external-dns/tree/master#new-providers)
 
 ## Tutorials
 
@@ -99,24 +172,25 @@ helm install my-release \
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
-| Name                    | Description                                                                                  | Value           |
-| ----------------------- | -------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`          | String to partially override external-dns.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`      | String to fully override external-dns.fullname template                                      | `""`            |
-| `clusterDomain`         | Kubernetes Cluster Domain                                                                    | `cluster.local` |
-| `commonLabels`          | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`     | Annotations to add to all deployed objects                                                   | `{}`            |
-| `extraDeploy`           | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
-| `kubeVersion`           | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `watchReleaseNamespace` | Watch only namepsace used for the release                                                    | `false`         |
+| Name                | Description                                                                                  | Value           |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`      | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template                                      | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                              | `""`            |
+| `clusterDomain`     | Kubernetes Cluster Domain                                                                    | `cluster.local` |
+| `commonLabels`      | Labels to add to all deployed objects                                                        | `{}`            |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                   | `{}`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                 | `[]`            |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
 
 ### external-dns parameters
 
@@ -127,6 +201,7 @@ helm install my-release \
 | `image.digest`                                      | ExternalDNS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                       | `""`                           |
 | `image.pullPolicy`                                  | ExternalDNS image pull policy                                                                                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                                 | ExternalDNS image pull secrets                                                                                                                                                                                    | `[]`                           |
+| `revisionHistoryLimit`                              | sets number of replicaset to keep in k8s                                                                                                                                                                          | `10`                           |
 | `automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                | `true`                         |
 | `hostAliases`                                       | Deployment pod host aliases                                                                                                                                                                                       | `[]`                           |
 | `updateStrategy`                                    | update strategy type                                                                                                                                                                                              | `{}`                           |
@@ -139,6 +214,7 @@ helm install my-release \
 | `dnsConfig`                                         | allows users more control on the DNS settings for a Pod. Required if `dnsPolicy` is set to `None`                                                                                                                 | `{}`                           |
 | `sidecars`                                          | Attach additional containers to the pod (evaluated as a template)                                                                                                                                                 | `[]`                           |
 | `namespace`                                         | Limit sources of endpoints to a specific namespace (default: all namespaces)                                                                                                                                      | `""`                           |
+| `watchReleaseNamespace`                             | Watch only namespace used for the release                                                                                                                                                                         | `false`                        |
 | `fqdnTemplates`                                     | Templated strings that are used to generate DNS names from sources that don't define a hostname themselves                                                                                                        | `[]`                           |
 | `containerPorts.http`                               | HTTP Container port                                                                                                                                                                                               | `7979`                         |
 | `combineFQDNAnnotation`                             | Combine FQDN template and annotations instead of overwriting                                                                                                                                                      | `false`                        |
@@ -197,6 +273,8 @@ helm install my-release \
 | `cloudflare.email`                                  | When using the Cloudflare provider, `CF_API_EMAIL` to set (optional). Needed when using CF_API_KEY                                                                                                                | `""`                           |
 | `cloudflare.proxied`                                | When using the Cloudflare provider, enable the proxy feature (DDOS protection, CDN...) (optional)                                                                                                                 | `true`                         |
 | `cloudflare.dnsRecordsPerPage`                      | Number of DNS records to fetch per page. (optional)                                                                                                                                                               | `100`                          |
+| `cloudflare.regionalServices`                       | Enable configuration of Cloudflare Regional Services. (optional)                                                                                                                                                  | `false`                        |
+| `cloudflare.regionKey`                              | Set default region, when Cloudflare Regional Services are enabled. (optional)                                                                                                                                     | `""`                           |
 | `coredns.etcdEndpoints`                             | When using the CoreDNS provider, set etcd backend endpoints (comma-separated list)                                                                                                                                | `http://etcd-extdns:2379`      |
 | `coredns.etcdTLS.enabled`                           | When using the CoreDNS provider, enable secure communication with etcd                                                                                                                                            | `false`                        |
 | `coredns.etcdTLS.autoGenerated`                     | Generate automatically self-signed TLS certificates                                                                                                                                                               | `false`                        |
@@ -205,20 +283,6 @@ helm install my-release \
 | `coredns.etcdTLS.caFilename`                        | When using the CoreDNS provider, specify CA PEM file name from the `coredns.etcdTLS.secretName`                                                                                                                   | `ca.crt`                       |
 | `coredns.etcdTLS.certFilename`                      | When using the CoreDNS provider, specify cert PEM file name from the `coredns.etcdTLS.secretName`                                                                                                                 | `cert.pem`                     |
 | `coredns.etcdTLS.keyFilename`                       | When using the CoreDNS provider, specify private key PEM file name from the `coredns.etcdTLS.secretName`                                                                                                          | `key.pem`                      |
-| `designate.username`                                | When using the Designate provider, specify the OpenStack authentication username. (optional)                                                                                                                      | `""`                           |
-| `designate.password`                                | When using the Designate provider, specify the OpenStack authentication password. (optional)                                                                                                                      | `""`                           |
-| `designate.applicationCredentialId`                 | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.username`. (optional)                                                           | `""`                           |
-| `designate.applicationCredentialSecret`             | When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.password`. (optional)                                                           | `""`                           |
-| `designate.authUrl`                                 | When using the Designate provider, specify the OpenStack authentication Url. (optional)                                                                                                                           | `""`                           |
-| `designate.regionName`                              | When using the Designate provider, specify the OpenStack region name. (optional)                                                                                                                                  | `""`                           |
-| `designate.userDomainName`                          | When using the Designate provider, specify the OpenStack user domain name. (optional)                                                                                                                             | `""`                           |
-| `designate.projectName`                             | When using the Designate provider, specify the OpenStack project name. (optional)                                                                                                                                 | `""`                           |
-| `designate.authType`                                | When using the Designate provider, specify the OpenStack auth type. (optional)                                                                                                                                    | `""`                           |
-| `designate.customCAHostPath`                        | When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`                                                                | `""`                           |
-| `designate.customCA.enabled`                        | When using the Designate provider, enable a custom CA (optional)                                                                                                                                                  | `false`                        |
-| `designate.customCA.content`                        | When using the Designate provider, set the content of the custom CA                                                                                                                                               | `""`                           |
-| `designate.customCA.mountPath`                      | When using the Designate provider, set the mountPath in which to mount the custom CA configuration                                                                                                                | `/config/designate`            |
-| `designate.customCA.filename`                       | When using the Designate provider, set the custom CA configuration filename                                                                                                                                       | `designate-ca.pem`             |
 | `exoscale.apiKey`                                   | When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APIKEY` to set (optional)                                                                                                                                | `""`                           |
 | `exoscale.apiToken`                                 | When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APISECRET` to set (optional)                                                                                                                             | `""`                           |
 | `exoscale.secretName`                               | Use an existing secret with keys "exoscale_api_key" and "exoscale_api_token" defined.                                                                                                                             | `""`                           |
@@ -230,22 +294,6 @@ helm install my-release \
 | `google.serviceAccountSecretKey`                    | When using the Google provider with an existing secret, specify the key name (optional)                                                                                                                           | `credentials.json`             |
 | `google.serviceAccountKey`                          | When using the Google provider, specify the service account key JSON file. In this case a new secret will be created holding this service account (optional)                                                      | `""`                           |
 | `google.zoneVisibility`                             | When using the Google provider, fiter for zones of a specific visibility (private or public)                                                                                                                      | `""`                           |
-| `hetzner.token`                                     | When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.)                                      | `""`                           |
-| `hetzner.secretName`                                | When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)                                                                          | `""`                           |
-| `hetzner.secretKey`                                 | When using the Hetzner provider with an existing secret, specify the key name (optional)                                                                                                                          | `hetzner_token`                |
-| `infoblox.wapiUsername`                             | When using the Infoblox provider, specify the Infoblox WAPI username                                                                                                                                              | `admin`                        |
-| `infoblox.wapiPassword`                             | When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)                                                                                                            | `""`                           |
-| `infoblox.gridHost`                                 | When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)                                                                                                                | `""`                           |
-| `infoblox.view`                                     | Infoblox view                                                                                                                                                                                                     | `""`                           |
-| `infoblox.secretName`                               | Existing secret name, when in place wapiUsername and wapiPassword are not required                                                                                                                                | `""`                           |
-| `infoblox.domainFilter`                             | When using the Infoblox provider, specify the domain (optional)                                                                                                                                                   | `""`                           |
-| `infoblox.nameRegex`                                | When using the Infoblox provider, specify the name regex filter (optional)                                                                                                                                        | `""`                           |
-| `infoblox.noSslVerify`                              | When using the Infoblox provider, disable SSL verification (optional)                                                                                                                                             | `false`                        |
-| `infoblox.wapiPort`                                 | When using the Infoblox provider, specify the Infoblox WAPI port (optional)                                                                                                                                       | `""`                           |
-| `infoblox.wapiVersion`                              | When using the Infoblox provider, specify the Infoblox WAPI version (optional)                                                                                                                                    | `""`                           |
-| `infoblox.wapiConnectionPoolSize`                   | When using the Infoblox provider, specify the Infoblox WAPI request connection pool size (optional)                                                                                                               | `""`                           |
-| `infoblox.wapiHttpTimeout`                          | When using the Infoblox provider, specify the Infoblox WAPI request timeout in seconds (optional)                                                                                                                 | `""`                           |
-| `infoblox.maxResults`                               | When using the Infoblox provider, specify the Infoblox Max Results (optional)                                                                                                                                     | `""`                           |
 | `linode.apiToken`                                   | When using the Linode provider, `LINODE_TOKEN` to set (optional)                                                                                                                                                  | `""`                           |
 | `linode.secretName`                                 | Use an existing secret with key "linode_api_token" defined.                                                                                                                                                       | `""`                           |
 | `ns1.minTTL`                                        | When using the ns1 provider, specify minimal TTL, as an integer, for records                                                                                                                                      | `10`                           |
@@ -253,7 +301,10 @@ helm install my-release \
 | `ns1.secretName`                                    | Use an existing secret with key "ns1-api-key" defined.                                                                                                                                                            | `""`                           |
 | `pihole.server`                                     | When using the Pi-hole provider, specify The address of the Pi-hole web server                                                                                                                                    | `""`                           |
 | `pihole.tlsSkipVerify`                              | When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server                                                                                     | `""`                           |
+| `pihole.password`                                   | When using the Pi-hole provider, specify a password to use                                                                                                                                                        | `""`                           |
 | `pihole.secretName`                                 | Use an existing secret with key "pihole_password" defined.                                                                                                                                                        | `""`                           |
+| `traefik.disableNew`                                | Disable listeners on Resources under traefik.io                                                                                                                                                                   | `false`                        |
+| `traefik.disableLegacy`                             | Disable listeners on Resources under traefik.containo.us                                                                                                                                                          | `false`                        |
 | `oci.region`                                        | When using the OCI provider, specify the region, where your zone is located in.                                                                                                                                   | `""`                           |
 | `oci.tenancyOCID`                                   | When using the OCI provider, specify your Tenancy OCID                                                                                                                                                            | `""`                           |
 | `oci.userOCID`                                      | When using the OCI provider, specify your User OCID                                                                                                                                                               | `""`                           |
@@ -270,9 +321,11 @@ helm install my-release \
 | `ovh.secretName`                                    | When using the OVH provider, it's the name of the secret containing `ovh_consumer_key`, `ovh_application_key` and `ovh_application_secret`. Disables usage of other `ovh`.                                        | `""`                           |
 | `scaleway.scwAccessKey`                             | When using the Scaleway provider, specify an existing access key. (required when provider=scaleway)                                                                                                               | `""`                           |
 | `scaleway.scwSecretKey`                             | When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)                                                                                                               | `""`                           |
+| `scaleway.secretName`                               | Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).                                                                                                              | `""`                           |
 | `rfc2136.host`                                      | When using the rfc2136 provider, specify the RFC2136 host (required when provider=rfc2136)                                                                                                                        | `""`                           |
 | `rfc2136.port`                                      | When using the rfc2136 provider, specify the RFC2136 port (optional)                                                                                                                                              | `53`                           |
-| `rfc2136.zone`                                      | When using the rfc2136 provider, specify the zone (required when provider=rfc2136)                                                                                                                                | `""`                           |
+| `rfc2136.zone`                                      | DEPRECATED: use rfc2136.zones instead.                                                                                                                                                                            | `""`                           |
+| `rfc2136.zones`                                     | When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)                                                                                           | `[]`                           |
 | `rfc2136.tsigSecret`                                | When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)                                                                     | `""`                           |
 | `rfc2136.secretName`                                | When using the rfc2136 provider, specify the existing secret which contains your tsig secret in the key "rfc2136_tsig_secret". Disables the usage of `rfc2136.tsigSecret` (optional)                              | `""`                           |
 | `rfc2136.tsigSecretAlg`                             | When using the rfc2136 provider, specify the tsig secret to enable security (optional)                                                                                                                            | `hmac-sha256`                  |
@@ -290,9 +343,6 @@ helm install my-release \
 | `pdns.secretName`                                   | When using the PowerDNS provider, specify as secret name containing the API Key                                                                                                                                   | `""`                           |
 | `transip.account`                                   | When using the TransIP provider, specify the account name.                                                                                                                                                        | `""`                           |
 | `transip.apiKey`                                    | When using the TransIP provider, specify the API key to use.                                                                                                                                                      | `""`                           |
-| `vinyldns.host`                                     | When using the VinylDNS provider, specify the VinylDNS API host.                                                                                                                                                  | `""`                           |
-| `vinyldns.accessKey`                                | When using the VinylDNS provider, specify the Access Key to use.                                                                                                                                                  | `""`                           |
-| `vinyldns.secretKey`                                | When using the VinylDNS provider, specify the Secret key to use.                                                                                                                                                  | `""`                           |
 | `domainFilters`                                     | Limit possible target zones by domain suffixes (optional)                                                                                                                                                         | `[]`                           |
 | `excludeDomains`                                    | Exclude subdomains (optional)                                                                                                                                                                                     | `[]`                           |
 | `regexDomainFilter`                                 | Limit possible target zones by regex domain suffixes (optional)                                                                                                                                                   | `""`                           |
@@ -312,9 +362,10 @@ helm install my-release \
 | `registry`                                          | Registry method to use (options: txt, aws-sd, dynamodb, noop)                                                                                                                                                     | `txt`                          |
 | `txtPrefix`                                         | When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)                                                  | `""`                           |
 | `txtSuffix`                                         | When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)                                           | `""`                           |
+| `txtNewFormatOnly`                                  | When using the TXT registry, use only the new format for ownership records (optional)                                                                                                                             | `false`                        |
 | `txtOwnerId`                                        | A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)                                                                                                    | `""`                           |
 | `forceTxtOwnerId`                                   | (backward compatibility) When using the non-TXT registry, it will pass the value defined by `txtOwnerId` down to the application (optional)                                                                       | `false`                        |
-| `txtEncrypt.enabled`                                | Enable TXT record encrypencryption                                                                                                                                                                                | `false`                        |
+| `txtEncrypt.enabled`                                | Enable TXT record encryption                                                                                                                                                                                      | `false`                        |
 | `txtEncrypt.aesKey`                                 | 32-byte AES-256-GCM encryption key.                                                                                                                                                                               | `""`                           |
 | `txtEncrypt.secretName`                             | Use an existing secret with key "txt_aes_encryption_key" defined.                                                                                                                                                 | `""`                           |
 | `extraArgs`                                         | Extra arguments to be passed to external-dns                                                                                                                                                                      | `{}`                           |
@@ -363,7 +414,7 @@ helm install my-release \
 | `networkPolicy.ingressNSMatchLabels`                | Labels to match to allow traffic from other namespaces                                                                                                                                                            | `{}`                           |
 | `networkPolicy.ingressNSPodMatchLabels`             | Pod labels to match to allow traffic from other namespaces                                                                                                                                                        | `{}`                           |
 | `serviceAccount.create`                             | Determine whether a Service Account should be created or it should reuse a exiting one.                                                                                                                           | `true`                         |
-| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set                                                                                                              | `""`                           |
+| `serviceAccount.name`                               | ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set                                                                                                              | `""`                           |
 | `serviceAccount.annotations`                        | Additional Service Account annotations                                                                                                                                                                            | `{}`                           |
 | `serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                                                                                                                                                  | `false`                        |
 | `serviceAccount.labels`                             | Additional labels to be included on the service account                                                                                                                                                           | `{}`                           |
@@ -425,6 +476,8 @@ helm install my-release \
 | `metrics.serviceMonitor.relabelings`                | Prometheus relabeling rules                                                                                                                                                                                       | `[]`                           |
 | `metrics.serviceMonitor.honorLabels`                | Specify honorLabels parameter to add the scrape endpoint                                                                                                                                                          | `false`                        |
 | `metrics.serviceMonitor.labels`                     | Used to pass Labels that are required by the installed Prometheus Operator                                                                                                                                        | `{}`                           |
+| `metrics.serviceMonitor.targetLabels`               | Labels from the Kubernetes service to be transferred to the created metrics                                                                                                                                       | `[]`                           |
+| `metrics.serviceMonitor.podTargetLabels`            | Labels from the Kubernetes pod to be transferred to the created metrics                                                                                                                                           | `[]`                           |
 | `metrics.serviceMonitor.annotations`                | Additional custom annotations for the ServiceMonitor                                                                                                                                                              | `{}`                           |
 | `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                 | `""`                           |
 | `metrics.googlePodMonitor.enabled`                  | Create Google Managed Prometheus PodMonitoring object                                                                                                                                                             | `false`                        |
@@ -455,6 +508,14 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/exter
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+Unsupported in-tree providers have been removed: OpenStack Designate, Hetzner, Infoblox, VinylDNS
+
+### To 8.7.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ### To 7.0.0
 
@@ -506,7 +567,7 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -542,7 +603,7 @@ Other mayor changes included in this major version are:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

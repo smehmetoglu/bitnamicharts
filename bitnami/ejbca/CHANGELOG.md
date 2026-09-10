@@ -1,8 +1,135 @@
 # Changelog
 
-## 14.2.7 (2024-07-03)
+## 19.0.0 (2025-08-18)
 
-* [bitnami/ejbca] Release 14.2.7 ([#27690](https://github.com/bitnami/charts/pull/27690))
+* [bitnami/ejbca] Upgrade to MariaDB 12.0 ([#36114](https://github.com/bitnami/charts/pull/36114))
+
+## <small>18.0.3 (2025-08-18)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#36110) ([2b94f0c](https://github.com/bitnami/charts/commit/2b94f0c272bef3a7610182afd291cb6e7ede499c)), closes [#36110](https://github.com/bitnami/charts/issues/36110)
+
+## <small>18.0.2 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#35553) ([20b4762](https://github.com/bitnami/charts/commit/20b4762f45835cc223c2ac400127f63551c758a4)), closes [#35553](https://github.com/bitnami/charts/issues/35553)
+
+## <small>18.0.1 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#35239) ([692284a](https://github.com/bitnami/charts/commit/692284ae15c21e540fd3f9b3100c354a01ee684b)), closes [#35239](https://github.com/bitnami/charts/issues/35239)
+
+## 18.0.0 (2025-06-25)
+
+* [bitnami/ejbca] Upgrade MariaDB 11.8 (#34635) ([45208fa](https://github.com/bitnami/charts/commit/45208fa627f3be44599ce925f9cf49640d650582)), closes [#34635](https://github.com/bitnami/charts/issues/34635)
+
+## <small>17.1.4 (2025-06-22)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#34578) ([98f684b](https://github.com/bitnami/charts/commit/98f684bf402933a0040ef2b5c9ebb1d86441d02d)), closes [#34578](https://github.com/bitnami/charts/issues/34578)
+
+## <small>17.1.3 (2025-05-23)</small>
+
+* [bitnami/ejbca] :zap: :arrow_up: Update dependency references (#33853) ([9917e60](https://github.com/bitnami/charts/commit/9917e60fdf6e04b15a8a0b18093fa4778cc56d2c)), closes [#33853](https://github.com/bitnami/charts/issues/33853)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>17.1.2 (2025-05-07)</small>
+
+* [bitnami/ejbca] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33355) ([db6d4c8](https://github.com/bitnami/charts/commit/db6d4c8aa79ff444a008dc2d390cc694bbe860cb)), closes [#33355](https://github.com/bitnami/charts/issues/33355)
+
+## <small>17.1.1 (2025-04-23)</small>
+
+* [bitnami/ejbca] Release 17.1.1 (#33136) ([30e4c1d](https://github.com/bitnami/charts/commit/30e4c1d01245b09dc537d1a3c54acbec6f15d8b3)), closes [#33136](https://github.com/bitnami/charts/issues/33136)
+
+## 17.1.0 (2025-04-04)
+
+* [bitnami/ejbca] Set `usePasswordFiles=true` by default (#32343) ([cfa2cc8](https://github.com/bitnami/charts/commit/cfa2cc85a37e59b73aea8bad93948a843182df59)), closes [#32343](https://github.com/bitnami/charts/issues/32343)
+
+## <small>17.0.4 (2025-03-28)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/ejbca] Release 17.0.4 (#32674) ([7284153](https://github.com/bitnami/charts/commit/7284153ab6d0283ce1cdf1a2baa27e233ac0fe5d)), closes [#32674](https://github.com/bitnami/charts/issues/32674)
+
+## <small>17.0.3 (2025-03-08)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/ejbca] Release 17.0.3 (#32370) ([f419d29](https://github.com/bitnami/charts/commit/f419d2908a049a6e9608bf2ea63939554baa14c2)), closes [#32370](https://github.com/bitnami/charts/issues/32370)
+
+## <small>17.0.2 (2025-02-05)</small>
+
+* [bitnami/ejbca] Release 17.0.2 (#31802) ([2878ff7](https://github.com/bitnami/charts/commit/2878ff7b71b392b49e189bfc1f2e94de971ecd2e)), closes [#31802](https://github.com/bitnami/charts/issues/31802)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>17.0.1 (2024-12-27)</small>
+
+* [bitnami/ejbca] Release 17.0.1 (#31178) ([bcf57b8](https://github.com/bitnami/charts/commit/bcf57b8a708139f72542da86b39bd0539a798c30)), closes [#31178](https://github.com/bitnami/charts/issues/31178)
+
+## 17.0.0 (2024-12-27)
+
+* [bitnami/ejbca] Release 17.0.0 (#31177) ([e8b6077](https://github.com/bitnami/charts/commit/e8b60778ed8c75de8246e09ea1728d4dd904170c)), closes [#31177](https://github.com/bitnami/charts/issues/31177)
+
+## <small>16.1.1 (2024-12-26)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/ejbca] Release 16.1.1 (#31166) ([847cc5e](https://github.com/bitnami/charts/commit/847cc5e0c84831ff8a803a41a50be56977e9893a)), closes [#31166](https://github.com/bitnami/charts/issues/31166)
+
+## 16.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/ejbca] Detect non-standard images (#30879) ([fad04d3](https://github.com/bitnami/charts/commit/fad04d3543a597a4b9b595f97f108560a327f170)), closes [#30879](https://github.com/bitnami/charts/issues/30879)
+
+## <small>16.0.1 (2024-11-16)</small>
+
+* [bitnami/ejbca] Release 16.0.1 (#30485) ([efd14a3](https://github.com/bitnami/charts/commit/efd14a3db551878a23b069b1ef6f4ac37b145e32)), closes [#30485](https://github.com/bitnami/charts/issues/30485)
+
+## 16.0.0 (2024-11-12)
+
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Bump MariaDB subchart to 20 (#30353) ([2a3ac05](https://github.com/bitnami/charts/commit/2a3ac052276cd11e387062525b5a9aa902d2263b)), closes [#30353](https://github.com/bitnami/charts/issues/30353)
+
+## <small>15.0.8 (2024-11-08)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/ejbca] Unify seLinuxOptions default value (#30345) ([ab673bb](https://github.com/bitnami/charts/commit/ab673bba8586f42cf8ba3829cb36c65b7ecb6123)), closes [#30345](https://github.com/bitnami/charts/issues/30345)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>15.0.7 (2024-10-07)</small>
+
+* [bitnami/ejbca] Release 15.0.7 (#29797) ([aa5c97b](https://github.com/bitnami/charts/commit/aa5c97b569178b60e2c792fa047b24b64a132d67)), closes [#29797](https://github.com/bitnami/charts/issues/29797)
+
+## <small>15.0.6 (2024-09-02)</small>
+
+* [bitnami/ejbca] Release 15.0.6 (#29153) ([b231573](https://github.com/bitnami/charts/commit/b231573de91e7ec3839af39c74ba3ad5c305f86a)), closes [#29153](https://github.com/bitnami/charts/issues/29153)
+
+## <small>15.0.5 (2024-08-02)</small>
+
+* [bitnami/ejbca] Release 15.0.5 (#28640) ([53b266f](https://github.com/bitnami/charts/commit/53b266f373d16fb122a81a172d0bb932bad87759)), closes [#28640](https://github.com/bitnami/charts/issues/28640)
+
+## <small>15.0.4 (2024-07-25)</small>
+
+* [bitnami/ejbca] Release 15.0.4 (#28416) ([a9bc424](https://github.com/bitnami/charts/commit/a9bc424d20229cdeaabf7f16eed51152e1b8d110)), closes [#28416](https://github.com/bitnami/charts/issues/28416)
+
+## <small>15.0.3 (2024-07-24)</small>
+
+* [bitnami/ejbca] Release 15.0.3 (#28284) ([e8a9cf1](https://github.com/bitnami/charts/commit/e8a9cf16f0e315e620e19f2c4133f5246b1a8a9c)), closes [#28284](https://github.com/bitnami/charts/issues/28284)
+
+## <small>15.0.2 (2024-07-23)</small>
+
+* [bitnami/ejbca] Release 15.0.2 (#28237) ([b5b248f](https://github.com/bitnami/charts/commit/b5b248fb3bd13a87aaba20ba28d81697edd69814)), closes [#28237](https://github.com/bitnami/charts/issues/28237)
+
+## <small>15.0.1 (2024-07-18)</small>
+
+* [bitnami/ejbca] Global StorageClass as default value (#28014) ([bf16551](https://github.com/bitnami/charts/commit/bf16551caa06e09e5274eb2e88c3a31f6a7d3ca8)), closes [#28014](https://github.com/bitnami/charts/issues/28014)
+
+## 15.0.0 (2024-07-12)
+
+* [bitnami/ejbca] chore!: :arrow_up: :boom: Update mariadb to 11.4 (#27935) ([2babab0](https://github.com/bitnami/charts/commit/2babab043054b955b319b017a3fe5860c582650b)), closes [#27935](https://github.com/bitnami/charts/issues/27935)
+
+## <small>14.2.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/ejbca] Release 14.2.7 (#27690) ([f90a453](https://github.com/bitnami/charts/commit/f90a453b01841ada3f196f3b62f0a4fd66aa7c57)), closes [#27690](https://github.com/bitnami/charts/issues/27690)
 
 ## <small>14.2.6 (2024-06-25)</small>
 

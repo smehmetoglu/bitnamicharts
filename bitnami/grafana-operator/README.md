@@ -1,6 +1,6 @@
 <!--- app-name: Grafana Operator -->
 
-# Bitnami package for Grafana Operator
+# Bitnami Secure Images Helm chart for Grafana Operator
 
 Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
-Looking to use Grafana Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Differences between the Bitnami Grafana chart and the Bitnami Grafana Operator chart
 
@@ -47,8 +60,6 @@ The Bitnami catalog offers both the `bitnami/grafana` and `bitnami/grafana-opera
 
 ```
 
-Its lifecycle is managed using Helm and, at the Grafana container level, the following operations are automated: persistence management, configuration based on environment variables and plugin initialization. The chart also allows deploying dashboards and data sources using ConfigMaps. The Deployments do not require any ServiceAccounts with special RBAC privileges so this solution would fit better in more restricted Kubernetes installations.
-
 - The `bitnami/grafana-operator` chart deploys a Grafana Operator installation using a Kubernetes Deployment. The operator will extend the Kubernetes API with the following objects: `Grafana`, `GrafanaDashboard` and `GrafanaDataSource`. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects.
 
 ```text
@@ -65,7 +76,7 @@ Its lifecycle is managed using Helm and, at the Grafana container level, the fol
             +-----------------+
 ```
 
-The Operator will extend the Kubernetes API with the following objects: _Grafana_, _GrafanaDashboard_ and _GrafanaDataSource_. From that moment, the user will be able to deploy objects of these kinds and the previously deployed Operator will take care of deploying all the required Deployments, ConfigMaps and Services for running a Grafana instance. Its lifecycle is managed using _kubectl_ on the Grafana, GrafanaDashboard and GrafanaDataSource objects. The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
+The following figure shows the deployed objects after deploying a Grafana object using _kubectl_:
 
 ```text
 +--------------------+
@@ -131,19 +142,41 @@ These commands deploy grafana-operator on the Kubernetes cluster in the default 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
+### Prometheus metrics
+
+This chart exposes Prometheus metrics by default with a `metrics` service, which has the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `operator.prometheus.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ### Create Grafana Dashboards
 
 After the installation, create Dashboards under a CRD of your Kubernetes cluster.
 
-For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/integr8ly/grafana-operator/blob/master/documentation/dashboards.md).
+For more details regarding what is possible with those CRDs please have a look at [Working with Dashboards](https://github.com/grafana/grafana-operator/blob/master/docs/docs/dashboards.md).
 
 ### Deploy extra Grafana resources or objects
 
@@ -195,6 +228,7 @@ extraDeploy:
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`       |
 | `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`       |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false`    |
 | `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `disabled` |
 
 ### Common parameters
@@ -329,6 +363,7 @@ extraDeploy:
 | Name                                                        | Description                                                                                                                                                                                                                       | Value                     |
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                                                                                                                                                 | `true`                    |
+| `grafana.disableDefaultAdminSecret`                         | Disables the creation of the default admin secret                                                                                                                                                                                 | `false`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                                                                                                                                            | `REGISTRY_NAME`           |
 | `grafana.image.repository`                                  | Grafana image name                                                                                                                                                                                                                | `REPOSITORY_NAME/grafana` |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                           | `""`                      |
@@ -336,6 +371,7 @@ extraDeploy:
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                                                                                                                                        | `[]`                      |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                                                                                                                                                          | `{}`                      |
 | `grafana.podLabels`                                         | Additional pod labels to pods in the grafana deployment                                                                                                                                                                           | `{}`                      |
+| `grafana.podAnnotations`                                    | Additional pod annotations to pods in the grafana deployment                                                                                                                                                                      | `{}`                      |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                                                                                                                                                      | `true`                    |
 | `grafana.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                | `Always`                  |
 | `grafana.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                    | `[]`                      |
@@ -363,6 +399,10 @@ extraDeploy:
 | `grafana.affinity`                                          | Affinity for controller pod assignment                                                                                                                                                                                            | `{}`                      |
 | `grafana.nodeSelector`                                      | Node labels for controller pod assignment                                                                                                                                                                                         | `{}`                      |
 | `grafana.tolerations`                                       | Tolerations for controller pod assignment                                                                                                                                                                                         | `[]`                      |
+| `grafana.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                                                                                                                                                   | `false`                   |
+| `grafana.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                                                                                                                                                    | `""`                      |
+| `grafana.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable. Defaults to `1` if both `grafana.pdb.minAvailable` and `grafana.pdb.maxUnavailable` are empty.                                                                    | `""`                      |
+| `grafana.extraEnvVars`                                      | Array containing extra env vars to configure Grafana                                                                                                                                                                              | `[]`                      |
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                                                                                                                                                       | `[]`                      |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                                                                                                                                                                  | `5`                       |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                                                                                                                                                    | `{}`                      |
@@ -429,6 +469,10 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/grafa
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 4.9.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
 
 ```console
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/grafana-operator
@@ -499,7 +543,7 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

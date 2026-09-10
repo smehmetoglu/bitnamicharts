@@ -27,6 +27,14 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
+Return the proper image name (for the init container dynamic-seed-discovery image)
+*/}}
+{{- define "cassandra.dynamicSeedDiscovery.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.dynamicSeedDiscovery.image "global" .Values.global) }}
+{{- end -}}
+
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "cassandra.imagePullSecrets" -}}
@@ -105,12 +113,7 @@ Return  the proper Commit Storage Class
 {{ include "cassandra.commitstorage.class" ( dict "persistence" .Values.path.to.the.persistence "global" $) }}
 */}}
 {{- define "cassandra.commitstorage.class" -}}
-{{- $storageClass := .persistence.commitStorageClass -}}
-{{- if .global -}}
-    {{- if .global.storageClass -}}
-        {{- $storageClass = .global.commitStorageClass -}}
-    {{- end -}}
-{{- end -}}
+{{- $storageClass := default .persistence.commitStorageClass | default (.global).defaultStorageClass | default "" -}}
 
 {{- if $storageClass -}}
   {{- if (eq "-" $storageClass) -}}
@@ -136,8 +139,6 @@ Return true if encryption via TLS for internode communication connections should
 {{- define "cassandra.internode.tlsEncryption" -}}
 {{- if (ne .Values.tls.internodeEncryption "none") -}}
     {{- printf "%s" .Values.tls.internodeEncryption -}}
-{{- else if (ne .Values.cluster.internodeEncryption "none") -}}
-    {{- printf "%s" .Values.cluster.internodeEncryption -}}
 {{- else -}}
     {{- printf "none" -}}
 {{- end -}}
@@ -257,49 +258,20 @@ Return true if a TLS credentials secret object should be created
 {{- end -}}
 
 {{/*
-Returns the available value for certain key in an existing secret (if it exists),
-otherwise it generates a random value.
+Get the password to use to access Cassandra
 */}}
-{{- define "getValueFromSecret" }}
-    {{- $len := (default 16 .Length) | int -}}
-    {{- $obj := (lookup "v1" "Secret" .Namespace .Name).data -}}
-    {{- if $obj }}
-        {{- index $obj .Key | b64dec -}}
-    {{- else -}}
-        {{- randAlphaNum $len -}}
-    {{- end -}}
-{{- end }}
-
 {{- define "cassandra.password" -}}
-    {{- if .Values.dbUser.password }}
-        {{- .Values.dbUser.password }}
-    {{- else if (not .Values.dbUser.forcePassword) }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (include "common.names.fullname" .) "Length" 10 "Key" "cassandra-password")  -}}
-    {{- else }}
+    {{- if (and (empty .Values.dbUser.password) .Values.dbUser.forcePassword) }}
         {{ required "A Cassandra Password is required!" .Values.dbUser.password }}
-    {{- end }}
-{{- end -}}
-
-{{- define "cassandra.keystore.password" -}}
-    {{- if .Values.tls.keystorePassword }}
-        {{- .Values.tls.keystorePassword }}
     {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "keystore-password")  -}}
-    {{- end }}
-{{- end -}}
-
-{{- define "cassandra.truststore.password" -}}
-    {{- if .Values.tls.truststorePassword }}
-        {{- .Values.tls.truststorePassword }}
-    {{- else }}
-        {{- include "getValueFromSecret" (dict "Namespace" (include "common.names.namespace" .) "Name" (printf "%s-%s" (include "common.names.fullname" .) "tls-pass" | trunc 63 | trimSuffix "-") "Length" 10 "Key" "truststore-password")  -}}
+        {{- include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "cassandra-password" "providedValues" (list "dbUser.password") "context" $) -}}
     {{- end }}
 {{- end -}}
 
 {{/*
-Get the metrics config map name.
+Get the metrics secret name.
 */}}
-{{- define "cassandra.metricsConfConfigMap" -}}
+{{- define "cassandra.metricsConfSecret" -}}
     {{- printf "%s-metrics-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -315,4 +287,42 @@ WARNING: JVM Max Heap Size not set in value jvm.maxHeapSize. When not set, the c
 WARNING: JVM New Heap Size not set in value jvm.newHeapSize. When not set, the chart will calculate the following size:
      MAX(Memory Limit (if set) / 64, 256M)
 {{- end }}
+{{- end -}}
+
+{{/*
+Dynamic Seed Discovery Init-Container
+*/}}
+{{- define "cassandra.dynamicSeedDiscovery" -}}
+- name: dynamic-seed-discovery
+  image: {{ include "cassandra.dynamicSeedDiscovery.image" .}}
+  imagePullPolicy: {{ .Values.dynamicSeedDiscovery.image.pullPolicy | quote }}
+  securityContext:
+      runAsUser: 0  # Run as root user
+      privileged: true
+  command:
+      - "/bin/sh"
+      - "-c"
+      - |
+        export DYNAMIC_SEED_DIR=/opt/bitnami/cassandra/tmp &&
+        install_packages netcat-traditional dnsutils &&
+        dig +short {{ printf "%s-headless.%s.svc.%s" (include "common.names.fullname" .) .Release.Namespace .Values.clusterDomain | trunc 63 | trimSuffix "-" }} | grep -v $POD_IP | \
+          while read NODE_IP; do \
+            nc -zvw3 $NODE_IP {{ .Values.service.ports.cql }} && \
+            echo "$NODE_IP" >> ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
+          done && \
+        if [ ! -s ${DYNAMIC_SEED_DIR}/seed-ips.lst ]; then \
+          echo "No seed nodes found, using pod's own IP: $POD_IP" && \
+          echo $POD_IP > ${DYNAMIC_SEED_DIR}/seed-ips.lst; \
+        fi && \
+        cat ${DYNAMIC_SEED_DIR}/seed-ips.lst | head -2 | paste -sd, - > ${DYNAMIC_SEED_DIR}/seed-ips.txt &&
+        echo "Seed nodes: $(cat ${DYNAMIC_SEED_DIR}/seed-ips.txt)"
+  env:
+    - name: POD_IP
+      valueFrom:
+        fieldRef:
+            fieldPath: status.podIP
+  volumeMounts:
+    - name: empty-dir
+      mountPath: /opt/bitnami/cassandra/tmp
+      subPath: app-tmp-dir
 {{- end -}}

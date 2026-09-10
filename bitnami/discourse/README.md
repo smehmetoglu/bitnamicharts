@@ -1,6 +1,6 @@
 <!--- app-name: Discourse&reg; -->
 
-# Discourse(R) packaged by Bitnami
+# Discourse&reg; packaged by Bitnami
 
 Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
-Looking to use Discoursereg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [Discourse](https://www.discourse.org/) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages [Bitnami Postgresql](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) and [Bitnami Redis&reg;](https://github.com/bitnami/charts/tree/main/bitnami/redis) which are required as databases for the Discourse application.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -51,13 +64,24 @@ The command deploys Discourse on the Kubernetes cluster in the default configura
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://meta.discourse.org/t/administrators-index/322712)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and SMTP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=discourse-password=PASSWORD --from-literal=smtp-password=SMTP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
 
 ### Setting up replication
 
@@ -180,7 +204,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -224,6 +248,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami Discourse](https://github.com/bitnami/containers/tree/main/bitnami/discourse) image stores the Discourse data and configurations at the `/bitnami` path of the container.
@@ -235,12 +263,13 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -349,7 +378,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `discourse.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                   | `{}`                                                               |
 | `discourse.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                  | `{}`                                                               |
 | `discourse.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                    | `{}`                                                               |
-| `discourse.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if discourse.resources is set (discourse.resources is recommended for production). | `xlarge`                                                           |
+| `discourse.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if discourse.resources is set (discourse.resources is recommended for production). | `2xlarge`                                                          |
 | `discourse.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                     | `{}`                                                               |
 | `discourse.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                  | `true`                                                             |
 | `discourse.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                      | `{}`                                                               |
@@ -367,7 +396,6 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 | `persistence.enabled`                                         | Enable persistence using Persistent Volume Claims                                                                                                                                                                                     | `true`                                                             |
 | `persistence.storageClass`                                    | Persistent Volume storage class                                                                                                                                                                                                       | `""`                                                               |
 | `persistence.accessModes`                                     | Persistent Volume access modes                                                                                                                                                                                                        | `[]`                                                               |
-| `persistence.accessMode`                                      | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                                                                                                                     | `ReadWriteOnce`                                                    |
 | `persistence.size`                                            | Persistent Volume size                                                                                                                                                                                                                | `10Gi`                                                             |
 | `persistence.existingClaim`                                   | The name of an existing PVC to use for persistence                                                                                                                                                                                    | `""`                                                               |
 | `persistence.selector`                                        | Selector to match an existing Persistent Volume for Discourse data PVC                                                                                                                                                                | `{}`                                                               |
@@ -375,49 +403,49 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 
 ### Sidekiq container parameters
 
-| Name                                                        | Description                                                                                                                                                                                                                       | Value                                                                      |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `sidekiq.command`                                           | Custom command to override image cmd (evaluated as a template)                                                                                                                                                                    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`                         |
-| `sidekiq.args`                                              | Custom args for the custom command (evaluated as a template)                                                                                                                                                                      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]`                        |
-| `sidekiq.extraEnvVars`                                      | Array with extra environment variables to add Sidekiq pods                                                                                                                                                                        | `[]`                                                                       |
-| `sidekiq.extraEnvVarsCM`                                    | ConfigMap containing extra environment variables for Sidekiq pods                                                                                                                                                                 | `""`                                                                       |
-| `sidekiq.extraEnvVarsSecret`                                | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods                                                                                                                                        | `""`                                                                       |
-| `sidekiq.livenessProbe.enabled`                             | Enable livenessProbe on Sidekiq containers                                                                                                                                                                                        | `true`                                                                     |
-| `sidekiq.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated                                                                                                                                                                                          | `500`                                                                      |
-| `sidekiq.livenessProbe.periodSeconds`                       | How often to perform the probe                                                                                                                                                                                                    | `10`                                                                       |
-| `sidekiq.livenessProbe.timeoutSeconds`                      | When the probe times out                                                                                                                                                                                                          | `5`                                                                        |
-| `sidekiq.livenessProbe.failureThreshold`                    | Minimum consecutive failures for the probe                                                                                                                                                                                        | `6`                                                                        |
-| `sidekiq.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe                                                                                                                                                                                       | `1`                                                                        |
-| `sidekiq.readinessProbe.enabled`                            | Enable readinessProbe on Sidekiq containers                                                                                                                                                                                       | `true`                                                                     |
-| `sidekiq.readinessProbe.initialDelaySeconds`                | Delay before readiness probe is initiated                                                                                                                                                                                         | `30`                                                                       |
-| `sidekiq.readinessProbe.periodSeconds`                      | How often to perform the probe                                                                                                                                                                                                    | `10`                                                                       |
-| `sidekiq.readinessProbe.timeoutSeconds`                     | When the probe times out                                                                                                                                                                                                          | `5`                                                                        |
-| `sidekiq.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                                                                                                                                        | `6`                                                                        |
-| `sidekiq.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                                       | `1`                                                                        |
-| `sidekiq.startupProbe.enabled`                              | Enable startupProbe on Sidekiq containers                                                                                                                                                                                         | `false`                                                                    |
-| `sidekiq.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                            | `60`                                                                       |
-| `sidekiq.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                                   | `10`                                                                       |
-| `sidekiq.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                                  | `5`                                                                        |
-| `sidekiq.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                                | `15`                                                                       |
-| `sidekiq.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                                | `1`                                                                        |
-| `sidekiq.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                               | `{}`                                                                       |
-| `sidekiq.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                              | `{}`                                                                       |
-| `sidekiq.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                | `{}`                                                                       |
-| `sidekiq.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sidekiq.resources is set (sidekiq.resources is recommended for production). | `small`                                                                    |
-| `sidekiq.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                                                                       |
-| `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                              | `true`                                                                     |
-| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `{}`                                                                       |
-| `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                        | `0`                                                                        |
-| `sidekiq.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                       | `0`                                                                        |
-| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                     | `false`                                                                    |
-| `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                       | `false`                                                                    |
-| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                           | `false`                                                                    |
-| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                         | `false`                                                                    |
-| `sidekiq.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                | `["ALL"]`                                                                  |
-| `sidekiq.containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                                                  | `["CHOWN","CHMOD","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
-| `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                  | `RuntimeDefault`                                                           |
-| `sidekiq.lifecycleHooks`                                    | for the Sidekiq container(s) to automate configuration before or after startup                                                                                                                                                    | `{}`                                                                       |
-| `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Sidekiq pods                                                                                                                                                     | `[]`                                                                       |
+| Name                                                        | Description                                                                                                                                                                                                                       | Value                                                              |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `sidekiq.command`                                           | Custom command to override image cmd (evaluated as a template)                                                                                                                                                                    | `["/opt/bitnami/scripts/discourse/entrypoint.sh"]`                 |
+| `sidekiq.args`                                              | Custom args for the custom command (evaluated as a template)                                                                                                                                                                      | `["/opt/bitnami/scripts/discourse-sidekiq/run.sh"]`                |
+| `sidekiq.extraEnvVars`                                      | Array with extra environment variables to add Sidekiq pods                                                                                                                                                                        | `[]`                                                               |
+| `sidekiq.extraEnvVarsCM`                                    | ConfigMap containing extra environment variables for Sidekiq pods                                                                                                                                                                 | `""`                                                               |
+| `sidekiq.extraEnvVarsSecret`                                | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods                                                                                                                                        | `""`                                                               |
+| `sidekiq.livenessProbe.enabled`                             | Enable livenessProbe on Sidekiq containers                                                                                                                                                                                        | `true`                                                             |
+| `sidekiq.livenessProbe.initialDelaySeconds`                 | Delay before liveness probe is initiated                                                                                                                                                                                          | `500`                                                              |
+| `sidekiq.livenessProbe.periodSeconds`                       | How often to perform the probe                                                                                                                                                                                                    | `10`                                                               |
+| `sidekiq.livenessProbe.timeoutSeconds`                      | When the probe times out                                                                                                                                                                                                          | `5`                                                                |
+| `sidekiq.livenessProbe.failureThreshold`                    | Minimum consecutive failures for the probe                                                                                                                                                                                        | `6`                                                                |
+| `sidekiq.livenessProbe.successThreshold`                    | Minimum consecutive successes for the probe                                                                                                                                                                                       | `1`                                                                |
+| `sidekiq.readinessProbe.enabled`                            | Enable readinessProbe on Sidekiq containers                                                                                                                                                                                       | `true`                                                             |
+| `sidekiq.readinessProbe.initialDelaySeconds`                | Delay before readiness probe is initiated                                                                                                                                                                                         | `30`                                                               |
+| `sidekiq.readinessProbe.periodSeconds`                      | How often to perform the probe                                                                                                                                                                                                    | `10`                                                               |
+| `sidekiq.readinessProbe.timeoutSeconds`                     | When the probe times out                                                                                                                                                                                                          | `5`                                                                |
+| `sidekiq.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                                                                                                                                        | `6`                                                                |
+| `sidekiq.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                                       | `1`                                                                |
+| `sidekiq.startupProbe.enabled`                              | Enable startupProbe on Sidekiq containers                                                                                                                                                                                         | `false`                                                            |
+| `sidekiq.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                                                                                                                            | `60`                                                               |
+| `sidekiq.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                                                                                                                                   | `10`                                                               |
+| `sidekiq.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                                                                                                                                  | `5`                                                                |
+| `sidekiq.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                                                                                                                | `15`                                                               |
+| `sidekiq.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                                                                                                                | `1`                                                                |
+| `sidekiq.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                               | `{}`                                                               |
+| `sidekiq.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                              | `{}`                                                               |
+| `sidekiq.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                | `{}`                                                               |
+| `sidekiq.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if sidekiq.resources is set (sidekiq.resources is recommended for production). | `small`                                                            |
+| `sidekiq.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                                                               |
+| `sidekiq.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                              | `true`                                                             |
+| `sidekiq.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                  | `{}`                                                               |
+| `sidekiq.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                        | `0`                                                                |
+| `sidekiq.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                       | `0`                                                                |
+| `sidekiq.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                     | `false`                                                            |
+| `sidekiq.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                       | `false`                                                            |
+| `sidekiq.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                           | `false`                                                            |
+| `sidekiq.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                         | `false`                                                            |
+| `sidekiq.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                | `["ALL"]`                                                          |
+| `sidekiq.containerSecurityContext.capabilities.add`         | List of capabilities to be added                                                                                                                                                                                                  | `["CHOWN","SYS_CHROOT","FOWNER","SETGID","SETUID","DAC_OVERRIDE"]` |
+| `sidekiq.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                  | `RuntimeDefault`                                                   |
+| `sidekiq.lifecycleHooks`                                    | for the Sidekiq container(s) to automate configuration before or after startup                                                                                                                                                    | `{}`                                                               |
+| `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Sidekiq pods                                                                                                                                                     | `[]`                                                               |
 
 ### Traffic Exposure Parameters
 
@@ -559,6 +587,26 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/disco
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 22.0.0, which updates Redis&reg; from 8.0 to 8.2. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 16.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 15.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 15.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
+### To 14.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.
 
 ### To 13.0.0
 
@@ -715,7 +763,7 @@ This major updates the Redis&reg; subchart to it newest major, 14.0.0, which con
 
 #### Useful links
 
-- [Bitnami Tutorial](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html)
+- [Bitnami Tutorial](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html)
 - [Helm docs](https://helm.sh/docs/topics/v2_v3_migration)
 - [Helm Blog](https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3)
 
@@ -736,7 +784,7 @@ export REDIS_PASSWORD=$(kubectl get secret --namespace default discourse-redis -
 export POSTGRESQL_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=discourse,app.kubernetes.io/name=postgresql,role=primary -o jsonpath="{.items[0].metadata.name}")
 ```
 
-1. Delete the Airflow worker & PostgreSQL statefulset (notice the option _--cascade=false_):
+1. Delete the Discourse worker & PostgreSQL statefulset (notice the option _--cascade=false_):
 
 ```console
 kubectl delete statefulsets.apps --cascade=false discourse-postgresql
@@ -760,7 +808,7 @@ helm upgrade discourse bitnami/discourse \
   --set redis.cluster.enabled=true
 ```
 
-1. Delete the existing Airflow worker & PostgreSQL pods and the new statefulset will create a new one:
+1. Delete the existing Discourse worker & PostgreSQL pods and the new statefulset will create a new one:
 
 ```console
 kubectl delete pod discourse-postgresql-0
@@ -769,7 +817,7 @@ kubectl delete pod discourse-worker-0
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

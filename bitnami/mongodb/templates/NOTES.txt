@@ -2,6 +2,10 @@ CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
 APP VERSION: {{ .Chart.AppVersion }}
 
+⚠ WARNING: Since August 28th, 2025, only a limited subset of images/charts are available for free.
+    Subscribe to Bitnami Secure Images to receive continued support and security updates.
+    More info at https://bitnami.com and https://github.com/bitnami/containers/issues/83267
+
 {{- if .Values.diagnosticMode.enabled }}
 The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
 
@@ -76,6 +80,7 @@ To get the password for "{{ $user }}" run:
     export MONGODB_PASSWORD=$(kubectl get secret --namespace {{ include "mongodb.namespace" $ }} {{ include "mongodb.secretName" $ }} -o jsonpath="{.data.mongodb-passwords}" | base64 -d | awk -F',' '{print ${{ add 1 $index }}}')
 
 {{- end }}
+{{- end }}
 
 To connect to your database, create a MongoDB&reg; client container:
 
@@ -148,7 +153,6 @@ To connect to your database from outside the cluster execute the following comma
 
 {{- end }}
 {{- end }}
-{{- end }}
 
 {{- if .Values.metrics.enabled }}
 
@@ -169,3 +173,4 @@ Then, open the obtained URL in a browser.
 {{- include "mongodb.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "arbiter" "externalAccess.autoDiscovery" "hidden" "metrics" "" "tls" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.tls.image .Values.externalAccess.autoDiscovery.image .Values.externalAccess.dnsCheck.image .Values.volumePermissions.image .Values.metrics.image) "context" $) }}

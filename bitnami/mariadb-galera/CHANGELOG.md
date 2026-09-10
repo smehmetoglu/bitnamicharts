@@ -1,8 +1,181 @@
 # Changelog
 
-## 13.2.7 (2024-07-03)
+## 16.0.1 (2025-08-22)
 
-* [bitnami/mariadb-galera] Release 13.2.7 ([#27746](https://github.com/bitnami/charts/pull/27746))
+* [bitnami/mariadb-galera] Only require mariadb-password key in secret when creating a user on first run ([#36141](https://github.com/bitnami/charts/pull/36141))
+
+## 16.0.0 (2025-08-18)
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#36107) ([22c1bd5](https://github.com/bitnami/charts/commit/22c1bd543ed0f9503eba127d5cf904a369d0cdb8)), closes [#36107](https://github.com/bitnami/charts/issues/36107)
+
+## <small>15.0.6 (2025-08-14)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#35887) ([98ffce2](https://github.com/bitnami/charts/commit/98ffce22d7d6fce00284e668cb92b019ecd592f0)), closes [#35887](https://github.com/bitnami/charts/issues/35887)
+
+## <small>15.0.5 (2025-08-08)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#35698) ([81ecf2b](https://github.com/bitnami/charts/commit/81ecf2b0ba3f60b4ddd042551aac99ce19dc1792)), closes [#35698](https://github.com/bitnami/charts/issues/35698)
+
+## <small>15.0.4 (2025-08-07)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#35589) ([3dca756](https://github.com/bitnami/charts/commit/3dca756b29f2656bdf8b317bbffea9a98a0096cf)), closes [#35589](https://github.com/bitnami/charts/issues/35589)
+
+## <small>15.0.3 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#35505) ([16e35dc](https://github.com/bitnami/charts/commit/16e35dc3bbdc25975a2158fc4df5a4224eb501fd)), closes [#35505](https://github.com/bitnami/charts/issues/35505)
+
+## <small>15.0.2 (2025-07-09)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34929) ([62c7dd5](https://github.com/bitnami/charts/commit/62c7dd581d0fc1d90de9fd7d9af5c5622fa2539d)), closes [#34929](https://github.com/bitnami/charts/issues/34929)
+
+## <small>15.0.1 (2025-06-30)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34711) ([f53894a](https://github.com/bitnami/charts/commit/f53894a308abb6db4d0868b1f7a8d426e6ca46ea)), closes [#34711](https://github.com/bitnami/charts/issues/34711)
+
+## 15.0.0 (2025-06-25)
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34625) ([9663c61](https://github.com/bitnami/charts/commit/9663c61f05cd1acd7925071bac66b3d5d3d6bbda)), closes [#34625](https://github.com/bitnami/charts/issues/34625)
+
+## <small>14.2.9 (2025-06-13)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34472) ([2a8bb0e](https://github.com/bitnami/charts/commit/2a8bb0e7179fd4a860dd9baa7ed106c599a96c92)), closes [#34472](https://github.com/bitnami/charts/issues/34472)
+
+## <small>14.2.8 (2025-06-10)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34295) ([b27ec9e](https://github.com/bitnami/charts/commit/b27ec9e2f82057f4d7641f077b04350f133413a8)), closes [#34295](https://github.com/bitnami/charts/issues/34295)
+
+## <small>14.2.7 (2025-06-06)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#34199) ([65afab0](https://github.com/bitnami/charts/commit/65afab04a7030adf35f3a723b9267c82e904d0dc)), closes [#34199](https://github.com/bitnami/charts/issues/34199)
+
+## <small>14.2.6 (2025-05-23)</small>
+
+* [bitnami/mariadb-galera] :zap: :arrow_up: Update dependency references (#33855) ([076c26e](https://github.com/bitnami/charts/commit/076c26e9489bbb2460da1462fb12529f12f41d68)), closes [#33855](https://github.com/bitnami/charts/issues/33855)
+
+## <small>14.2.5 (2025-05-14)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/mariadb-galera] Release 14.2.5 (#33553) ([5c50a37](https://github.com/bitnami/charts/commit/5c50a37a3cc3810cbdcd6aa989362c9b88ed6ac1)), closes [#33553](https://github.com/bitnami/charts/issues/33553)
+
+## <small>14.2.4 (2025-05-06)</small>
+
+* [bitnami/mariadb-galera] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([4d78a11](https://github.com/bitnami/charts/commit/4d78a1166ea7bc0cc61cec76feef94fa7c29d4e2)), closes [#33394](https://github.com/bitnami/charts/issues/33394)
+
+## <small>14.2.3 (2025-05-01)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.3 (#33284) ([66b41fa](https://github.com/bitnami/charts/commit/66b41fa1e056bf0b065100045888bffe7c3026d0)), closes [#33284](https://github.com/bitnami/charts/issues/33284)
+
+## <small>14.2.2 (2025-04-01)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/mariadb-galera] Release 14.2.2 (#32712) ([325f550](https://github.com/bitnami/charts/commit/325f550908ee29765e2d8b22fcd1aa600d8ae7f0)), closes [#32712](https://github.com/bitnami/charts/issues/32712)
+
+## <small>14.2.1 (2025-03-02)</small>
+
+* [bitnami/mariadb-galera] Release 14.2.1 (#32229) ([02368ff](https://github.com/bitnami/charts/commit/02368ff70a363aa1d5aebc42469c5af7daa3ccb7)), closes [#32229](https://github.com/bitnami/charts/issues/32229)
+
+## 14.2.0 (2025-02-26)
+
+* [bitnami/mariadb-galera] Set `usePasswordFiles=true` by default (#32111) ([d312db4](https://github.com/bitnami/charts/commit/d312db4016edce2d8a4dbb8ea3d49886bb1cb918)), closes [#32111](https://github.com/bitnami/charts/issues/32111)
+
+## <small>14.1.4 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/mariadb-galera] Release 14.1.4 (#32013) ([622c686](https://github.com/bitnami/charts/commit/622c68659e0c9085b0ba3240ff231de266565352)), closes [#32013](https://github.com/bitnami/charts/issues/32013)
+
+## <small>14.1.3 (2025-02-07)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.3 (#31790) ([dc056e9](https://github.com/bitnami/charts/commit/dc056e927ffd96cfcbc8037f17a8b263e80d1c55)), closes [#31790](https://github.com/bitnami/charts/issues/31790)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>14.1.2 (2025-01-15)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.2 (#31381) ([54eddfc](https://github.com/bitnami/charts/commit/54eddfcd09984cca6de3f3ed85f5c6064fdaa74d)), closes [#31381](https://github.com/bitnami/charts/issues/31381)
+
+## <small>14.1.1 (2025-01-12)</small>
+
+* [bitnami/mariadb-galera] Release 14.1.1 (#31307) ([48ae84d](https://github.com/bitnami/charts/commit/48ae84d4ea739100fa94661e0efe1419ff482dbb)), closes [#31307](https://github.com/bitnami/charts/issues/31307)
+* Update README.md (#31195) ([d5777a0](https://github.com/bitnami/charts/commit/d5777a0a496ea4ff9f7f587934dc7630fc6c7fb7)), closes [#31195](https://github.com/bitnami/charts/issues/31195)
+
+## 14.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/mariadb-galera] Detect non-standard images (#30920) ([f1dd6c8](https://github.com/bitnami/charts/commit/f1dd6c867e871139ba31ff28ba208ae25248a556)), closes [#30920](https://github.com/bitnami/charts/issues/30920)
+
+## <small>14.0.14 (2024-12-03)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.14 (#30736) ([a5cdf9b](https://github.com/bitnami/charts/commit/a5cdf9be50a545f51549780d3beaafe56b39d25a)), closes [#30736](https://github.com/bitnami/charts/issues/30736)
+
+## <small>14.0.13 (2024-12-03)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 2) (#30687) ([c457848](https://github.com/bitnami/charts/commit/c457848b2a111aad59830b98f85ffa1e29918e10)), closes [#30687](https://github.com/bitnami/charts/issues/30687)
+* [bitnami/mariadb-galera] Release 14.0.13 (#30735) ([2344562](https://github.com/bitnami/charts/commit/2344562e63dd67e0c401b7dcd1955f5123c6f845)), closes [#30735](https://github.com/bitnami/charts/issues/30735)
+
+## <small>14.0.12 (2024-11-04)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.12 (#30200) ([fde08ae](https://github.com/bitnami/charts/commit/fde08ae54de37cef63e0015b906dd65c54c451f8)), closes [#30200](https://github.com/bitnami/charts/issues/30200)
+
+## <small>14.0.11 (2024-11-02)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/mariadb-galera] Release 14.0.11 (#30177) ([875ca56](https://github.com/bitnami/charts/commit/875ca56f13f7d8894008940b856c9a777e54e6a9)), closes [#30177](https://github.com/bitnami/charts/issues/30177)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>14.0.10 (2024-09-23)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.10 (#29574) ([ad8f8ea](https://github.com/bitnami/charts/commit/ad8f8eacdbec058174a1173df49ee231c9fb41aa)), closes [#29574](https://github.com/bitnami/charts/issues/29574)
+* Update README.md (typo fix) (#29335) ([2613b9f](https://github.com/bitnami/charts/commit/2613b9f8f0a6b77f024755ba2427f02f71667f30)), closes [#29335](https://github.com/bitnami/charts/issues/29335)
+
+## <small>14.0.9 (2024-08-14)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.9 (#28876) ([0cdf6a2](https://github.com/bitnami/charts/commit/0cdf6a2c0f74447801ad1a0de1fa8702db28ae4d)), closes [#28876](https://github.com/bitnami/charts/issues/28876)
+
+## <small>14.0.8 (2024-08-05)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.8 (#28669) ([5e2508d](https://github.com/bitnami/charts/commit/5e2508d3d48bbc21d20923656d7fd5cfafc1ebf6)), closes [#28669](https://github.com/bitnami/charts/issues/28669)
+
+## <small>14.0.7 (2024-08-05)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.7 (#28663) ([0b9eb24](https://github.com/bitnami/charts/commit/0b9eb240ed3a7f4f6f9d01e8c6dc5c8406bb891d)), closes [#28663](https://github.com/bitnami/charts/issues/28663)
+
+## <small>14.0.6 (2024-08-01)</small>
+
+* [bitnami/mariadb-galera] fix: ginkgo tests (#28598) ([33d53d0](https://github.com/bitnami/charts/commit/33d53d062850d56e8819729da12aaacfd2ae9007)), closes [#28598](https://github.com/bitnami/charts/issues/28598)
+
+## <small>14.0.5 (2024-07-25)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.5 (#28433) ([9bebacc](https://github.com/bitnami/charts/commit/9bebaccf79d025738864c7baa54394259005023b)), closes [#28433](https://github.com/bitnami/charts/issues/28433)
+
+## <small>14.0.4 (2024-07-24)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.4 (#28308) ([3a207b0](https://github.com/bitnami/charts/commit/3a207b091fe94f7a6371fa264b9cdf3331dc007b)), closes [#28308](https://github.com/bitnami/charts/issues/28308)
+
+## <small>14.0.3 (2024-07-23)</small>
+
+* [bitnami/mariadb-galera] Release 14.0.3 (#28219) ([6822d00](https://github.com/bitnami/charts/commit/6822d00f657b040180ba32a3a967fe596f96b367)), closes [#28219](https://github.com/bitnami/charts/issues/28219)
+
+## <small>14.0.2 (2024-07-19)</small>
+
+* [bitnami/mariadb-galera] Global StorageClass as default value (#28051) ([75bf8d7](https://github.com/bitnami/charts/commit/75bf8d738a728b480d73521f19e0824f89cc4693)), closes [#28051](https://github.com/bitnami/charts/issues/28051)
+
+## <small>14.0.1 (2024-07-18)</small>
+
+* [bitnami/mariadb-galera] allow template in existingSecret and extraVolumes (#27915) ([6d7ad68](https://github.com/bitnami/charts/commit/6d7ad68f94c618e817778308f926fefd32a6f3eb)), closes [#27915](https://github.com/bitnami/charts/issues/27915)
+
+## 14.0.0 (2024-07-11)
+
+* [bitnami/mariadb-galera] Release 14.0.0 (#27908) ([faedc05](https://github.com/bitnami/charts/commit/faedc0596e9734afaed3f1715a12906538505b12)), closes [#27908](https://github.com/bitnami/charts/issues/27908)
+
+## <small>13.2.7 (2024-07-03)</small>
+
+* [bitnami/mariadb-galera] Release 13.2.7 (#27746) ([79e765c](https://github.com/bitnami/charts/commit/79e765cb931bdbe04c8d230d3ad54606f6cf30ca)), closes [#27746](https://github.com/bitnami/charts/issues/27746)
 
 ## <small>13.2.6 (2024-07-02)</small>
 

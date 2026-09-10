@@ -47,6 +47,17 @@ Create a default mongo arbiter service name which can be overridden.
 {{- end }}
 
 {{/*
+Create a default mongo hidden service name which can be overridden.
+*/}}
+{{- define "mongodb.hidden.service.nameOverride" -}}
+    {{- if and .Values.hidden.service .Values.hidden.service.nameOverride -}}
+        {{- print .Values.hidden.service.nameOverride -}}
+    {{- else -}}
+        {{- printf "%s-hidden-headless" (include "mongodb.fullname" .) -}}
+    {{- end }}
+{{- end }}
+
+{{/*
 Return the proper MongoDB&reg; image name
 */}}
 {{- define "mongodb.image" -}}
@@ -218,6 +229,44 @@ Return true if a secret object should be created for MongoDB&reg;
 {{- end -}}
 
 {{/*
+Return true if a secret object should be created for MongoDB
+*/}}
+{{- define "mongodb.createPreviousSecret" -}}
+{{- if and .Values.passwordUpdateJob.previousPasswords.rootPassword (not .Values.passwordUpdateJob.previousPasswords.existingSecret) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with previous MongoDB credentials
+*/}}
+{{- define "mongodb.update-job.previousSecretName" -}}
+    {{- if .Values.passwordUpdateJob.previousPasswords.existingSecret -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- tpl .Values.passwordUpdateJob.previousPasswords.existingSecret $ -}}
+    {{- else if .Values.passwordUpdateJob.previousPasswords.rootPassword -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- printf "%s-previous-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- /* The secret with the new password is managed by the helm chart. We use the current secret name as it has the old password */ -}}
+        {{- include "common.names.fullname" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Return the secret with new MongoDB credentials
+*/}}
+{{- define "mongodb.update-job.newSecretName" -}}
+    {{- if and (not .Values.passwordUpdateJob.previousPasswords.existingSecret) (not .Values.passwordUpdateJob.previousPasswords.rootPassword) -}}
+        {{- /* The secret with the new password is managed by the helm chart. We create a new secret as the current one has the old password */ -}}
+        {{- printf "%s-new-secret" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+    {{- else -}}
+        {{- /* The secret with the new password is managed externally */ -}}
+        {{- include "mongodb.secretName" . -}}
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Get the initialization scripts ConfigMap name.
 */}}
 {{- define "mongodb.initdbScriptsCM" -}}
@@ -232,7 +281,7 @@ Get the initialization scripts ConfigMap name.
 Get initial primary host to configure MongoDB cluster.
 */}}
 {{- define "mongodb.initialPrimaryHost" -}}
-{{ ternary ( printf "%s-0.$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
+{{ ternary ( printf "%s-0.%s.$(MY_POD_NAMESPACE).svc.%s" (include "mongodb.fullname" .) (include "mongodb.service.nameOverride" .) .Values.clusterDomain ) ( first .Values.externalAccess.service.publicNames ) ( empty .Values.externalAccess.service.publicNames ) }}
 {{- end -}}
 
 {{/*
@@ -256,7 +305,7 @@ Init container definition to change/establish volume permissions.
   securityContext: {{- .Values.volumePermissions.securityContext | toYaml | nindent 12 }}
   {{- end }}
   {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -285,7 +334,7 @@ Init container definition to recover log dir.
   securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
   {{- end }}
   {{- if .Values.resources }}
-  resources: {{- toYaml .Values.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -303,7 +352,6 @@ Init container definition to get external IP addresses.
   image: {{ include "mongodb.externalAccess.autoDiscovery.image" . }}
   imagePullPolicy: {{ .Values.externalAccess.autoDiscovery.image.pullPolicy | quote }}
   # We need the service account token for contacting the k8s API
-  automountServiceAccountToken: true
   command:
     - /scripts/auto-discovery.sh
   env:
@@ -314,7 +362,7 @@ Init container definition to get external IP addresses.
     - name: SHARED_FILE
       value: "/shared/info.txt"
   {{- if .Values.externalAccess.autoDiscovery.resources }}
-  resources: {{- toYaml .Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  resources: {{- include "common.tplvalues.render" (dict "value" .Values.externalAccess.autoDiscovery.resources "context" $) | nindent 12 }}
   {{- else if ne .Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
   resources: {{- include "common.resources.preset" (dict "type" .Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
@@ -345,6 +393,9 @@ Init container definition to wait external DNS names.
       while ! (getent ahosts "{{ include "mongodb.initialPrimaryHost" . }}" | grep STREAM); do
         sleep 10
       done
+  {{- if .Values.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
+  {{- end }}
   {{- if .Values.externalAccess.dnsCheck.resources }}
   resources: {{- toYaml .Values.externalAccess.dnsCheck.resources | nindent 12 }}
   {{- else if ne .Values.externalAccess.dnsCheck.resourcesPreset "none" }}
@@ -592,23 +643,12 @@ Validate values of MongoDB&reg; exporter URI string - auth.enabled and/or tls.en
         {{- $tlsArgs = printf "tls=true%s&tlsCAFile=/certs/mongodb-ca-cert" $tlsCertKeyFile -}}
     {{- end -}}
     {{- if .Values.metrics.username -}}
-        {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r \"s/@/%40/g;s/:/%3A/g\"):$(echo $MONGODB_METRICS_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
+        {{- $uriAuth := ternary "$(echo $MONGODB_METRICS_USERNAME | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g'):$(echo $MONGODB_METRICS_PASSWORD | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g')@" "" .Values.auth.enabled -}}
+        {{- printf "mongodb://%s$(hostname -s):%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- else -}}
-        {{- $uriAuth := ternary "$MONGODB_ROOT_USER:$(echo $MONGODB_ROOT_PASSWORD | sed -r \"s/@/%40/g;s/:/%3A/g\")@" "" .Values.auth.enabled -}}
-        {{- printf "mongodb://%slocalhost:%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
+        {{- $uriAuth := ternary "$(echo $MONGODB_ROOT_USER | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g'):$(echo $MONGODB_ROOT_PASSWORD | sed -r 's/%/%25/g;s/@/%40/g;s/:/%3A/g;s/\\//%2F/g;s/\\?/%3F/g;s/#/%23/g;s/\\$/%24/g')@" "" .Values.auth.enabled -}}
+        {{- printf "mongodb://%s$(hostname -s):%d/admin?%s" $uriAuth (int .Values.containerPorts.mongodb) $tlsArgs -}}
     {{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate apiGroup for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiGroup" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy" -}}
-{{- else -}}
-{{- print "extensions" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*

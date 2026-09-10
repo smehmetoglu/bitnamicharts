@@ -475,8 +475,10 @@ spec:
             items:
               - key: mariadb-root-password
                 path: mariadb-root-password
+              {{- if .Values.db.user }}
               - key: mariadb-password
                 path: mariadb-password
+              {{- end }}
               - key: mariadb-galera-mariabackup-password
                 path: mariadb-galera-mariabackup-password
         {{- end }}
@@ -499,7 +501,7 @@ spec:
         - name: empty-dir
           emptyDir: {}
         {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- if and .Values.persistence.enabled .Values.persistence.existingClaim }}
         - name: data

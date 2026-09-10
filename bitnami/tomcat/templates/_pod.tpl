@@ -77,13 +77,23 @@ containers:
     env:
       - name: BITNAMI_DEBUG
         value: {{ ternary "true" "false" .Values.image.debug | quote }}
+      {{- if .Values.usePasswordFiles }}
+      - name: TOMCAT_USERNAME_FILE
+        value: {{ printf "/opt/bitnami/tomcat/secrets/%s" (include "tomcat.adminUsernameKey" .) }}
+      - name: TOMCAT_PASSWORD_FILE
+        value: {{ printf "/opt/bitnami/tomcat/secrets/%s" (include "tomcat.adminPasswordKey" .) }}
+      {{- else }}
       - name: TOMCAT_USERNAME
-        value: {{ .Values.tomcatUsername | quote }}
+        valueFrom:
+          secretKeyRef:
+            name: {{ include "tomcat.secretName" . }}
+            key: {{ include "tomcat.adminUsernameKey" . }}
       - name: TOMCAT_PASSWORD
         valueFrom:
           secretKeyRef:
             name: {{ include "tomcat.secretName" . }}
-            key: tomcat-password
+            key: {{ include "tomcat.adminPasswordKey" . }}
+      {{- end }}
       - name: TOMCAT_ALLOW_REMOTE_MANAGEMENT
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
       - name: TOMCAT_HTTP_PORT_NUMBER
@@ -164,6 +174,10 @@ containers:
       - name: empty-dir
         mountPath: /tmp
         subPath: tmp-dir
+      {{- if  .Values.usePasswordFiles }}
+      - name: tomcat-secrets
+        mountPath: /opt/bitnami/tomcat/secrets
+      {{- end }}
       {{- if .Values.extraVolumeMounts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 6 }}
       {{- end }}
@@ -180,7 +194,7 @@ containers:
       - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
-      - jmx_prometheus_httpserver.jar
+      - jmx_prometheus_standalone.jar
       - {{ .Values.metrics.jmx.ports.metrics | quote }}
       - /etc/jmx-tomcat/jmx-tomcat-prometheus.yml
     ports:
@@ -206,6 +220,13 @@ containers:
 volumes:
   - name: empty-dir
     emptyDir: {}
+  {{- if .Values.usePasswordFiles }}
+  - name: tomcat-secrets
+    projected:
+      sources:
+        - secret:
+            name: {{ include "tomcat.secretName" . }}
+  {{- end }}
   {{- if (eq .Values.deployment.type "deployment") }}
   {{- if and .Values.persistence.enabled }}
   - name: data

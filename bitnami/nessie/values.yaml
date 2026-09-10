@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -35,6 +42,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -114,10 +124,9 @@ javaOpts: ""
 image:
   registry: docker.io
   repository: bitnami/nessie
-  tag: 0.91.3-debian-12-r0
+  tag: 0.104.10-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -158,9 +167,9 @@ deploymentAnnotations: {}
 ## @param logLevel Set application log level
 ##
 logLevel: INFO
-## @param usePasswordFile Mount all sensitive information as files
+## @param usePasswordFiles Mount all sensitive information as files
 ##
-usePasswordFile: true
+usePasswordFiles: true
 ## @param versionStoreType Set version store type. The chart natively supports JDBC_POSTGRESQL, ROCKSDB and IN_MEMORY. Any other type requires you to add the configuration in configOverrides and secretConfigOverrides.
 ##
 versionStoreType: JDBC_POSTGRESQL
@@ -267,7 +276,7 @@ podSecurityContext:
 ##
 containerSecurityContext:
   enabled: true
-  seLinuxOptions: null
+  seLinuxOptions: {}
   runAsUser: 1001
   runAsGroup: 1001
   runAsNonRoot: true
@@ -743,7 +752,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r23
+    tag: 12-debian-12-r51
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -798,10 +807,9 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 16.3.0-debian-12-r16
+    tag: 17.6.0-debian-12-r4
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -848,7 +856,7 @@ waitContainer:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true

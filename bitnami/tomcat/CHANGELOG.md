@@ -1,8 +1,236 @@
 # Changelog
 
-## 11.2.9 (2024-07-03)
+## 12.0.8 (2025-08-26)
 
-* [bitnami/tomcat] Release 11.2.9 ([#27715](https://github.com/bitnami/charts/pull/27715))
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references ([#36190](https://github.com/bitnami/charts/pull/36190))
+
+## <small>12.0.7 (2025-08-12)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35756) ([92073fa](https://github.com/bitnami/charts/commit/92073fab84accccee569b0796ab7c99a5465ce9a)), closes [#35756](https://github.com/bitnami/charts/issues/35756)
+
+## <small>12.0.6 (2025-08-08)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35708) ([b6c5614](https://github.com/bitnami/charts/commit/b6c5614431cbddf453cd9ecd617b6a65c6944cbc)), closes [#35708](https://github.com/bitnami/charts/issues/35708)
+
+## <small>12.0.5 (2025-08-08)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35696) ([6d9f595](https://github.com/bitnami/charts/commit/6d9f595e141915e26116dab365ad44bd3e6bcd18)), closes [#35696](https://github.com/bitnami/charts/issues/35696)
+
+## <small>12.0.4 (2025-08-07)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35657) ([058ef86](https://github.com/bitnami/charts/commit/058ef86f764227e33a7a794f467c404d241b8431)), closes [#35657](https://github.com/bitnami/charts/issues/35657)
+
+## <small>12.0.3 (2025-08-07)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35574) ([8898ae3](https://github.com/bitnami/charts/commit/8898ae3c628e06e7c97bf1d8ddcf284aa72b66b8)), closes [#35574](https://github.com/bitnami/charts/issues/35574)
+
+## <small>12.0.2 (2025-08-06)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35437) ([a7038ef](https://github.com/bitnami/charts/commit/a7038ef1fcff36cfddb8c2694177a6bf8333b1a2)), closes [#35437](https://github.com/bitnami/charts/issues/35437)
+
+## <small>12.0.1 (2025-07-15)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#35130) ([d2513d9](https://github.com/bitnami/charts/commit/d2513d9bfbee3960c32d973c1f4fc59b736a3bb5)), closes [#35130](https://github.com/bitnami/charts/issues/35130)
+
+## 12.0.0 (2025-07-09)
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34967) ([3b88c24](https://github.com/bitnami/charts/commit/3b88c24498eb228a44fddab08e7e4fa722af57b3)), closes [#34967](https://github.com/bitnami/charts/issues/34967)
+
+## <small>11.7.14 (2025-07-04)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34809) ([b526e48](https://github.com/bitnami/charts/commit/b526e4853e9672de01199d9839d42dc9b36ac7ba)), closes [#34809](https://github.com/bitnami/charts/issues/34809)
+
+## <small>11.7.13 (2025-07-01)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34757) ([22bf2fb](https://github.com/bitnami/charts/commit/22bf2fb2a79a7a6a31ed6f434a8c6b19c7020230)), closes [#34757](https://github.com/bitnami/charts/issues/34757)
+
+## <small>11.7.12 (2025-06-11)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34342) ([70d9da9](https://github.com/bitnami/charts/commit/70d9da9b2644479c1ca4efc359a244de76730164)), closes [#34342](https://github.com/bitnami/charts/issues/34342)
+
+## <small>11.7.11 (2025-06-10)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34301) ([8f194e2](https://github.com/bitnami/charts/commit/8f194e28dcf58d8f843ba9dc6b550b42eb29243c)), closes [#34301](https://github.com/bitnami/charts/issues/34301)
+
+## <small>11.7.10 (2025-06-10)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#34286) ([8826462](https://github.com/bitnami/charts/commit/88264623f7417eee76706b35667d924c6823d9e7)), closes [#34286](https://github.com/bitnami/charts/issues/34286)
+
+## <small>11.7.9 (2025-05-28)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33939) ([bc54b6b](https://github.com/bitnami/charts/commit/bc54b6b6ff948bec3776f435e29a39830d5f7593)), closes [#33939](https://github.com/bitnami/charts/issues/33939)
+
+## <small>11.7.8 (2025-05-27)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33906) ([4912516](https://github.com/bitnami/charts/commit/4912516d9651b90db6bd1746e8123d7e18838e14)), closes [#33906](https://github.com/bitnami/charts/issues/33906)
+
+## <small>11.7.7 (2025-05-27)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33904) ([4d211ba](https://github.com/bitnami/charts/commit/4d211ba9148561476a93399585caa48653daf03f)), closes [#33904](https://github.com/bitnami/charts/issues/33904)
+
+## <small>11.7.6 (2025-05-16)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33763) ([6c7406e](https://github.com/bitnami/charts/commit/6c7406e7f1bf85b2bc077b1988d107d1d7b93af9)), closes [#33763](https://github.com/bitnami/charts/issues/33763)
+
+## <small>11.7.5 (2025-05-12)</small>
+
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33620) ([c7e2322](https://github.com/bitnami/charts/commit/c7e232230711b6bf29ee6c6b56adcb4239a1e31a)), closes [#33620](https://github.com/bitnami/charts/issues/33620)
+
+## <small>11.7.4 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/tomcat] :zap: :arrow_up: Update dependency references (#33586) ([ddad138](https://github.com/bitnami/charts/commit/ddad1380b5f535847177d3c3807190fed6e3d6f4)), closes [#33586](https://github.com/bitnami/charts/issues/33586)
+
+## <small>11.7.3 (2025-05-06)</small>
+
+* [bitnami/tomcat] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33442) ([56d36fd](https://github.com/bitnami/charts/commit/56d36fd23a50e154cfa1624bdeb4087986f17cbc)), closes [#33442](https://github.com/bitnami/charts/issues/33442)
+
+## <small>11.7.2 (2025-04-09)</small>
+
+* [bitnami/tomcat] Release 11.7.2 (#32918) ([eefe9c5](https://github.com/bitnami/charts/commit/eefe9c57d08c6f24a94b0873f35341b5162402cb)), closes [#32918](https://github.com/bitnami/charts/issues/32918)
+
+## <small>11.7.1 (2025-04-08)</small>
+
+* [bitnami/tomcat] Release 11.7.1 (#32871) ([972a98e](https://github.com/bitnami/charts/commit/972a98e88b8d999876909d656b7e20d09a62c6ab)), closes [#32871](https://github.com/bitnami/charts/issues/32871)
+
+## 11.7.0 (2025-04-04)
+
+* [bitnami/tomcat] Set `usePasswordFiles=true` by default (#32767) ([eae8740](https://github.com/bitnami/charts/commit/eae8740db4531b00fa202e12c50bfe7edc9a73b7)), closes [#32767](https://github.com/bitnami/charts/issues/32767)
+
+## <small>11.6.1 (2025-03-27)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tomcat] Release 11.6.1 (#32629) ([da54156](https://github.com/bitnami/charts/commit/da541565254f8a73b4bf1eb62746235e70dbed12)), closes [#32629](https://github.com/bitnami/charts/issues/32629)
+
+## 11.6.0 (2025-03-12)
+
+* [bitnami/tomcat] add annotations & labels to volumeClaimTemplate (#32396) ([553b0a8](https://github.com/bitnami/charts/commit/553b0a8ef1ef324a0da90ffe226bbe1910437bec)), closes [#32396](https://github.com/bitnami/charts/issues/32396)
+
+## <small>11.5.6 (2025-03-08)</small>
+
+* [bitnami/tomcat] Release 11.5.6 (#32371) ([cfa4da0](https://github.com/bitnami/charts/commit/cfa4da058eca5945102e4c74cd12f150dcc72c5f)), closes [#32371](https://github.com/bitnami/charts/issues/32371)
+
+## <small>11.5.5 (2025-02-26)</small>
+
+* [bitnami/tomcat] Release 11.5.5 (#32173) ([c69bb88](https://github.com/bitnami/charts/commit/c69bb88d63a4578302ee9455feb556bb00e6fe04)), closes [#32173](https://github.com/bitnami/charts/issues/32173)
+
+## <small>11.5.4 (2025-02-14)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/tomcat] Release 11.5.4 (#31926) ([a401c96](https://github.com/bitnami/charts/commit/a401c96b685d790344f960eab46e5aba87308f63)), closes [#31926](https://github.com/bitnami/charts/issues/31926)
+
+## <small>11.5.3 (2025-02-11)</small>
+
+* [bitnami/tomcat] Release 11.5.3 (#31875) ([823f656](https://github.com/bitnami/charts/commit/823f656236b559e07e61fd99d47ea05488ee0ca4)), closes [#31875](https://github.com/bitnami/charts/issues/31875)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.5.2 (2025-01-28)</small>
+
+* [bitnami/tomcat] Release 11.5.2 (#31626) ([8df20cf](https://github.com/bitnami/charts/commit/8df20cf13c0b7c0edcbbb46e406c5e12a1d4b892)), closes [#31626](https://github.com/bitnami/charts/issues/31626)
+
+## <small>11.5.1 (2025-01-14)</small>
+
+* [bitnami/tomcat] Release 11.5.1 (#31370) ([b524bc1](https://github.com/bitnami/charts/commit/b524bc1571c226de23cb9f058ddb8fe7387b065c)), closes [#31370](https://github.com/bitnami/charts/issues/31370)
+
+## 11.5.0 (2024-12-19)
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tomcat] chore(jmx-exporter): Upgrade image and change args (#31104) ([95b6681](https://github.com/bitnami/charts/commit/95b66814b50b2ac7b23d9f1987d207700f222d24)), closes [#31104](https://github.com/bitnami/charts/issues/31104)
+
+## 11.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/tomcat] Detect non-standard images (#30949) ([936a5de](https://github.com/bitnami/charts/commit/936a5dee502a7761e05d5e2254bb0ddba15a4a0b)), closes [#30949](https://github.com/bitnami/charts/issues/30949)
+
+## <small>11.3.3 (2024-12-10)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/tomcat] Release 11.3.3 (#30847) ([dccf562](https://github.com/bitnami/charts/commit/dccf562c26e63a321f60903fa46eac3ff59c2e94)), closes [#30847](https://github.com/bitnami/charts/issues/30847)
+
+## <small>11.3.2 (2024-11-20)</small>
+
+* [bitnami/tomcat] Release 11.3.2 (#30550) ([56f6abf](https://github.com/bitnami/charts/commit/56f6abf1123818096cc7834274a6d26057dbc748)), closes [#30550](https://github.com/bitnami/charts/issues/30550)
+
+## <small>11.3.1 (2024-11-12)</small>
+
+* [bitnami/tomcat] Release 11.3.1 (#30409) ([d1d0b6a](https://github.com/bitnami/charts/commit/d1d0b6a786fab4ab14e4926c3cfc99d24d6fd7bf)), closes [#30409](https://github.com/bitnami/charts/issues/30409)
+
+## 11.3.0 (2024-10-30)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/tomcat] Make existing secret key names choosable. Allow tomcat username to be set from secr ([bd8163c](https://github.com/bitnami/charts/commit/bd8163ca1540450b86c6efd7d37772ea48d2174c)), closes [#30080](https://github.com/bitnami/charts/issues/30080)
+
+## <small>11.2.24 (2024-10-26)</small>
+
+* [bitnami/tomcat] Release 11.2.24 (#30092) ([e5764e1](https://github.com/bitnami/charts/commit/e5764e1ce621a9f3365e27ee627249c312fd49c1)), closes [#30092](https://github.com/bitnami/charts/issues/30092)
+
+## <small>11.2.23 (2024-10-17)</small>
+
+* [bitnami/tomcat] Release 11.2.23 (#29960) ([d76f36c](https://github.com/bitnami/charts/commit/d76f36c8ba13c8fecd1ad695e7b8a14f47deee63)), closes [#29960](https://github.com/bitnami/charts/issues/29960)
+
+## <small>11.2.22 (2024-10-16)</small>
+
+* [bitnami/tomcat] Release 11.2.22 (#29937) ([5559a58](https://github.com/bitnami/charts/commit/5559a58ac027d23ac1100f807dc9616fa6853ea4)), closes [#29937](https://github.com/bitnami/charts/issues/29937)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>11.2.21 (2024-09-17)</small>
+
+* [bitnami/tomcat] Release 11.2.21 (#29485) ([0285e87](https://github.com/bitnami/charts/commit/0285e874e95cb490542b889370f2c1a3210c9f99)), closes [#29485](https://github.com/bitnami/charts/issues/29485)
+
+## <small>11.2.20 (2024-09-11)</small>
+
+* [bitnami/tomcat] fix: add apiVersion and kind to volumeClaimTemplates (#29355) ([88102b4](https://github.com/bitnami/charts/commit/88102b45f29a947812c1befa17d47568dddb31a0)), closes [#29355](https://github.com/bitnami/charts/issues/29355)
+
+## <small>11.2.19 (2024-09-11)</small>
+
+* [bitnami/tomcat] Release 11.2.19 (#29350) ([1001ff7](https://github.com/bitnami/charts/commit/1001ff70482ef27aa9184c15b3cac9c42871cecc)), closes [#29350](https://github.com/bitnami/charts/issues/29350)
+
+## <small>11.2.18 (2024-08-26)</small>
+
+* [bitnami/tomcat] Release 11.2.18 (#29024) ([3076a98](https://github.com/bitnami/charts/commit/3076a98a108652f161e3d11072c0dd56cc8a7f26)), closes [#29024](https://github.com/bitnami/charts/issues/29024)
+
+## <small>11.2.17 (2024-08-22)</small>
+
+* [bitnami/tomcat] Release 11.2.17 (#28982) ([73aba0b](https://github.com/bitnami/charts/commit/73aba0b224393ef425ca92aebbe46235904016ba)), closes [#28982](https://github.com/bitnami/charts/issues/28982)
+
+## <small>11.2.16 (2024-08-07)</small>
+
+* [bitnami/tomcat] Release 11.2.16 (#28756) ([0595ee9](https://github.com/bitnami/charts/commit/0595ee9413055543130075a8f71f46e482c63af4)), closes [#28756](https://github.com/bitnami/charts/issues/28756)
+
+## <small>11.2.15 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.15 (#28504) ([922f44d](https://github.com/bitnami/charts/commit/922f44de1141c1474ac3b82b0d8876fee0baea3a)), closes [#28504](https://github.com/bitnami/charts/issues/28504)
+
+## <small>11.2.14 (2024-07-25)</small>
+
+* [bitnami/tomcat] Release 11.2.14 (#28397) ([47d9008](https://github.com/bitnami/charts/commit/47d9008376a2c4885785379e6602325d0ce23c9e)), closes [#28397](https://github.com/bitnami/charts/issues/28397)
+
+## <small>11.2.13 (2024-07-24)</small>
+
+* [bitnami/tomcat] Release 11.2.13 (#28389) ([85ba54e](https://github.com/bitnami/charts/commit/85ba54e0b138e49516429a169ffa6df4f44ff9ed)), closes [#28389](https://github.com/bitnami/charts/issues/28389)
+
+## <small>11.2.12 (2024-07-17)</small>
+
+* [bitnami/tomcat] Release 11.2.12 (#28145) ([d6071a1](https://github.com/bitnami/charts/commit/d6071a135a4fe52c3b62fdde46bea74d7cfda795)), closes [#28145](https://github.com/bitnami/charts/issues/28145)
+
+## <small>11.2.11 (2024-07-16)</small>
+
+* [bitnami/tomcat] Global StorageClass as default value (#28104) ([ba7fb29](https://github.com/bitnami/charts/commit/ba7fb298a519dc7077022cbc1559282ab4f000d3)), closes [#28104](https://github.com/bitnami/charts/issues/28104)
+
+## <small>11.2.10 (2024-07-15)</small>
+
+* [bitnami/tomcat] Release 11.2.10 (#27969) ([b369cc9](https://github.com/bitnami/charts/commit/b369cc991ff56800bd0b2bfcdeae192089ebbfe2)), closes [#27969](https://github.com/bitnami/charts/issues/27969)
+
+## <small>11.2.9 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tomcat] Release 11.2.9 (#27715) ([9f5296f](https://github.com/bitnami/charts/commit/9f5296f7c87e3cf3e3a9c6c5531f97fe24b60f25)), closes [#27715](https://github.com/bitnami/charts/issues/27715)
 
 ## <small>11.2.8 (2024-06-20)</small>
 
@@ -1274,7 +1502,7 @@
 ## <small>3.0.3 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>3.0.2 (2019-05-28)</small>

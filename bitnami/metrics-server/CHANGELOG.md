@@ -1,8 +1,137 @@
 # Changelog
 
-## 7.2.8 (2024-07-04)
+## 7.4.12 (2025-08-14)
 
-* [bitnami/metrics-server] Release 7.2.8 ([#27769](https://github.com/bitnami/charts/pull/27769))
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references ([#35879](https://github.com/bitnami/charts/pull/35879))
+
+## <small>7.4.11 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#35502) ([7ff6b32](https://github.com/bitnami/charts/commit/7ff6b329575913fab86c03c7cf095577d0f71bd0)), closes [#35502](https://github.com/bitnami/charts/issues/35502)
+
+## <small>7.4.10 (2025-07-09)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34924) ([e708b49](https://github.com/bitnami/charts/commit/e708b4912bff42962da399fa67a0fb5ed3721e8d)), closes [#34924](https://github.com/bitnami/charts/issues/34924)
+
+## <small>7.4.9 (2025-07-07)</small>
+
+* [bitnami/metrics-server] ci: VIB verify (#34819) ([396147d](https://github.com/bitnami/charts/commit/396147d60dd64dfa32512251b029a37fda5c1edb)), closes [#34819](https://github.com/bitnami/charts/issues/34819)
+
+## <small>7.4.8 (2025-07-03)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34777) ([ab8d476](https://github.com/bitnami/charts/commit/ab8d476c3dfbaaaa69153a91c895d11ad4a03edc)), closes [#34777](https://github.com/bitnami/charts/issues/34777)
+
+## <small>7.4.7 (2025-06-13)</small>
+
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34467) ([2fd5c55](https://github.com/bitnami/charts/commit/2fd5c555759bbd0d22750172eb33cfdb9b51c542)), closes [#34467](https://github.com/bitnami/charts/issues/34467)
+
+## <small>7.4.6 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metrics-server] :zap: :arrow_up: Update dependency references (#34193) ([70c9a27](https://github.com/bitnami/charts/commit/70c9a27c97d1a665484c5c8af16959a4809cd6f7)), closes [#34193](https://github.com/bitnami/charts/issues/34193)
+
+## <small>7.4.5 (2025-05-07)</small>
+
+* [bitnami/metrics-server] Release 7.4.5 (#33482) ([07b73fa](https://github.com/bitnami/charts/commit/07b73fa0c06e60fc29f17123845c2cadd9044054)), closes [#33482](https://github.com/bitnami/charts/issues/33482)
+
+## <small>7.4.4 (2025-05-06)</small>
+
+* [bitnami/metrics-server] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references  ([b36fa86](https://github.com/bitnami/charts/commit/b36fa8666c311b9e49bacf982a3844e98f7c60d7)), closes [#33400](https://github.com/bitnami/charts/issues/33400)
+
+## <small>7.4.3 (2025-05-02)</small>
+
+* [bitnami/metrics-server] Release 7.4.3 (#33296) ([32d8701](https://github.com/bitnami/charts/commit/32d8701105619dced44cb5a8cf981c7d8a91c98b)), closes [#33296](https://github.com/bitnami/charts/issues/33296)
+
+## <small>7.4.2 (2025-04-09)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metrics-server] Release 7.4.2 (#32746) ([3234328](https://github.com/bitnami/charts/commit/3234328aa4b5b1a18041c7dbf3364b91e8b40c74)), closes [#32746](https://github.com/bitnami/charts/issues/32746)
+
+## <small>7.4.1 (2025-03-05)</small>
+
+* [bitnami/metrics-server] Release 7.4.1 (#32303) ([d4ae291](https://github.com/bitnami/charts/commit/d4ae291eecd30ddba17b2be3901ab4c0376286ba)), closes [#32303](https://github.com/bitnami/charts/issues/32303)
+
+## 7.4.0 (2025-02-20)
+
+* [bitnami/metrics-server] feat: use new helper for checking API versions (#32056) ([05cf2f8](https://github.com/bitnami/charts/commit/05cf2f80284ead5388a99c0b053039250988173f)), closes [#32056](https://github.com/bitnami/charts/issues/32056)
+
+## <small>7.3.6 (2025-02-19)</small>
+
+* [bitnami/metrics-server] Release 7.3.6 (#32017) ([acd94b1](https://github.com/bitnami/charts/commit/acd94b1f2c3fa2f62d6340f8394b3fddc0144724)), closes [#32017](https://github.com/bitnami/charts/issues/32017)
+
+## <small>7.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/metrics-server] Release 7.3.5 (#31897) ([79cfa28](https://github.com/bitnami/charts/commit/79cfa280f7d0a491d3f7e3626a69413d1effe07a)), closes [#31897](https://github.com/bitnami/charts/issues/31897)
+
+## <small>7.3.4 (2025-02-05)</small>
+
+* [bitnami/metrics-server] Release 7.3.4 (#31765) ([4d013b8](https://github.com/bitnami/charts/commit/4d013b8026cafe1b4c8bed3cc14e80a69f124b21)), closes [#31765](https://github.com/bitnami/charts/issues/31765)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.3.3 (2025-01-24)</small>
+
+* [bitnami/metrics-server] Release 7.3.3 (#31569) ([fd917c4](https://github.com/bitnami/charts/commit/fd917c450c4415cd8b083041582c0fb7e9cc4dc3)), closes [#31569](https://github.com/bitnami/charts/issues/31569)
+
+## <small>7.3.2 (2025-01-17)</small>
+
+* [bitnami/metrics-server] Release 7.3.2 (#31436) ([1d5b8eb](https://github.com/bitnami/charts/commit/1d5b8eb46dc1021d067f0ee3e423ba9282ffe8a5)), closes [#31436](https://github.com/bitnami/charts/issues/31436)
+
+## <small>7.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/metrics-server] Release 7.3.1 (#31321) ([cec8fd1](https://github.com/bitnami/charts/commit/cec8fd1493fc794eabf71d84ab09b867e7456176)), closes [#31321](https://github.com/bitnami/charts/issues/31321)
+
+## 7.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/metrics-server] Detect non-standard images (#30958) ([fcea029](https://github.com/bitnami/charts/commit/fcea0290ba2cae36820967e5123ccd7e267e6fb8)), closes [#30958](https://github.com/bitnami/charts/issues/30958)
+
+## <small>7.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/metrics-server] Release 7.2.17 (#30764) ([d516181](https://github.com/bitnami/charts/commit/d516181b9aa4c3e7d2cd9126f28cab97e4f3ec89)), closes [#30764](https://github.com/bitnami/charts/issues/30764)
+
+## <small>7.2.16 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/metrics-server] Release 7.2.16 (#30281) ([5a9502a](https://github.com/bitnami/charts/commit/5a9502a778c63391b73632d618fbb5c30f93171d)), closes [#30281](https://github.com/bitnami/charts/issues/30281)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>7.2.15 (2024-10-02)</small>
+
+* [bitnami/metrics-server] Release 7.2.15 (#29705) ([1401a20](https://github.com/bitnami/charts/commit/1401a20a249384cf8605f800e89f57011732abf9)), closes [#29705](https://github.com/bitnami/charts/issues/29705)
+
+## <small>7.2.14 (2024-09-06)</small>
+
+* [bitnami/metrics-server] Release 7.2.14 (#29254) ([da64b51](https://github.com/bitnami/charts/commit/da64b5159c558e5b73585b968f4562931b66d8a3)), closes [#29254](https://github.com/bitnami/charts/issues/29254)
+
+## <small>7.2.13 (2024-08-27)</small>
+
+* [bitnami/metrics-server] Release 7.2.13 (#29069) ([5e12672](https://github.com/bitnami/charts/commit/5e126723733e0997e80ca14577b06ef3f2438c47)), closes [#29069](https://github.com/bitnami/charts/issues/29069)
+
+## <small>7.2.12 (2024-08-27)</small>
+
+* [bitnami/metrics-server] Release 7.2.12 (#29063) ([ca11843](https://github.com/bitnami/charts/commit/ca118432040ecfd12bb71a62c8a435c85562797b)), closes [#29063](https://github.com/bitnami/charts/issues/29063)
+
+## <small>7.2.11 (2024-08-07)</small>
+
+* [bitnami/metrics-server] Release 7.2.11 (#28728) ([ae8eb5a](https://github.com/bitnami/charts/commit/ae8eb5a0e53adc3d98bd84148a4e0d612fc68bc1)), closes [#28728](https://github.com/bitnami/charts/issues/28728)
+
+## <small>7.2.10 (2024-07-25)</small>
+
+* [bitnami/metrics-server] Release 7.2.10 (#28446) ([71c20fc](https://github.com/bitnami/charts/commit/71c20fc792b3e90296bdf1d55744a016522e4e2a)), closes [#28446](https://github.com/bitnami/charts/issues/28446)
+
+## <small>7.2.9 (2024-07-24)</small>
+
+* [bitnami/metrics-server] Release 7.2.9 (#28333) ([8f2bca0](https://github.com/bitnami/charts/commit/8f2bca01b85ff2f8ff8530e0827b0a45de7f6645)), closes [#28333](https://github.com/bitnami/charts/issues/28333)
+
+## <small>7.2.8 (2024-07-04)</small>
+
+* [bitnami/metrics-server] Release 7.2.8 (#27769) ([3b84a42](https://github.com/bitnami/charts/commit/3b84a4289928f5e9c94c51254f4de93c74e4d9b7)), closes [#27769](https://github.com/bitnami/charts/issues/27769)
 
 ## <small>7.2.7 (2024-07-03)</small>
 
@@ -873,7 +1002,7 @@
 ## <small>2.3.6 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.3.5 (2019-05-28)</small>

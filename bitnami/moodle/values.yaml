@@ -8,7 +8,7 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -17,7 +17,12 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
+  defaultStorageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -47,6 +52,9 @@ commonLabels: {}
 ## @param extraDeploy Array with extra yaml to deploy with the chart. Evaluated as a template
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## @section Moodle&trade; parameters
 
 ## Bitnami Moodle&trade; image version
@@ -62,10 +70,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/moodle
-  tag: 4.4.1-debian-12-r3
+  tag: 5.0.2-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -83,7 +90,7 @@ image:
 ## @param replicaCount Number of Moodle replicas (requires ReadWriteMany PVC support)
 ## Setting this will fix the number replica count needed for Moodle&trade;
 ## This can be overridden by setting autoscaling.enabled to true
-## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas 
+## For upgrades set the autoscaling.enabled to false and replicaCount to the desired number of replicas
 ##
 replicaCount: 1
 ## When enabled, the number of Moodle&trade; replicas will be automatically adjusted based on targets on given metrics.
@@ -183,10 +190,13 @@ sidecars: []
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: false
-## @param hostAliases Moodle&trade; pods host aliases
+## @param hostAliases [array] Moodle&trade; pods host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
-hostAliases: []
+hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
 ## @param tolerations Tolerations for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
@@ -544,10 +554,6 @@ ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation
   ##
   enabled: false
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
-
   ## @param ingress.pathType Ingress Path type
   ##
   pathType: ImplementationSpecific
@@ -759,7 +765,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -804,7 +810,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.8-debian-12-r2
+    tag: 1.0.10-debian-12-r55
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -932,10 +938,9 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r50
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent

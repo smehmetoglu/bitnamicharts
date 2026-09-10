@@ -77,13 +77,16 @@ spec:
       {{- if .Values.coordinating.priorityClassName }}
       priorityClassName: {{ .Values.coordinating.priorityClassName | quote }}
       {{- end }}
+      {{- if .Values.coordinating.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.coordinating.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.coordinating.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.coordinating.terminationGracePeriodSeconds }}
       {{- end }}
       {{- if .Values.coordinating.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.coordinating.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.coordinating.initContainers) .Values.sysctlImage.enabled }}
+      {{- if or (or .Values.initContainers .Values.coordinating.initContainers) .Values.security.enabled .Values.sysctlImage.enabled }}
       initContainers:
         {{- if .Values.sysctlImage.enabled }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
@@ -278,8 +281,15 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/plugins
               subPath: app-plugins-dir
+            - name: empty-dir
+              mountPath: /bitnami/elasticsearch
+              subPath: app-volume-dir
             - name: data
               mountPath: /bitnami/elasticsearch/data
+            {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+            - name: elasticsearch-secrets
+              mountPath: /opt/bitnami/elasticsearch/secrets
+            {{- end }}
             {{- if .Values.config }}
             - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
               name: config
@@ -324,6 +334,17 @@ spec:
           emptyDir: {}
         - name: "data"
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+        - name: elasticsearch-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "elasticsearch.secretName" . }}
+              {{- if or .Values.security.tls.passwordsSecret .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword }}
+              - secret:
+                  name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:

@@ -1,8 +1,150 @@
 # Changelog
 
-## 6.3.7 (2024-07-04)
+## 6.4.22 (2025-08-14)
 
-* [bitnami/metallb] Release 6.3.7 ([#27796](https://github.com/bitnami/charts/pull/27796))
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references ([#35880](https://github.com/bitnami/charts/pull/35880))
+
+## <small>6.4.21 (2025-08-07)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#35501) ([78b0cb6](https://github.com/bitnami/charts/commit/78b0cb6d25233a443f4b36de1a1d5b614764377f)), closes [#35501](https://github.com/bitnami/charts/issues/35501)
+
+## <small>6.4.20 (2025-08-01)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#35373) ([a2c75d5](https://github.com/bitnami/charts/commit/a2c75d55350dfee3c3a9ecfa8edb9b9f301ed16c)), closes [#35373](https://github.com/bitnami/charts/issues/35373)
+
+## <small>6.4.19 (2025-07-09)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34923) ([d8f3db4](https://github.com/bitnami/charts/commit/d8f3db4c59de5594f1e5d763c23fc011717d3c87)), closes [#34923](https://github.com/bitnami/charts/issues/34923)
+
+## <small>6.4.18 (2025-06-16)</small>
+
+* [bitnami/metallb] Add RBAC permissions for new IPAddressPool and ServiceBGP resources (#34233) ([31f6fbd](https://github.com/bitnami/charts/commit/31f6fbd549d1b7b8952ce868e4eb0232a8bb3199)), closes [#34233](https://github.com/bitnami/charts/issues/34233)
+
+## <small>6.4.17 (2025-06-13)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34466) ([66e8dcf](https://github.com/bitnami/charts/commit/66e8dcfd86830855f47419a48b0bf09454759fab)), closes [#34466](https://github.com/bitnami/charts/issues/34466)
+
+## <small>6.4.16 (2025-06-06)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34192) ([7d31656](https://github.com/bitnami/charts/commit/7d3165658a617d4bcbf3e8f0c2e8a4688b210715)), closes [#34192](https://github.com/bitnami/charts/issues/34192)
+
+## <small>6.4.15 (2025-06-04)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34101) ([16be32c](https://github.com/bitnami/charts/commit/16be32c30bbb19ccd338208b68786408d831662e)), closes [#34101](https://github.com/bitnami/charts/issues/34101)
+
+## <small>6.4.14 (2025-06-03)</small>
+
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#34069) ([e16e576](https://github.com/bitnami/charts/commit/e16e576607fb024e627e8e40a47925264e8cfbc6)), closes [#34069](https://github.com/bitnami/charts/issues/34069)
+
+## <small>6.4.13 (2025-05-15)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/metallb] :zap: :arrow_up: Update dependency references (#33707) ([4407ba6](https://github.com/bitnami/charts/commit/4407ba65aae5e2473bbc88c2d2e9f54b70d03db5)), closes [#33707](https://github.com/bitnami/charts/issues/33707)
+
+## <small>6.4.12 (2025-05-07)</small>
+
+* [bitnami/metallb] Release 6.4.12 (#33534) ([e1fe319](https://github.com/bitnami/charts/commit/e1fe319645d8288b2a3aafa0bac41433639a8d1d)), closes [#33534](https://github.com/bitnami/charts/issues/33534)
+
+## <small>6.4.11 (2025-05-06)</small>
+
+* [bitnami/metallb] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33398 ([f55bc85](https://github.com/bitnami/charts/commit/f55bc851530f9caf66252ded8d27c35eae87b8d5)), closes [#33398](https://github.com/bitnami/charts/issues/33398)
+
+## <small>6.4.10 (2025-05-02)</small>
+
+* [bitnami/metallb] Release 6.4.10 (#33297) ([c6b47ee](https://github.com/bitnami/charts/commit/c6b47ee4d2a3e0b0a56109ff2414114a506f233f)), closes [#33297](https://github.com/bitnami/charts/issues/33297)
+
+## <small>6.4.9 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/metallb] Release 6.4.9 (#32750) ([2d75cde](https://github.com/bitnami/charts/commit/2d75cde070fb339d4635c2c77e0a63fdf6c76c86)), closes [#32750](https://github.com/bitnami/charts/issues/32750)
+
+## <small>6.4.8 (2025-03-05)</small>
+
+* [bitnami/metallb] Release 6.4.8 (#32302) ([63855c7](https://github.com/bitnami/charts/commit/63855c7c58f8f3a49c3064d8e38ff09152cb3772)), closes [#32302](https://github.com/bitnami/charts/issues/32302)
+
+## <small>6.4.7 (2025-02-19)</small>
+
+* [bitnami/metallb] Release 6.4.7 (#32016) ([03c24da](https://github.com/bitnami/charts/commit/03c24dafe4a4fc25f273906da9c61f1aab4f0aa4)), closes [#32016](https://github.com/bitnami/charts/issues/32016)
+
+## <small>6.4.6 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/metallb] Release 6.4.6 (#31898) ([e640853](https://github.com/bitnami/charts/commit/e640853c1ec61bca446d3a1971b4e10b128f6fc5)), closes [#31898](https://github.com/bitnami/charts/issues/31898)
+
+## <small>6.4.5 (2025-02-05)</small>
+
+* [bitnami/metallb] Release 6.4.5 (#31769) ([d124001](https://github.com/bitnami/charts/commit/d12400147e94c3ea71222948a0839339526717c3)), closes [#31769](https://github.com/bitnami/charts/issues/31769)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>6.4.4 (2025-01-24)</small>
+
+* [bitnami/metallb] Release 6.4.4 (#31568) ([f0041c8](https://github.com/bitnami/charts/commit/f0041c8ee02b15fea17e54b29d8bfdd600139488)), closes [#31568](https://github.com/bitnami/charts/issues/31568)
+
+## <small>6.4.3 (2025-01-17)</small>
+
+* [bitnami/metallb] Release 6.4.3 (#31431) ([a2f2d8c](https://github.com/bitnami/charts/commit/a2f2d8cb2d0fbb49708b237de815cea02bfde182)), closes [#31431](https://github.com/bitnami/charts/issues/31431)
+
+## <small>6.4.2 (2024-12-17)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/metallb] Release 6.4.2 (#31074) ([d59f600](https://github.com/bitnami/charts/commit/d59f6000e96e7f9322309da24e061b65e6002e3e)), closes [#31074](https://github.com/bitnami/charts/issues/31074)
+
+## <small>6.4.1 (2024-12-10)</small>
+
+* [bitnami/metallb] Fix lack of global.security.allowInsecureImages option (#30973) ([8e0efd9](https://github.com/bitnami/charts/commit/8e0efd97e4510d6b533242b0f4bd91adb915fe04)), closes [#30973](https://github.com/bitnami/charts/issues/30973)
+
+## 6.4.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/metallb] Detect non-standard images (#30923) ([048c203](https://github.com/bitnami/charts/commit/048c2036e2c1c7d93ef2d51f5bb3c487e34a7224)), closes [#30923](https://github.com/bitnami/charts/issues/30923)
+
+## <small>6.3.16 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 4) (#30669) ([a4ec006](https://github.com/bitnami/charts/commit/a4ec00624589023a70a7094fcfb9f12e382bc280)), closes [#30669](https://github.com/bitnami/charts/issues/30669)
+* [bitnami/metallb] Release 6.3.16 (#30763) ([2b81e7f](https://github.com/bitnami/charts/commit/2b81e7f231fd340f909f3bc5c0fbb96ecfa0bb3a)), closes [#30763](https://github.com/bitnami/charts/issues/30763)
+
+## <small>6.3.15 (2024-11-08)</small>
+
+* [bitnami/metallb] Unify seLinuxOptions default value (#30339) ([f1cc8ce](https://github.com/bitnami/charts/commit/f1cc8ce1d4d3c8e0da0c4aa799bcaab62177f9d1)), closes [#30339](https://github.com/bitnami/charts/issues/30339)
+
+## <small>6.3.14 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/metallb] Release 6.3.14 (#30280) ([7c02be0](https://github.com/bitnami/charts/commit/7c02be08858db99911a0a4a30edbec071d1def1a)), closes [#30280](https://github.com/bitnami/charts/issues/30280)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.3.13 (2024-10-02)</small>
+
+* [bitnami/metallb] Release 6.3.13 (#29706) ([86c6c62](https://github.com/bitnami/charts/commit/86c6c62fd91c52da161e7d3392187a9f8a880bf9)), closes [#29706](https://github.com/bitnami/charts/issues/29706)
+
+## <small>6.3.12 (2024-09-19)</small>
+
+* [bitnami/metallb] Release 6.3.12 (#29514) ([549fe79](https://github.com/bitnami/charts/commit/549fe79bc491fe4de9d7392e3ca07b74d7fcaba5)), closes [#29514](https://github.com/bitnami/charts/issues/29514)
+
+## <small>6.3.11 (2024-09-06)</small>
+
+* [bitnami/metallb] Release 6.3.11 (#29251) ([6836c94](https://github.com/bitnami/charts/commit/6836c9487f831eea731e33cabda76db8092b31da)), closes [#29251](https://github.com/bitnami/charts/issues/29251)
+
+## <small>6.3.10 (2024-08-08)</small>
+
+* [bitnami/metallb] Release 6.3.10 (#28760) ([9ca98f2](https://github.com/bitnami/charts/commit/9ca98f2617777533328f679c8252ceeaf5ece509)), closes [#28760](https://github.com/bitnami/charts/issues/28760)
+
+## <small>6.3.9 (2024-07-24)</small>
+
+* [bitnami/metallb] Remove duplicate keys (#28203) ([1552ffc](https://github.com/bitnami/charts/commit/1552ffc0cba7b4173c1d3647e34236ebbfb4fef2)), closes [#28203](https://github.com/bitnami/charts/issues/28203)
+
+## <small>6.3.8 (2024-07-16)</small>
+
+* [bitnami/metallb] Global StorageClass as default value (#28056) ([d0ab955](https://github.com/bitnami/charts/commit/d0ab95565e69472a14c13408893b8207fe5ec578)), closes [#28056](https://github.com/bitnami/charts/issues/28056)
+
+## <small>6.3.7 (2024-07-04)</small>
+
+* [bitnami/metallb] Release 6.3.7 (#27796) ([bfd90e5](https://github.com/bitnami/charts/commit/bfd90e589210411ecf58128c2c92dc178ff3299b)), closes [#27796](https://github.com/bitnami/charts/issues/27796)
 
 ## <small>6.3.6 (2024-07-03)</small>
 
@@ -316,7 +458,7 @@
 ## <small>4.5.3 (2023-06-07)</small>
 
 * [bitnami/*] Change copyright section in READMEs (#17006) ([ef986a1](https://github.com/bitnami/charts/commit/ef986a1605241102b3dcafe9fd8089e6fc1201ad)), closes [#17006](https://github.com/bitnami/charts/issues/17006)
-* [bitnami/metallb] Add missing rule to controller role (#16992) ([bbc3a6d](https://github.com/bitnami/charts/commit/bbc3a6d00d0f11e92c19c4658df87c356410a78d)), closes [#16992](https://github.com/bitnami/charts/issues/16992) [/github.com/metallb/metallb/blob/e708fc9010afb80c379bdfadd5d543931164ca5e/config/rbac/role.yaml#L17-L22](https://github.com//github.com/metallb/metallb/blob/e708fc9010afb80c379bdfadd5d543931164ca5e/config/rbac/role.yaml/issues/L17-L22)
+* [bitnami/metallb] Add missing rule to controller role (#16992) ([bbc3a6d](https://github.com/bitnami/charts/commit/bbc3a6d00d0f11e92c19c4658df87c356410a78d)), closes [#16992](https://github.com/bitnami/charts/issues/16992)
 * [bitnami/several] Change copyright section in READMEs (#16989) ([5b6a5cf](https://github.com/bitnami/charts/commit/5b6a5cfb7625a751848a2e5cd796bd7278f406ca)), closes [#16989](https://github.com/bitnami/charts/issues/16989)
 
 ## <small>4.5.2 (2023-05-31)</small>

@@ -6,13 +6,14 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "external-dns.fullname" . }}
+  name: {{ template "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   replicas: 1
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -23,15 +24,16 @@ spec:
   template:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
-      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) }}
       annotations:
         {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
-        {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
+        {{- $podAnnotations := include "common.tplvalues.merge" (dict "values" (list .Values.podAnnotations .Values.metrics.podAnnotations) "context" .) }}
+        {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
-        {{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
+        {{- if (include "external-dns.createConfigMap" .) }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
       {{- end }}
@@ -157,6 +159,9 @@ spec:
             {{- if .Values.txtSuffix }}
             - --txt-suffix={{ .Values.txtSuffix }}
             {{- end }}
+            {{- if .Values.txtNewFormatOnly }}
+            - --txt-new-format-only
+            {{- end }}
             {{- end }}
             {{- if .Values.annotationFilter }}
             - --annotation-filter={{ .Values.annotationFilter }}
@@ -243,6 +248,12 @@ spec:
               {{- if .Values.cloudflare.dnsRecordsPerPage }}
             - --cloudflare-dns-records-per-page={{ .Values.cloudflare.dnsRecordsPerPage }}
               {{- end }}
+              {{- if .Values.cloudflare.regionalServices }}
+            - --cloudflare-regional-services
+              {{- end }}
+              {{- if .Values.cloudflare.regionKey }}
+            - --cloudflare-region-key={{ .Values.cloudflare.regionKey }}
+              {{- end }}
             {{- end }}
             {{- if eq .Values.provider "google" }}
             # Google Arguments
@@ -277,6 +288,9 @@ spec:
               {{- else }}
             - --infoblox-ssl-verify
               {{- end }}
+              {{- if .Values.infoblox.createPtr }}
+            - --infoblox-create-ptr
+              {{- end }}
               {{- if .Values.infoblox.maxResults }}
             - --infoblox-max-results={{ .Values.infoblox.maxResults }}
               {{- end }}
@@ -304,7 +318,13 @@ spec:
             # RFC 2136 arguments
             - --rfc2136-host={{ required "rfc2136.host must be supplied for provider 'rfc2136'" .Values.rfc2136.host }}
             - --rfc2136-port={{ .Values.rfc2136.port }}
-            - --rfc2136-zone={{ required "rfc2136.zone must be supplied for provider 'rfc2136'" .Values.rfc2136.zone }}
+              {{- $rfc2136Zones := prepend .Values.rfc2136.zones .Values.rfc2136.zone | uniq | compact }}
+              {{- if empty $rfc2136Zones }}
+                {{ fail "rfc2136.zone or rfc2136.zones must be supplied for provider 'rfc2136'" }}
+              {{- end }}
+              {{- range $rfc2136Zones }}
+            - --rfc2136-zone={{ . }}
+              {{- end }}
             - --rfc2136-min-ttl={{ .Values.rfc2136.minTTL }}
               {{- if .Values.rfc2136.tsigAxfr }}
             - --rfc2136-tsig-axfr
@@ -331,17 +351,29 @@ spec:
             - --transip-account={{ .Values.transip.account }}
             - --transip-keyfile=/transip/transip-api-key
             {{- end }}
+            {{- if .Values.traefik.disableLegacy }}
+            - --traefik-disable-legacy
+            {{- end }}
+            {{- if .Values.traefik.disableNew }}
+            - --traefik-disable-new
+            {{- end }}
             {{- if .Values.txtEncrypt.enabled }}
             # TXT registry encryption
             - --txt-encrypt-enabled
             - --txt-encrypt-aes-key=$(TXT_AES_ENCRYPTION_KEY)
             {{- end }}
-            {{- range $key, $value := .Values.extraArgs }}
-             # Extra arguments
-              {{- if $value }}
+            {{- if .Values.extraArgs }}
+              {{- range $key, $value := .Values.extraArgs }}
+            # Extra arguments
+                {{- if kindIs "slice" $value }}
+                  {{- range $val := $value }}
+            - --{{ $key }}={{ $val }}
+                  {{- end }}
+                {{- else if $value }}
             - --{{ $key }}={{ $value }}
-              {{- else }}
+                {{- else }}
             - --{{ $key }}
+                {{- end }}
               {{- end }}
             {{- end }}
           {{- end }}
@@ -432,64 +464,6 @@ spec:
               value: {{ .Values.coredns.etcdTLS.mountPath }}/{{ include "external-dns.tlsCACert" . }}
             {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "designate" }}
-            # Designate environment variables
-            {{- if .Values.designate.customCA.enabled }}
-            - name: OPENSTACK_CA_FILE
-              value: {{ .Values.designate.customCA.mountPath }}/{{ .Values.designate.customCA.filename }}
-            {{- else if .Values.designate.customCAHostPath }}
-            - name: OPENSTACK_CA_FILE
-              value: {{ .Values.designate.customCAHostPath }}
-            {{- end }}
-            {{- if .Values.designate.username }}
-            - name: OS_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: designate_username
-            {{- end }}
-            {{- if .Values.designate.password }}
-            - name: OS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: designate_password
-            {{- end }}
-            {{- if .Values.designate.applicationCredentialId }}
-            - name: OS_APPLICATION_CREDENTIAL_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: designate_application_credential_id
-            {{- end }}
-            {{- if .Values.designate.applicationCredentialSecret }}
-            - name: OS_APPLICATION_CREDENTIAL_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: designate_application_credential_secret
-            {{- end }}
-            {{- if .Values.designate.authUrl }}
-            - name: OS_AUTH_URL
-              value: {{ .Values.designate.authUrl }}
-            {{- end }}
-            {{- if .Values.designate.regionName }}
-            - name: OS_REGION_NAME
-              value: {{ .Values.designate.regionName }}
-            {{- end }}
-            {{- if .Values.designate.userDomainName }}
-            - name: OS_USER_DOMAIN_NAME
-              value: {{ .Values.designate.userDomainName }}
-            {{- end }}
-            {{- if .Values.designate.projectName }}
-            - name: OS_PROJECT_NAME
-              value: {{ .Values.designate.projectName }}
-            {{- end }}
-            {{- if .Values.designate.authType }}
-            - name: OS_AUTH_TYPE
-              value: {{ .Values.designate.authType }}
-            {{- end }}
-            {{- end }}
             {{- if and (eq .Values.provider "digitalocean") (or .Values.digitalocean.apiToken .Values.digitalocean.secretName) }}
             # DigitalOcean environment variables
             - name: DO_TOKEN
@@ -520,22 +494,6 @@ spec:
             {{- if or .Values.google.serviceAccountSecret .Values.google.serviceAccountKey }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/secrets/service-account/credentials.json
-            {{- end }}
-            {{- end }}
-            {{- if eq .Values.provider "hetzner" }}
-            # Hetzner environment variables
-            {{- if .Values.hetzner.secretName }}
-            - name: HETZNER_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.hetzner.secretName }}
-                  key: {{ .Values.hetzner.secretKey }}
-            {{- else }}
-            - name: HETZNER_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: hetzner_token
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "linode" }}
@@ -574,14 +532,14 @@ spec:
             {{- end }}
             {{- if eq .Values.provider "scaleway" }}
             # Scaleway environment variables
-            {{- if .Values.scaleway.scwAccessKey }}
+            {{- if or (.Values.scaleway.scwAccessKey) (.Values.scaleway.secretName) }}
             - name: SCW_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: scw_access_key
             {{- end }}
-            {{- if .Values.scaleway.scwSecretKey }}
+            {{- if or (.Values.scaleway.scwSecretKey) (.Values.scaleway.secretName) }}
             - name: SCW_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -589,29 +547,7 @@ spec:
                   key: scw_secret_key
             {{- end }}
             {{- end }}
-            {{- if eq .Values.provider "infoblox" }}
-            # Infloblox environment variables
-            {{- if .Values.infoblox.wapiConnectionPoolSize }}
-            - name: EXTERNAL_DNS_INFOBLOX_HTTP_POOL_CONNECTIONS
-              value: "{{ .Values.infoblox.wapiConnectionPoolSize }}"
-            {{- end }}
-            {{- if .Values.infoblox.wapiHttpTimeout }}
-            - name: EXTERNAL_DNS_INFOBLOX_HTTP_REQUEST_TIMEOUT
-              value: "{{ .Values.infoblox.wapiHttpTimeout }}"
-            {{- end }}
-            {{- if or (and .Values.infoblox.wapiUsername .Values.infoblox.wapiPassword) (.Values.infoblox.secretName) }}
-            - name: EXTERNAL_DNS_INFOBLOX_WAPI_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: infoblox_wapi_username
-            - name: EXTERNAL_DNS_INFOBLOX_WAPI_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: infoblox_wapi_password
-            {{- end }}
-            {{- end }}
+            {{- if eq .Values.provider "rfc2136" }}
             {{- if .Values.rfc2136.tsigSecret | or (and .Values.rfc2136.kerberosUsername .Values.rfc2136.kerberosPassword) | or .Values.rfc2136.secretName }}
             # RFC 2136 environment variables
             {{- if .Values.rfc2136.rfc3645Enabled }}
@@ -633,6 +569,7 @@ spec:
                   key: rfc2136_tsig_secret
             {{- end }}
             {{- end }}
+            {{- end }}
             {{- if eq .Values.provider "pdns" }}
             # PowerDNS environment variables
             - name: PDNS_API_KEY
@@ -640,27 +577,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
                   key: pdns_api_key
-            {{- end }}
-            {{- if eq .Values.provider "vinyldns" }}
-            # VinylDNS environment variables
-            {{- if .Values.vinyldns.host }}
-            - name: VINYLDNS_HOST
-              value: {{ .Values.vinyldns.host }}
-            {{- end }}
-            {{- if .Values.vinyldns.accessKey }}
-            - name: VINYLDNS_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: vinyldns-access-key
-            {{- end }}
-            {{- if .Values.vinyldns.secretKey }}
-            - name: VINYLDNS_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "external-dns.secretName" . }}
-                  key: vinyldns-secret-key
-            {{- end }}
             {{- end }}
               {{- if .Values.extraEnvVars }}
               {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
@@ -791,20 +707,6 @@ spec:
             - name: oci-config-file
               mountPath: /etc/kubernetes/
             {{- end }}
-            {{- if eq .Values.provider "designate" }}
-            # Designate mountPath(s)
-            {{- if and (.Values.designate.customCAHostPath) (.Values.designate.customCA.enabled) }}
-            {{- fail "designate.customCAHostPath cannot be specified with designate.customCA.enabled set to true" }}
-            {{- else if .Values.designate.customCA.enabled }}
-            - name: designate-custom-ca
-              mountPath: {{ .Values.designate.customCA.mountPath }}
-              readOnly: true
-            {{- else if .Values.designate.customCAHostPath }}
-            - name: designate-custom-ca-hostpath
-              mountPath: {{ .Values.designate.customCAHostPath }}
-              readOnly: true
-            {{- end }}
-            {{- end }}
             {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
             - name: krb5config
               mountPath: /etc/krb5.conf
@@ -846,10 +748,10 @@ spec:
             secretName: {{ template "external-dns.secretName" . }}
           {{- else if .Values.azure.useWorkloadIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else if .Values.azure.useManagedIdentityExtension }}
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
           {{- else }}
           hostPath:
             path: /etc/kubernetes/azure.json
@@ -879,26 +781,11 @@ spec:
               path: credentials.json
             {{- end }}
         {{- end }}
-        {{- if eq .Values.provider "designate" }}
-        # Designate volume(s)
-        {{- if .Values.designate.customCA.enabled }}
-        - name: designate-custom-ca
-          configMap:
-            name: {{ template "external-dns.fullname" . }}
-            items:
-            - key: {{ .Values.designate.customCA.filename }}
-              path: {{ .Values.designate.customCA.filename }}
-        {{- else if .Values.designate.customCAHostPath }}
-        - name: designate-custom-ca-hostpath
-          hostPath:
-            path: {{ .Values.designate.customCAHostPath }}
-        {{- end }}
-        {{- end }}
         {{- if and (eq .Values.provider "rfc2136") .Values.rfc2136.rfc3645Enabled }}
         # Kerberos config volume
         - name: krb5config
           configMap:
-            name: {{ template "external-dns.fullname" . }}
+            name: {{ template "common.names.fullname" . }}
             items:
             - key: "krb5.conf"
               path: "krb5.conf"
@@ -907,7 +794,7 @@ spec:
         # TransIP volume(s)
         - name: transip-api-key
           secret:
-            secretName: {{ template "external-dns.fullname" . }}
+            secretName: {{ template "common.names.fullname" . }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         # Extra volume(s)

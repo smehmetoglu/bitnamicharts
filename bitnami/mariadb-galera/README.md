@@ -1,6 +1,6 @@
 <!--- app-name: MariaDB Galera -->
 
-# Bitnami package for MariaDB Galera
+# Bitnami Secure Images Helm chart for MariaDB Galera
 
 MariaDB Galera is a multi-primary database cluster solution for synchronous replication and high availability.
 
@@ -14,13 +14,26 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
-Looking to use MariaDB Galera in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [MariaDB Galera](https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera) cluster on [Kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Differences between the the Bitnami MariaDB Galera and Bitnami MariaDB Helm charts
 
@@ -77,9 +90,38 @@ The command removes all the Kubernetes components associated with the chart and 
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://mariadb.com/kb/en/set-password/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD, ROOT_PASSWORD and BACKUP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=mariadb-root-password=ROOT_PASSWORD --from-literal=mariadb-password=PASSWORD --from-literal=mariadb-galera-mariabackup-password=BACKUP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mysqld_exporter](https://github.com/prometheus/mysqld_exporter) in all pods and will expose it via a `metrics` service configurable under the `metrics.service` section. This service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -199,13 +241,13 @@ extraInitContainers:
     - install_packages curl && curl http://api-service.local/db/starting;
 ```
 
-### Extra Containers
+### Sidecar Containers
 
-The feature allows for specifying additional containers in the pod. Usecases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
+The feature allows for specifying additional containers in the pod. Use cases include situations when you need to run some sidecar containers. For example, you can observe if mysql in pod is running and report to some service discovery software like eureka. Example:
 `values.yaml`
 
 ```yaml
-extraContainers:
+sidecars:
 - name: '{{ .Chart.Name }}-eureka-sidecar'
   image: 'image:tag'
   env:
@@ -337,7 +379,7 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb-galera \
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
-### Backup and restore MariaDB Galera deployments
+### Backup and restore
 
 Two different approaches are available to back up and restore Bitnami MariaDB Galera Helm chart deployments on Kubernetes:
 
@@ -370,7 +412,7 @@ This method involves the following steps:
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring MariaDB Galera chart deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-mariadb-galera-kubernetes-index.html), which covers both these approaches, for more information.
+Refer to our detailed [tutorial on backing up and restoring MariaDB Galera chart deployments on Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-data-mariadb-galera-kubernetes-index.html), which covers both these approaches, for more information.
 
 ### Setting Pod's affinity
 
@@ -388,12 +430,14 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -475,7 +519,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 | `rootUser.password`                                         | Password for the admin user. Ignored if existing secret is provided.                                                                                                                                                              | `""`                              |
 | `rootUser.forcePassword`                                    | Option to force users to specify a password. That is required for 'helm upgrade' to work properly.                                                                                                                                | `false`                           |
 | `existingSecret`                                            | Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret)                                                                       | `""`                              |
-| `usePasswordFiles`                                          | Mount credentials as a files instead of using an environment variable.                                                                                                                                                            | `false`                           |
+| `usePasswordFiles`                                          | Mount credentials as a files instead of using an environment variable.                                                                                                                                                            | `true`                            |
 | `customPasswordFiles`                                       | Use custom password files when `usePasswordFiles` is set to `true`. Define path for keys `root`, `user`, and `mariabackup`.                                                                                                       | `{}`                              |
 | `db.user`                                                   | Username of new user to create                                                                                                                                                                                                    | `""`                              |
 | `db.password`                                               | Password for the new user. Ignored if existing secret is provided.                                                                                                                                                                | `""`                              |
@@ -543,7 +587,7 @@ The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/stora
 | `sidecars`                                                  | Add additional sidecar containers (this value is evaluated as a template)                                                                                                                                                         | `[]`                              |
 | `extraVolumes`                                              | Extra volumes                                                                                                                                                                                                                     | `[]`                              |
 | `extraVolumeMounts`                                         | Mount extra volume(s)                                                                                                                                                                                                             | `[]`                              |
-| `resourcesPreset`                                           | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                 | `micro`                           |
+| `resourcesPreset`                                           | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).                 | `medium`                          |
 | `resources`                                                 | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                 | `{}`                              |
 | `livenessProbe.enabled`                                     | Turn on and off liveness probe                                                                                                                                                                                                    | `true`                            |
 | `livenessProbe.initialDelaySeconds`                         | Delay before liveness probe is initiated                                                                                                                                                                                          | `120`                             |
@@ -657,6 +701,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 14.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
 
 ```console
@@ -746,7 +794,7 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
@@ -772,11 +820,11 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 - [Documentation for MariaDB Galera Helm chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera)
 - [Get Started with Kubernetes guides](https://docs.bitnami.com/kubernetes/)
 - [Kubernetes FAQs](https://docs.bitnami.com/kubernetes/faq/)
-- [Kubernetes Developer guides](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-index.html)
+- [Kubernetes Developer guides](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-index.html)
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

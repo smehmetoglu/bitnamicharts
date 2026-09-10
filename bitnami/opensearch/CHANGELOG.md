@@ -1,8 +1,233 @@
 # Changelog
 
-## 1.2.6 (2024-06-28)
+## 2.0.10 (2025-08-20)
 
-* [bitnami/opensearch] Fix opensearch annotation templating indentation ([#27571](https://github.com/bitnami/charts/pull/27571))
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references ([#36148](https://github.com/bitnami/charts/pull/36148))
+
+## <small>2.0.9 (2025-08-19)</small>
+
+* [bitnami/opensearch] add docs to clarify parameter behavior. (#36134) ([4f5a86f](https://github.com/bitnami/charts/commit/4f5a86f73f9c2de971b1d2d712e6f2c3bfa027f1)), closes [#36134](https://github.com/bitnami/charts/issues/36134)
+
+## <small>2.0.8 (2025-08-12)</small>
+
+* [bitnami/opensearch] Add ability to unset OPENSEARCH_SECURITY_ADMIN_DN variable to fix issue/35666 ( ([a7b9ee7](https://github.com/bitnami/charts/commit/a7b9ee7071ce33ca4a6fd9a72e54a4037399382b)), closes [#35746](https://github.com/bitnami/charts/issues/35746)
+
+## <small>2.0.7 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#35646) ([1d0fcf1](https://github.com/bitnami/charts/commit/1d0fcf1266c912c57ab121f5899d6958dac531c3)), closes [#35646](https://github.com/bitnami/charts/issues/35646)
+
+## <small>2.0.6 (2025-07-15)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#35118) ([71af747](https://github.com/bitnami/charts/commit/71af747952cdb7101d1da8985d2e3df108547536)), closes [#35118](https://github.com/bitnami/charts/issues/35118)
+
+## <small>2.0.5 (2025-06-25)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#34611) ([b1d5705](https://github.com/bitnami/charts/commit/b1d57058721d7f326e24bdf71ba4740e5d629222)), closes [#34611](https://github.com/bitnami/charts/issues/34611)
+
+## <small>2.0.4 (2025-06-19)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#34561) ([d459f30](https://github.com/bitnami/charts/commit/d459f30d4f3c91dcde3c86ca90cbe889390c4fdf)), closes [#34561](https://github.com/bitnami/charts/issues/34561)
+
+## <small>2.0.3 (2025-05-21)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33795) ([3f7a47e](https://github.com/bitnami/charts/commit/3f7a47e82c163ac5fde4da3071af76294fbbc47b)), closes [#33795](https://github.com/bitnami/charts/issues/33795)
+
+## <small>2.0.2 (2025-05-16)</small>
+
+* [bitnami/opensearch] opensearch: Increase resourcesPreset for master, coordinating and ingest nodes  ([03e46b4](https://github.com/bitnami/charts/commit/03e46b416858320b04f3c5236cbfd39f48a71040)), closes [#33742](https://github.com/bitnami/charts/issues/33742)
+
+## <small>2.0.1 (2025-05-16)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33718) ([3055a4f](https://github.com/bitnami/charts/commit/3055a4fb35be793d25f2b5ed4e9d2d882631604e)), closes [#33718](https://github.com/bitnami/charts/issues/33718)
+
+## 2.0.0 (2025-05-14)
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33589) ([b63c8ad](https://github.com/bitnami/charts/commit/b63c8ad0e34a11e00caa250725386c5e117a87cc)), closes [#33589](https://github.com/bitnami/charts/issues/33589)
+
+## <small>1.9.4 (2025-05-08)</small>
+
+* [bitnami/opensearch] :zap: :arrow_up: Update dependency references (#33569) ([c359209](https://github.com/bitnami/charts/commit/c3592095ccbe32f6d9a6dc981e6f8bbb03f53f5b)), closes [#33569](https://github.com/bitnami/charts/issues/33569)
+
+## <small>1.9.3 (2025-05-07)</small>
+
+* [bitnami/opensearch] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33 ([2cb9aaf](https://github.com/bitnami/charts/commit/2cb9aafb37c4aaf25f34e4bdaf09997c4a4a1899)), closes [#33418](https://github.com/bitnami/charts/issues/33418)
+
+## <small>1.9.2 (2025-05-06)</small>
+
+* [bitnami/opensearch] Release 1.9.2 (#33452) ([e9e4ae7](https://github.com/bitnami/charts/commit/e9e4ae793f095b2ab359a5dce6c2e1567711e71f)), closes [#33452](https://github.com/bitnami/charts/issues/33452)
+
+## <small>1.9.1 (2025-04-09)</small>
+
+* [bitnami/opensearch] Release 1.9.1 (#32916) ([a25c6c7](https://github.com/bitnami/charts/commit/a25c6c738c83407d2c29d61cd9bd48d97f29fb74)), closes [#32916](https://github.com/bitnami/charts/issues/32916)
+
+## 1.9.0 (2025-04-04)
+
+* [bitnami/opensearch] Set `usePasswordFiles=true` by default (#32797) ([d1ea259](https://github.com/bitnami/charts/commit/d1ea2593fc3a34439b742ac077edec74a1b8b3a6)), closes [#32797](https://github.com/bitnami/charts/issues/32797)
+
+## <small>1.8.2 (2025-04-02)</small>
+
+* [bitnami/opensearch] Release 1.8.2 (#32783) ([be1ab6d](https://github.com/bitnami/charts/commit/be1ab6dd868fdbd45d25d97e9cbc5cf54005b0e4)), closes [#32783](https://github.com/bitnami/charts/issues/32783)
+
+## <small>1.8.1 (2025-03-31)</small>
+
+* [bitnami/opensearch] Update nodes heapSize to half the memory preset (#32686) ([e467b2b](https://github.com/bitnami/charts/commit/e467b2b30b36dcaca94d9355315e05d50adf09f6)), closes [#32686](https://github.com/bitnami/charts/issues/32686)
+
+## 1.8.0 (2025-03-19)
+
+* [bitnami/opensearch] allow to configure trafficDistribution (#32442) ([42f6123](https://github.com/bitnami/charts/commit/42f61239d2afba35ef8f58087b634762fcbc7bbc)), closes [#32442](https://github.com/bitnami/charts/issues/32442)
+
+## 1.7.0 (2025-03-19)
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/opensearch] Add support for customizing headless services annotations (#32507) ([95945cb](https://github.com/bitnami/charts/commit/95945cb1a592b0b2ef3d9c01eb1986621aac42eb)), closes [#32507](https://github.com/bitnami/charts/issues/32507)
+
+## <small>1.6.3 (2025-03-03)</small>
+
+* [bitnami/opensearch] Release 1.6.3 (#32239) ([ee35be0](https://github.com/bitnami/charts/commit/ee35be0d9b67dd681723cffac287dac164f516be)), closes [#32239](https://github.com/bitnami/charts/issues/32239)
+
+## <small>1.6.2 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.2 (#32168) ([bb3f465](https://github.com/bitnami/charts/commit/bb3f4656caea7f38c423548874c06a55a261fe1e)), closes [#32168](https://github.com/bitnami/charts/issues/32168)
+
+## <small>1.6.1 (2025-02-25)</small>
+
+* [bitnami/opensearch] Release 1.6.1 (#32027) ([fdbd862](https://github.com/bitnami/charts/commit/fdbd862be60ddbea1ea1e919cac7cbdf0814048e)), closes [#32027](https://github.com/bitnami/charts/issues/32027)
+
+## 1.6.0 (2025-02-20)
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/opensearch] feat: use new helper for checking API versions (#32061) ([5e7a94f](https://github.com/bitnami/charts/commit/5e7a94fae9e873dc14e0c2743fa1d9597cef24b6)), closes [#32061](https://github.com/bitnami/charts/issues/32061)
+
+## <small>1.5.4 (2025-02-06)</small>
+
+* [bitnami/opensearch] bugfix: snapshots init-job to consider security settings (#31809) ([72bced5](https://github.com/bitnami/charts/commit/72bced59eb12b715f924bec907df3dacd175e8cb)), closes [#31809](https://github.com/bitnami/charts/issues/31809)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.5.3 (2025-01-28)</small>
+
+* [bitnami/opensearch] Release 1.5.3 (#31638) ([d5a7ed3](https://github.com/bitnami/charts/commit/d5a7ed377bda0f7899e2d6335ad1860b50687360)), closes [#31638](https://github.com/bitnami/charts/issues/31638)
+
+## <small>1.5.2 (2025-01-25)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/opensearch] Release 1.5.2 (#31592) ([c3e0d1b](https://github.com/bitnami/charts/commit/c3e0d1b5e5bd1cd0bd116f58d47b2541d2dd4211)), closes [#31592](https://github.com/bitnami/charts/issues/31592)
+
+## <small>1.5.1 (2024-12-16)</small>
+
+* [bitnami/opensearch] Release 1.5.1 (#31048) ([4f14ffa](https://github.com/bitnami/charts/commit/4f14ffa0492d1cf05f794be16a77b9fa02a1633c)), closes [#31048](https://github.com/bitnami/charts/issues/31048)
+
+## 1.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 5) (#30674) ([ed2a546](https://github.com/bitnami/charts/commit/ed2a54617faf763169e6b01a89100b9db32e1000)), closes [#30674](https://github.com/bitnami/charts/issues/30674)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 3) (#30688) ([10a49f9](https://github.com/bitnami/charts/commit/10a49f9ff2db1d9d11a6edd1c40a9f61803241bc)), closes [#30688](https://github.com/bitnami/charts/issues/30688)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/opensearch] Detect non-standard images (#30934) ([e31f704](https://github.com/bitnami/charts/commit/e31f70462cccd22d5f2508c480101dbeed1a0605)), closes [#30934](https://github.com/bitnami/charts/issues/30934)
+
+## 1.4.0 (2024-11-18)
+
+* [bitnami/opensearch] Enable automated setup of snapshot policies (#29796) ([39322b9](https://github.com/bitnami/charts/commit/39322b9054f3d88006a18c240165dfc7608f5aad)), closes [#29796](https://github.com/bitnami/charts/issues/29796)
+
+## <small>1.3.14 (2024-11-08)</small>
+
+* [bitnami/opensearch] Unify seLinuxOptions default value (#30336) ([2b670fc](https://github.com/bitnami/charts/commit/2b670fc5c17e0dd5ddafef2c062c1a474d07eb21)), closes [#30336](https://github.com/bitnami/charts/issues/30336)
+
+## <small>1.3.13 (2024-11-06)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/opensearch] Release 1.3.13 (#30232) ([7597498](https://github.com/bitnami/charts/commit/75974989d052bcccc258dba5f7211227716c94ec)), closes [#30232](https://github.com/bitnami/charts/issues/30232)
+
+## <small>1.3.12 (2024-10-17)</small>
+
+* [bitnami/opensearch] Release 1.3.12 (#29958) ([5fe7ee5](https://github.com/bitnami/charts/commit/5fe7ee5945e7005a923158b5d85dc8a8757beaf5)), closes [#29958](https://github.com/bitnami/charts/issues/29958)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.3.11 (2024-10-03)</small>
+
+* [bitnami/opensearch] Release 1.3.11 (#29768) ([08d9c3e](https://github.com/bitnami/charts/commit/08d9c3e69a2089a076542b894a7aee96e42c0320)), closes [#29768](https://github.com/bitnami/charts/issues/29768)
+
+## <small>1.3.10 (2024-10-03)</small>
+
+* [bitnami/opensearch] Fix typo in dashboards.fullname helper (#29645) ([5660c8c](https://github.com/bitnami/charts/commit/5660c8cee2e75a37d3b9496e69700bb1e22b8607)), closes [#29645](https://github.com/bitnami/charts/issues/29645)
+
+## <small>1.3.9 (2024-10-02)</small>
+
+* [bitnami/opensearch] Release 1.3.9 (#29747) ([ab4f933](https://github.com/bitnami/charts/commit/ab4f9331ebfbcdc7c031f90ff1e0349e5d0eeb31)), closes [#29747](https://github.com/bitnami/charts/issues/29747)
+
+## <small>1.3.8 (2024-10-02)</small>
+
+* [bitnami/opensearch] Release 1.3.8 (#29726) ([208f678](https://github.com/bitnami/charts/commit/208f67897ca37f1c7b52e7a9f69ab192fd7e7deb)), closes [#29726](https://github.com/bitnami/charts/issues/29726)
+
+## <small>1.3.7 (2024-09-26)</small>
+
+* [bitnami/opensearch] Release 1.3.7 (#29639) ([b5c5a6a](https://github.com/bitnami/charts/commit/b5c5a6a55cbcfe9b359883f991d92ddf6698f1bb)), closes [#29639](https://github.com/bitnami/charts/issues/29639)
+
+## <small>1.3.6 (2024-09-26)</small>
+
+* [bitnami/opensearch] Plugin installation as non-root user (#29624) ([bc87c42](https://github.com/bitnami/charts/commit/bc87c424bd5584e4735e7b4539a542f9e59aa0dc)), closes [#29624](https://github.com/bitnami/charts/issues/29624)
+
+## <small>1.3.5 (2024-09-26)</small>
+
+* [bitnami/opensearch] Release 1.3.5 (#29613) ([5a97a83](https://github.com/bitnami/charts/commit/5a97a83840a4811eae90ad74722f1f4fc7d39851)), closes [#29613](https://github.com/bitnami/charts/issues/29613)
+
+## <small>1.3.4 (2024-09-24)</small>
+
+* [bitnami/opensearch] Fix plugins installation (#29586) ([464c683](https://github.com/bitnami/charts/commit/464c683d543a7c39640f91fa49d6bd2902b2d331)), closes [#29586](https://github.com/bitnami/charts/issues/29586)
+
+## <small>1.3.3 (2024-09-24)</small>
+
+* [bitnami/opensearch] Release 1.3.3 (#29582) ([8e60928](https://github.com/bitnami/charts/commit/8e60928332d201716283187687dc129034816e41)), closes [#29582](https://github.com/bitnami/charts/issues/29582)
+* [bitnami/opensearch] Replace links to open.co with opensearch.org (#29548) ([1f2ebcc](https://github.com/bitnami/charts/commit/1f2ebcc40481d284e2dc6b99c0716a34ca29dc8f)), closes [#29548](https://github.com/bitnami/charts/issues/29548)
+
+## <small>1.3.2 (2024-09-17)</small>
+
+* [bitnami/opensearch] test: :white_check_mark: Improve reliability of ginkgo tests (#29471) ([63b5131](https://github.com/bitnami/charts/commit/63b5131ab378847b16be6c621df2b609bcfb83fa)), closes [#29471](https://github.com/bitnami/charts/issues/29471)
+
+## <small>1.3.1 (2024-09-11)</small>
+
+* [bitnami/opensearch] fix: add apiVersion and kind to volumeClaimTemplates (#29360) ([dce854e](https://github.com/bitnami/charts/commit/dce854e5318e0b3a339481e4a8f04a27c2c835f5)), closes [#29360](https://github.com/bitnami/charts/issues/29360)
+
+## 1.3.0 (2024-09-09)
+
+* [bitnami/opensearch] feat: :sparkles: Add metrics (#29307) ([181f600](https://github.com/bitnami/charts/commit/181f600561b3110251730540731572a4d7be0a1d)), closes [#29307](https://github.com/bitnami/charts/issues/29307)
+
+## <small>1.2.13 (2024-09-09)</small>
+
+* [bitnami/opensearch] Release 1.2.13 (#29309) ([e34315e](https://github.com/bitnami/charts/commit/e34315e5eabba57298187c5dcaaa7a5bba02ea80)), closes [#29309](https://github.com/bitnami/charts/issues/29309)
+
+## <small>1.2.12 (2024-09-09)</small>
+
+* [bitnami/opensearch] Release 1.2.12 (#29308) ([34b5af2](https://github.com/bitnami/charts/commit/34b5af2cc3da11368f51c72f8cf7bbd59e59a899)), closes [#29308](https://github.com/bitnami/charts/issues/29308)
+
+## <small>1.2.11 (2024-09-06)</small>
+
+* [bitnami/opensearch] Release 1.2.11 (#29281) ([7b87518](https://github.com/bitnami/charts/commit/7b87518dcfebb34ef91c6957eb29d5a45f38f624)), closes [#29281](https://github.com/bitnami/charts/issues/29281)
+
+## <small>1.2.10 (2024-08-08)</small>
+
+* [bitnami/opensearch] Release 1.2.10 (#28777) ([fd8c5f4](https://github.com/bitnami/charts/commit/fd8c5f42aea6194f35e54da23a57ccc4787c760c)), closes [#28777](https://github.com/bitnami/charts/issues/28777)
+
+## <small>1.2.9 (2024-07-25)</small>
+
+* [bitnami/opensearch] Release 1.2.9 (#28466) ([63ae1ed](https://github.com/bitnami/charts/commit/63ae1ed7f96b30e82faacc8283db2ef179edd4fc)), closes [#28466](https://github.com/bitnami/charts/issues/28466)
+
+## <small>1.2.8 (2024-07-24)</small>
+
+* [bitnami/opensearch] Release 1.2.8 (#28349) ([b6793e4](https://github.com/bitnami/charts/commit/b6793e4d5ff88d6d37783cc7bc8790bae0506f38)), closes [#28349](https://github.com/bitnami/charts/issues/28349)
+
+## <small>1.2.7 (2024-07-16)</small>
+
+* [bitnami/opensearch] Global StorageClass as default value (#28076) ([68f11c4](https://github.com/bitnami/charts/commit/68f11c4cf6f996ed3b2a56e20fdfc8dbd6f5df2b)), closes [#28076](https://github.com/bitnami/charts/issues/28076)
+
+## <small>1.2.6 (2024-06-28)</small>
+
+* [bitnami/opensearch] Fix opensearch annotation templating indentation (#27571) ([dcb262a](https://github.com/bitnami/charts/commit/dcb262a491a5eb97e99560ff24a13ce999e6dbb3)), closes [#27571](https://github.com/bitnami/charts/issues/27571)
 
 ## <small>1.2.5 (2024-06-26)</small>
 

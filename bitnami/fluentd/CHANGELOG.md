@@ -1,8 +1,129 @@
 # Changelog
 
-## 6.5.7 (2024-07-03)
+## 7.2.5 (2025-08-08)
 
-* [bitnami/fluentd] Release 6.5.7 ([#27696](https://github.com/bitnami/charts/pull/27696))
+* [bitnami/fluentd] Remove hardcoded references to image repository ([#35693](https://github.com/bitnami/charts/pull/35693))
+
+## <small>7.2.4 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35555) ([7bf83ed](https://github.com/bitnami/charts/commit/7bf83ed191988107f596bed9f0be9bfa2ac4bdca)), closes [#35555](https://github.com/bitnami/charts/issues/35555)
+
+## <small>7.2.3 (2025-07-30)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35341) ([2f4695b](https://github.com/bitnami/charts/commit/2f4695b5542599c04104699e2e757655ab4f194e)), closes [#35341](https://github.com/bitnami/charts/issues/35341)
+
+## <small>7.2.2 (2025-07-16)</small>
+
+* [bitnami/fluentd] feat: Support for config dual-stack for services (#34827) ([a85496e](https://github.com/bitnami/charts/commit/a85496ed73f248785575019bfef78af8552e5f9d)), closes [#34827](https://github.com/bitnami/charts/issues/34827)
+
+## <small>7.2.1 (2025-07-14)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#35043) ([2c3e789](https://github.com/bitnami/charts/commit/2c3e78954e46c399441d68b582a8b0dba40e2ec9)), closes [#35043](https://github.com/bitnami/charts/issues/35043)
+
+## 7.2.0 (2025-07-14)
+
+* [bitnami/fluentd] Make  volume mount read-only (#35038) ([f7961f2](https://github.com/bitnami/charts/commit/f7961f2fc3ee9de839a58ffb83d17d4b9b8b8199)), closes [#35038](https://github.com/bitnami/charts/issues/35038)
+
+## <small>7.1.9 (2025-06-14)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#34503) ([e1a35fe](https://github.com/bitnami/charts/commit/e1a35fec9a34ab0542eb021f6038efdae00405f9)), closes [#34503](https://github.com/bitnami/charts/issues/34503)
+
+## <small>7.1.8 (2025-05-15)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33717) ([36f0609](https://github.com/bitnami/charts/commit/36f0609730409702cc1cdf65e64e216fc5e7c10d)), closes [#33717](https://github.com/bitnami/charts/issues/33717)
+
+## <small>7.1.7 (2025-05-12)</small>
+
+* [bitnami/fluentd] :zap: :arrow_up: Update dependency references (#33611) ([008f88d](https://github.com/bitnami/charts/commit/008f88dcdb1abc09ae64f9510ba46605d6a6cebf)), closes [#33611](https://github.com/bitnami/charts/issues/33611)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>7.1.6 (2025-05-07)</small>
+
+* [bitnami/fluentd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33362 ([1d61b4a](https://github.com/bitnami/charts/commit/1d61b4a8eddfaf58c6530b4a57f8505c245f6935)), closes [#33362](https://github.com/bitnami/charts/issues/33362)
+
+## <small>7.1.5 (2025-04-12)</small>
+
+* [bitnami/fluentd] Release 7.1.5 (#32979) ([9a1c7f2](https://github.com/bitnami/charts/commit/9a1c7f211c61ba26f3c2d447a1db9a1136e6df17)), closes [#32979](https://github.com/bitnami/charts/issues/32979)
+
+## <small>7.1.4 (2025-03-13)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/fluentd] Release 7.1.4 (#32439) ([026852a](https://github.com/bitnami/charts/commit/026852acb7b38c9a01720e2378a74f33c85f8806)), closes [#32439](https://github.com/bitnami/charts/issues/32439)
+
+## <small>7.1.3 (2025-02-19)</small>
+
+* [bitnami/fluentd] Release 7.1.3 (#31996) ([71f10d1](https://github.com/bitnami/charts/commit/71f10d1f556145f87f4b487ce503806b7446507d)), closes [#31996](https://github.com/bitnami/charts/issues/31996)
+
+## <small>7.1.2 (2025-02-17)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/fluentd] Release 7.1.2 (#31949) ([0ec2926](https://github.com/bitnami/charts/commit/0ec29260972e928264eff6b6080de84d0bcc4def)), closes [#31949](https://github.com/bitnami/charts/issues/31949)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>7.1.1 (2025-01-08)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/fluentd] Release 7.1.1 (#31254) ([129caa5](https://github.com/bitnami/charts/commit/129caa5399d71d14c819a38db77e216683b956cd)), closes [#31254](https://github.com/bitnami/charts/issues/31254)
+
+## 7.1.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/fluentd] Detect non-standard images (#30877) ([7975300](https://github.com/bitnami/charts/commit/79753007a9eb6b973990ecaf84c51f2f1808f991)), closes [#30877](https://github.com/bitnami/charts/issues/30877)
+
+## <small>7.0.3 (2024-11-29)</small>
+
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/fluentd] Release 7.0.3 (#30679) ([a427241](https://github.com/bitnami/charts/commit/a4272412d4d43d8921beda27403b38990b0dd95a)), closes [#30679](https://github.com/bitnami/charts/issues/30679)
+
+## <small>7.0.2 (2024-11-09)</small>
+
+* [bitnami/fluentd] Release 7.0.2 (#30376) ([aa6e830](https://github.com/bitnami/charts/commit/aa6e830ebf892edd21bd7fb45594d4a674bbc370)), closes [#30376](https://github.com/bitnami/charts/issues/30376)
+
+## <small>7.0.1 (2024-11-05)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/fluentd] Release 7.0.1 (#30212) ([f6e469a](https://github.com/bitnami/charts/commit/f6e469a3894493edc1276df342e339c1146f6c49)), closes [#30212](https://github.com/bitnami/charts/issues/30212)
+
+## 7.0.0 (2024-10-22)
+
+* [bitnami/fluentd] Major release 7.x.x (#30031) ([d1b9a1f](https://github.com/bitnami/charts/commit/d1b9a1f3e9eb822b16643667316db02d1eeb5308)), closes [#30031](https://github.com/bitnami/charts/issues/30031)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>6.5.13 (2024-09-26)</small>
+
+* [bitnami/fluentd] Release 6.5.13 (#29609) ([a2c9129](https://github.com/bitnami/charts/commit/a2c9129e34f88135b43534ce63066db9860f1872)), closes [#29609](https://github.com/bitnami/charts/issues/29609)
+
+## <small>6.5.12 (2024-08-19)</small>
+
+* [bitnami/fluentd] Release 6.5.12 (#28921) ([2387691](https://github.com/bitnami/charts/commit/2387691e2b09ebc2e19967123544255e9060ed6a)), closes [#28921](https://github.com/bitnami/charts/issues/28921)
+* docs: update README.md (#28797) ([82058a3](https://github.com/bitnami/charts/commit/82058a3792fb3ba078ebcaeb83b48b54a688489b)), closes [#28797](https://github.com/bitnami/charts/issues/28797)
+
+## <small>6.5.11 (2024-07-25)</small>
+
+* [bitnami/fluentd] Release 6.5.11 (#28407) ([faf110e](https://github.com/bitnami/charts/commit/faf110e259814f8c488df7dfea23dfad3371dfbc)), closes [#28407](https://github.com/bitnami/charts/issues/28407)
+
+## <small>6.5.10 (2024-07-24)</small>
+
+* [bitnami/fluentd] Release 6.5.10 (#28276) ([119de24](https://github.com/bitnami/charts/commit/119de24388e5e3b2d43ea07dbb6708c597b57253)), closes [#28276](https://github.com/bitnami/charts/issues/28276)
+
+## <small>6.5.9 (2024-07-24)</small>
+
+* [bitnami/fluentd] Release 6.5.9 (#28254) ([a263832](https://github.com/bitnami/charts/commit/a2638328cea667f5a53889b611705db551a77517)), closes [#28254](https://github.com/bitnami/charts/issues/28254)
+
+## <small>6.5.8 (2024-07-16)</small>
+
+* [bitnami/fluentd] Global StorageClass as default value (#28020) ([79df4a4](https://github.com/bitnami/charts/commit/79df4a43da2d9b1076c44cbd7fda282a683c00d6)), closes [#28020](https://github.com/bitnami/charts/issues/28020)
+
+## <small>6.5.7 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/fluentd] Release 6.5.7 (#27696) ([407cf4b](https://github.com/bitnami/charts/commit/407cf4b36770b3c4609043bca844c99af0292ed0)), closes [#27696](https://github.com/bitnami/charts/issues/27696)
 
 ## <small>6.5.6 (2024-06-18)</small>
 

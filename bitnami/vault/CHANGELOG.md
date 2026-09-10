@@ -1,8 +1,271 @@
 # Changelog
 
-## 1.4.11 (2024-07-04)
+## 1.9.0 (2025-08-14)
 
-* [bitnami/vault] Release 1.4.11 ([#27795](https://github.com/bitnami/charts/pull/27795))
+* [bitnami/vault] Add ability to disable the cluster role binding for server rbac ([#35861](https://github.com/bitnami/charts/pull/35861))
+
+## <small>1.8.2 (2025-08-14)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35897) ([f2413c0](https://github.com/bitnami/charts/commit/f2413c0dc6bac15f2f333a1853b09ebe7330db1f)), closes [#35897](https://github.com/bitnami/charts/issues/35897)
+
+## <small>1.8.1 (2025-08-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35839) ([af2dba9](https://github.com/bitnami/charts/commit/af2dba9fe07af98c9c5f094d24207250e462ffb0)), closes [#35839](https://github.com/bitnami/charts/issues/35839)
+
+## 1.8.0 (2025-08-13)
+
+* [bitnami/vault] Add ability to modify or extend the vault sever RBAC roles (#35774) ([f6fa389](https://github.com/bitnami/charts/commit/f6fa389e36433f6a859b40eda3447ccab1dcc25c)), closes [#35774](https://github.com/bitnami/charts/issues/35774)
+
+## <small>1.7.25 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35636) ([ae931de](https://github.com/bitnami/charts/commit/ae931dee0f8acfd1c32a96687d257ec32b04620a)), closes [#35636](https://github.com/bitnami/charts/issues/35636)
+
+## <small>1.7.24 (2025-08-07)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35542) ([50ede49](https://github.com/bitnami/charts/commit/50ede497c022353427f9ca13c795178dc29c3523)), closes [#35542](https://github.com/bitnami/charts/issues/35542)
+
+## <small>1.7.23 (2025-08-06)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35433) ([6ae23f3](https://github.com/bitnami/charts/commit/6ae23f3b150306ca51b9e770e135087db2119ec4)), closes [#35433](https://github.com/bitnami/charts/issues/35433)
+
+## <small>1.7.22 (2025-07-24)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35292) ([a7087eb](https://github.com/bitnami/charts/commit/a7087eb59f88858844d21f442150f14bca2e97ee)), closes [#35292](https://github.com/bitnami/charts/issues/35292)
+
+## <small>1.7.21 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35137) ([e337e30](https://github.com/bitnami/charts/commit/e337e30c87d16b7c96de4608b42c7d21a69fc8bd)), closes [#35137](https://github.com/bitnami/charts/issues/35137)
+
+## <small>1.7.20 (2025-07-15)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35062) ([01a5cb5](https://github.com/bitnami/charts/commit/01a5cb5704a71acae15838521240f063c5bbc676)), closes [#35062](https://github.com/bitnami/charts/issues/35062)
+
+## <small>1.7.19 (2025-07-14)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#35052) ([c96c9c8](https://github.com/bitnami/charts/commit/c96c9c8e8d11202647d162d6106d2995ed077db3)), closes [#35052](https://github.com/bitnami/charts/issues/35052)
+
+## <small>1.7.18 (2025-07-09)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34959) ([5bf409d](https://github.com/bitnami/charts/commit/5bf409d8067ab028ff4bcb81faefae343a70415d)), closes [#34959](https://github.com/bitnami/charts/issues/34959)
+
+## <small>1.7.17 (2025-07-01)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34640) ([71a3831](https://github.com/bitnami/charts/commit/71a38311640b33d4959c6d58b6566abc15a47ebe)), closes [#34640](https://github.com/bitnami/charts/issues/34640)
+
+## <small>1.7.16 (2025-06-25)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34610) ([31ad11f](https://github.com/bitnami/charts/commit/31ad11f3ac737896ec72ae5be15da214965d4f1a)), closes [#34610](https://github.com/bitnami/charts/issues/34610)
+
+## <small>1.7.15 (2025-06-13)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34497) ([9945dcc](https://github.com/bitnami/charts/commit/9945dcccf26e66be8b8fb31290ea2e0a23867b2e)), closes [#34497](https://github.com/bitnami/charts/issues/34497)
+
+## <small>1.7.14 (2025-06-11)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34341) ([879863e](https://github.com/bitnami/charts/commit/879863e5262a04e812cd0a6321e51e42774c7151)), closes [#34341](https://github.com/bitnami/charts/issues/34341)
+
+## <small>1.7.13 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34229) ([263a016](https://github.com/bitnami/charts/commit/263a0168d2c510bf13f7b9f6561c53cebdf892fb)), closes [#34229](https://github.com/bitnami/charts/issues/34229)
+
+## <small>1.7.12 (2025-06-06)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#34223) ([3e2144e](https://github.com/bitnami/charts/commit/3e2144e4967bcbf3f1bcd71eb7e9c043dfd00ead)), closes [#34223](https://github.com/bitnami/charts/issues/34223)
+
+## <small>1.7.11 (2025-05-30)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33982) ([86eedf9](https://github.com/bitnami/charts/commit/86eedf97c52efcb887f188919f30c54c61fcb4a1)), closes [#33982](https://github.com/bitnami/charts/issues/33982)
+
+## <small>1.7.10 (2025-05-21)</small>
+
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33791) ([835677c](https://github.com/bitnami/charts/commit/835677cac979e646d0ce903bafedae9b5dc91d5f)), closes [#33791](https://github.com/bitnami/charts/issues/33791)
+
+## <small>1.7.9 (2025-05-09)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/vault] :zap: :arrow_up: Update dependency references (#33594) ([7a93af2](https://github.com/bitnami/charts/commit/7a93af29d76c865a334893977f4de5bd5383f04f)), closes [#33594](https://github.com/bitnami/charts/issues/33594)
+
+## <small>1.7.8 (2025-05-07)</small>
+
+* [bitnami/vault] Release 1.7.8 (#33516) ([524f254](https://github.com/bitnami/charts/commit/524f2543ec651adbb58cfe757119f9d1207fd503)), closes [#33516](https://github.com/bitnami/charts/issues/33516)
+
+## <small>1.7.7 (2025-05-07)</small>
+
+* [bitnami/vault] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33445) ([3a89290](https://github.com/bitnami/charts/commit/3a89290df070eb355495262d431f4e1624b31df1)), closes [#33445](https://github.com/bitnami/charts/issues/33445)
+
+## <small>1.7.6 (2025-04-30)</small>
+
+* [bitnami/vault] Release 1.7.6 (#33273) ([3dfb09f](https://github.com/bitnami/charts/commit/3dfb09f99574b2225d693e2803689186817afb35)), closes [#33273](https://github.com/bitnami/charts/issues/33273)
+
+## <small>1.7.5 (2025-04-18)</small>
+
+* [bitnami/vault] Release 1.7.5 (#33075) ([9dfede7](https://github.com/bitnami/charts/commit/9dfede72bb0df747cf0bb2e3c3db210e4447fe80)), closes [#33075](https://github.com/bitnami/charts/issues/33075)
+
+## <small>1.7.4 (2025-04-14)</small>
+
+* [bitnami/vault] bugfix: enable back server.replicaCount parameter (#32992) ([6f734f4](https://github.com/bitnami/charts/commit/6f734f419d4809e7b80be9f2c412e2f8c1c99421)), closes [#32992](https://github.com/bitnami/charts/issues/32992)
+
+## <small>1.7.3 (2025-04-09)</small>
+
+* [bitnami/vault] Release 1.7.3 (#32919) ([32020c1](https://github.com/bitnami/charts/commit/32020c1a7047c5717374c972e6ca755545477650)), closes [#32919](https://github.com/bitnami/charts/issues/32919)
+
+## <small>1.7.2 (2025-04-04)</small>
+
+* [bitnami/vault] Release 1.7.2 (#32819) ([79a15c6](https://github.com/bitnami/charts/commit/79a15c68659a535de55bdcaffb37824fd844af6e)), closes [#32819](https://github.com/bitnami/charts/issues/32819)
+
+## <small>1.7.1 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/vault] Release 1.7.1 (#32765) ([af1ea05](https://github.com/bitnami/charts/commit/af1ea053672509dbaef2b96426d9bf63a166eaa1)), closes [#32765](https://github.com/bitnami/charts/issues/32765)
+
+## 1.7.0 (2025-03-11)
+
+* [bitnami/vault] Remove server.replicaCount parameter (#32384) ([3dcf30f](https://github.com/bitnami/charts/commit/3dcf30f59eb2febfd69f48ad06f31b51e7bb69b4)), closes [#32384](https://github.com/bitnami/charts/issues/32384)
+
+## <small>1.6.10 (2025-03-05)</small>
+
+* [bitnami/vault] Release 1.6.10 (#32331) ([d09b74e](https://github.com/bitnami/charts/commit/d09b74ec36a7a7b178ff2515fc682da6dc6b1e57)), closes [#32331](https://github.com/bitnami/charts/issues/32331)
+
+## <small>1.6.9 (2025-03-05)</small>
+
+* [bitnami/vault] Release 1.6.9 (#32320) ([4a78adb](https://github.com/bitnami/charts/commit/4a78adb19a9882149d5ebdb6195b96d2422b0bc3)), closes [#32320](https://github.com/bitnami/charts/issues/32320)
+
+## <small>1.6.8 (2025-02-25)</small>
+
+* [bitnami/vault] Release 1.6.8 (#32152) ([5daa205](https://github.com/bitnami/charts/commit/5daa2050953fb6cabd33868e82602cbd788d1e41)), closes [#32152](https://github.com/bitnami/charts/issues/32152)
+
+## <small>1.6.7 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/vault] Release 1.6.7 (#32069) ([cec553b](https://github.com/bitnami/charts/commit/cec553b088e13dc80a6f049758906436832db447)), closes [#32069](https://github.com/bitnami/charts/issues/32069)
+
+## <small>1.6.6 (2025-02-05)</small>
+
+* [bitnami/vault] Release 1.6.6 (#31781) ([87925bc](https://github.com/bitnami/charts/commit/87925bcff431278154fac514c292b2ec8feccabf)), closes [#31781](https://github.com/bitnami/charts/issues/31781)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>1.6.5 (2025-01-31)</small>
+
+* [bitnami/vault] Release 1.6.5 (#31681) ([54af143](https://github.com/bitnami/charts/commit/54af143ef4abf2746aadfec114ece49bfafdbdfa)), closes [#31681](https://github.com/bitnami/charts/issues/31681)
+
+## <small>1.6.4 (2025-01-24)</small>
+
+* [bitnami/vault] Release 1.6.4 (#31586) ([1151ff3](https://github.com/bitnami/charts/commit/1151ff31c6004424c9983246b2735673f0149cc6)), closes [#31586](https://github.com/bitnami/charts/issues/31586)
+
+## <small>1.6.3 (2025-01-23)</small>
+
+* [bitnami/vault] Fix missing existing PVC volume declaration (#31202) (#31211) ([f743319](https://github.com/bitnami/charts/commit/f743319c46b75d6382bfd4af7e578dbc2cedea52)), closes [#31202](https://github.com/bitnami/charts/issues/31202) [#31211](https://github.com/bitnami/charts/issues/31211) [#31202](https://github.com/bitnami/charts/issues/31202)
+
+## <small>1.6.2 (2025-01-17)</small>
+
+* [bitnami/vault] Release 1.6.2 (#31445) ([b34be1a](https://github.com/bitnami/charts/commit/b34be1a754898b376f2aff703d68609ce81b6994)), closes [#31445](https://github.com/bitnami/charts/issues/31445)
+
+## <small>1.6.1 (2024-12-19)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/vault] Release 1.6.1 (#31110) ([99abcba](https://github.com/bitnami/charts/commit/99abcba5ae865a78096c8b26632a299d08480635)), closes [#31110](https://github.com/bitnami/charts/issues/31110)
+
+## 1.6.0 (2024-12-12)
+
+* [bitnami/vault] Parametize caBundle in mutatingwebhook (#30709) ([bbac787](https://github.com/bitnami/charts/commit/bbac7879e5179dce88e00195e480169f7fa4032d)), closes [#30709](https://github.com/bitnami/charts/issues/30709)
+
+## 1.5.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/vault] Detect non-standard images (#30952) ([b7d4d9c](https://github.com/bitnami/charts/commit/b7d4d9c133d90526e52d0cf39ea7096902af2979)), closes [#30952](https://github.com/bitnami/charts/issues/30952)
+
+## <small>1.4.31 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/*] docs: :memo: Unify "Securing Traffic using TLS" section (#30707) ([b572333](https://github.com/bitnami/charts/commit/b57233336e4fe9af928ecb4f2a5f334011efb1bc)), closes [#30707](https://github.com/bitnami/charts/issues/30707)
+* [bitnami/vault] Release 1.4.31 (#30780) ([46280fd](https://github.com/bitnami/charts/commit/46280fd8776323c22b2d0140da7e252b7cf6b31a)), closes [#30780](https://github.com/bitnami/charts/issues/30780)
+
+## <small>1.4.30 (2024-11-22)</small>
+
+* [bitnami/vault] Release 1.4.30 (#30573) ([c98e533](https://github.com/bitnami/charts/commit/c98e533c3061c98a5e8e7561c08114b8002d1dab)), closes [#30573](https://github.com/bitnami/charts/issues/30573)
+
+## <small>1.4.29 (2024-11-08)</small>
+
+* [bitnami/vault] Unify seLinuxOptions default value (#30323) ([c107a0d](https://github.com/bitnami/charts/commit/c107a0dab0e4b0a692cbe458903bf0bdaa2a855f)), closes [#30323](https://github.com/bitnami/charts/issues/30323)
+
+## <small>1.4.28 (2024-11-07)</small>
+
+* [bitnami/vault] Release 1.4.28 (#30297) ([28c047d](https://github.com/bitnami/charts/commit/28c047d7a7c101da6b0f45cac2d940e11417a6f7)), closes [#30297](https://github.com/bitnami/charts/issues/30297)
+
+## <small>1.4.27 (2024-11-01)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/vault] Release 1.4.27 (#30167) ([3f157ed](https://github.com/bitnami/charts/commit/3f157edcff98a7f7c694b043a6ff3e36e0e515b5)), closes [#30167](https://github.com/bitnami/charts/issues/30167)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>1.4.26 (2024-10-09)</small>
+
+* [bitnami/vault] Release 1.4.26 (#29839) ([545c006](https://github.com/bitnami/charts/commit/545c006dff7f6fcdaf4d875a903f56a643f8d8fd)), closes [#29839](https://github.com/bitnami/charts/issues/29839)
+
+## <small>1.4.25 (2024-10-02)</small>
+
+* [bitnami/vault] Release 1.4.25 (#29721) ([692d7a2](https://github.com/bitnami/charts/commit/692d7a2287c4fe16692384f80064e368e8c5e44a)), closes [#29721](https://github.com/bitnami/charts/issues/29721)
+
+## <small>1.4.24 (2024-10-02)</small>
+
+* [bitnami/vault] Fix documentation in README.md (#29665) ([3cf178a](https://github.com/bitnami/charts/commit/3cf178a2d8ba3d6002ed076044b221f548b5e868)), closes [#29665](https://github.com/bitnami/charts/issues/29665)
+
+## <small>1.4.23 (2024-09-26)</small>
+
+* [bitnami/vault] Release 1.4.23 (#29608) ([155118f](https://github.com/bitnami/charts/commit/155118f32248d78de3dbee0412c0350bccf849c2)), closes [#29608](https://github.com/bitnami/charts/issues/29608)
+
+## <small>1.4.22 (2024-09-11)</small>
+
+* [bitnami/vault] fix: add apiVersion and kind to volumeClaimTemplates (#29353) ([e870d71](https://github.com/bitnami/charts/commit/e870d71f3b5f8bb0c5ed174cdaca739af4aaa83b)), closes [#29353](https://github.com/bitnami/charts/issues/29353)
+
+## <small>1.4.21 (2024-09-06)</small>
+
+* [bitnami/vault] Release 1.4.21 (#29269) ([bb12732](https://github.com/bitnami/charts/commit/bb1273268ea62c2cd2604fc96744f0afef421b78)), closes [#29269](https://github.com/bitnami/charts/issues/29269)
+
+## <small>1.4.20 (2024-08-31)</small>
+
+* [bitnami/vault] Release 1.4.20 (#29140) ([7134ec1](https://github.com/bitnami/charts/commit/7134ec1db9fa5b1e9dcf04a131c09f17f1f21f1c)), closes [#29140](https://github.com/bitnami/charts/issues/29140)
+
+## <small>1.4.19 (2024-08-29)</small>
+
+* [bitnami/vault] Release 1.4.19 (#29115) ([94f3eaf](https://github.com/bitnami/charts/commit/94f3eaf77153071646f392ae5e142eee08ca04c6)), closes [#29115](https://github.com/bitnami/charts/issues/29115)
+
+## <small>1.4.18 (2024-08-08)</small>
+
+* [bitnami/vault] Release 1.4.18 (#28781) ([ef9ddad](https://github.com/bitnami/charts/commit/ef9ddadb67fa4346667842b54e32108179fa344b)), closes [#28781](https://github.com/bitnami/charts/issues/28781)
+
+## <small>1.4.17 (2024-08-07)</small>
+
+* [bitnami/vault] Release 1.4.17 (#28751) ([82fc640](https://github.com/bitnami/charts/commit/82fc64001bda2695a56f5ffc71a5f73a2a45a057)), closes [#28751](https://github.com/bitnami/charts/issues/28751)
+
+## <small>1.4.16 (2024-07-25)</small>
+
+* [bitnami/vault] Release 1.4.16 (#28497) ([bd56214](https://github.com/bitnami/charts/commit/bd56214ec9c9bceffded3c59b445e149dfb5dc4b)), closes [#28497](https://github.com/bitnami/charts/issues/28497)
+
+## <small>1.4.15 (2024-07-24)</small>
+
+* [bitnami/vault] Release 1.4.15 (#28391) ([20a67f5](https://github.com/bitnami/charts/commit/20a67f5ae532b65d5767fd08a26ed5ae28fa0eea)), closes [#28391](https://github.com/bitnami/charts/issues/28391)
+
+## <small>1.4.14 (2024-07-22)</small>
+
+* [bitnami/vault] Only mount data volume if persistence is enabled (#27986) ([3942449](https://github.com/bitnami/charts/commit/3942449403e5d39d45b4a23c980adcd816a26322)), closes [#27986](https://github.com/bitnami/charts/issues/27986)
+
+## <small>1.4.13 (2024-07-18)</small>
+
+* [bitnami/vault] Global StorageClass as default value (#28107) ([3ad8853](https://github.com/bitnami/charts/commit/3ad885391c5c6e655078b6c65792616e3553ec44)), closes [#28107](https://github.com/bitnami/charts/issues/28107)
+
+## <small>1.4.12 (2024-07-10)</small>
+
+* [bitnami/vault] Release 1.4.12 (#27885) ([bba178f](https://github.com/bitnami/charts/commit/bba178ff953d1344f69b43879e5b295103f11e34)), closes [#27885](https://github.com/bitnami/charts/issues/27885)
+
+## <small>1.4.11 (2024-07-04)</small>
+
+* [bitnami/vault] Release 1.4.11 (#27795) ([28e75bc](https://github.com/bitnami/charts/commit/28e75bc3ec2e8e575c1231f1e2b0ad9e22f23301)), closes [#27795](https://github.com/bitnami/charts/issues/27795)
 
 ## <small>1.4.10 (2024-07-03)</small>
 

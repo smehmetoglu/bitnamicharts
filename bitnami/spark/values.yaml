@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -102,10 +109,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.1-debian-12-r8
+  tag: 4.0.0-debian-12-r20
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -131,6 +137,9 @@ hostNetwork: false
 ## Spark master specific configuration
 ##
 master:
+  ## @param master.enabled Deploy master statefulset
+  ##
+  enabled: true
   ## @param master.existingConfigmap The name of an existing ConfigMap with your custom configuration for master
   ##
   existingConfigmap: ""
@@ -205,7 +214,7 @@ master:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -476,6 +485,9 @@ master:
 ## Spark worker specific configuration
 ##
 worker:
+  ## @param worker.enabled Deploy worker resources
+  ##
+  enabled: true
   ## @param worker.existingConfigmap The name of an existing ConfigMap with your custom configuration for workers
   ##
   existingConfigmap: ""
@@ -551,7 +563,7 @@ worker:
     sysctls: []
     supplementalGroups: []
     fsGroup: 1001
-    seLinuxOptions: null
+    seLinuxOptions: {}
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param worker.containerSecurityContext.enabled Enabled containers' Security Context
@@ -567,7 +579,7 @@ worker:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true

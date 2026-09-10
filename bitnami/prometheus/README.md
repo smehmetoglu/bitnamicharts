@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus -->
 
-# Bitnami package for Prometheus
+# Bitnami Secure Images Helm chart for Prometheus
 
 Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/prometheus
 ```
 
-Looking to use Prometheus in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [Prometheus](https://prometheus.io) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -51,9 +64,9 @@ The command deploys Prometheus on the Kubernetes cluster in the default configur
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -62,6 +75,10 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Deploy extra resources
 
 There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ### Setting Pod's affinity
 
@@ -212,7 +229,7 @@ kubectl create namespace monitoring
 helm install prometheus \
     --namespace monitoring \
     oci://REGISTRY_NAME/REPOSITORY_NAME/prometheus
-helm install grafana-mimir \
+helm install grafana \
     --values values.yaml \
     --namespace monitoring \
     oci://REGISTRY_NAME/REPOSITORY_NAME/grafana
@@ -303,12 +320,14 @@ server:
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -370,7 +389,7 @@ server:
 | `alertmanager.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                 | `[]`                            |
 | `alertmanager.podSecurityContext.fsGroup`                        | Set Alertmanager pod's Security Context fsGroup                                                                                                                                                                                             | `1001`                          |
 | `alertmanager.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                        | `true`                          |
-| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                            | `nil`                           |
+| `alertmanager.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                            | `{}`                            |
 | `alertmanager.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                  | `1001`                          |
 | `alertmanager.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                 | `1001`                          |
 | `alertmanager.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                               | `true`                          |
@@ -470,9 +489,12 @@ server:
 | `server.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)                                                                                         | `""`                         |
 | `server.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                                                                  | `IfNotPresent`               |
 | `server.image.pullSecrets`                                        | Prometheus image pull secrets                                                                                                                                                                                                                 | `[]`                         |
+| `server.scrapePrometheusHost`                                     | Specifies whether to include prometheus host scraping job                                                                                                                                                                                     | `true`                       |
+| `server.scrapeAlertmanagerHost`                                   | Specifies whether to include alertmanager host scraping job                                                                                                                                                                                   | `true`                       |
 | `server.configuration`                                            | Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.                                                                                                                       | `""`                         |
 | `server.alertingRules`                                            | Prometheus alerting rules. This content will be stored in the the rules.yaml file and the content can be a template.                                                                                                                          | `{}`                         |
 | `server.extraScrapeConfigs`                                       | Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.                                                                  | `[]`                         |
+| `server.useStatefulSet`                                           | Whether to use a StatefulSet or a Deployment to deploy Prometheus server                                                                                                                                                                      | `false`                      |
 | `server.replicaCount`                                             | Number of Prometheus replicas to deploy                                                                                                                                                                                                       | `1`                          |
 | `server.containerPorts.http`                                      | Prometheus HTTP container port                                                                                                                                                                                                                | `9090`                       |
 | `server.livenessProbe.enabled`                                    | Enable livenessProbe on Prometheus containers                                                                                                                                                                                                 | `true`                       |
@@ -504,7 +526,7 @@ server:
 | `server.podSecurityContext.supplementalGroups`                    | Set filesystem extra groups                                                                                                                                                                                                                   | `[]`                         |
 | `server.podSecurityContext.fsGroup`                               | Set Prometheus pod's Security Context fsGroup                                                                                                                                                                                                 | `1001`                       |
 | `server.containerSecurityContext.enabled`                         | Enabled containers' Security Context                                                                                                                                                                                                          | `true`                       |
-| `server.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                                                                                                                              | `nil`                        |
+| `server.containerSecurityContext.seLinuxOptions`                  | Set SELinux options in container                                                                                                                                                                                                              | `{}`                         |
 | `server.containerSecurityContext.runAsUser`                       | Set containers' Security Context runAsUser                                                                                                                                                                                                    | `1001`                       |
 | `server.containerSecurityContext.runAsGroup`                      | Set containers' Security Context runAsGroup                                                                                                                                                                                                   | `1001`                       |
 | `server.containerSecurityContext.runAsNonRoot`                    | Set container's Security Context runAsNonRoot                                                                                                                                                                                                 | `true`                       |
@@ -567,7 +589,7 @@ server:
 | `server.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                                                                                                                                      | `IfNotPresent`               |
 | `server.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                              | `[]`                         |
 | `server.thanos.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                          | `true`                       |
-| `server.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                              | `nil`                        |
+| `server.thanos.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                              | `{}`                         |
 | `server.thanos.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                    | `1001`                       |
 | `server.thanos.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                   | `1001`                       |
 | `server.thanos.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                 | `true`                       |
@@ -580,6 +602,9 @@ server:
 | `server.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                                                                                                                                   | `[]`                         |
 | `server.thanos.objectStorageConfig.secretName`                    | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                                                                                                                               | `""`                         |
 | `server.thanos.objectStorageConfig.secretKey`                     | Secret key with the configuration file.                                                                                                                                                                                                       | `thanos.yaml`                |
+| `server.thanos.extraEnvVars`                                      | Array with extra environment variables to add to the thanos sidecar container                                                                                                                                                                 | `[]`                         |
+| `server.thanos.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for the thanos sidecar container                                                                                                                                                         | `""`                         |
+| `server.thanos.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for the thanos sidecar container                                                                                                                                                            | `""`                         |
 | `server.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `server.volumes` for thanos sidecar container                                                                                                                                                                    | `[]`                         |
 | `server.thanos.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if server.thanos.resources is set (server.thanos.resources is recommended for production). | `nano`                       |
 | `server.thanos.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                             | `{}`                         |
@@ -671,6 +696,7 @@ server:
 | `server.persistence.selector`                                     | Selector to match an existing Persistent Volume for Prometheus data PVC                                                                                                                                                                       | `{}`                         |
 | `server.persistence.dataSource`                                   | Custom PVC data source                                                                                                                                                                                                                        | `{}`                         |
 | `server.rbac.create`                                              | Specifies whether RBAC resources should be created                                                                                                                                                                                            | `true`                       |
+| `server.rbac.includeDefaultRules`                                 | Specifies whether to include default rules from official prometheus helm chart                                                                                                                                                                | `true`                       |
 | `server.rbac.rules`                                               | Custom RBAC rules to set                                                                                                                                                                                                                      | `[]`                         |
 
 ### Init Container Parameters
@@ -684,7 +710,7 @@ server:
 | `volumePermissions.image.pullSecrets`                       | OS Shell + Utility image pull secrets                                                                                                                                                                                                                 | `[]`                       |
 | `volumePermissions.resourcesPreset`                         | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
 | `volumePermissions.resources`                               | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                       |
-| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `nil`                      |
+| `volumePermissions.containerSecurityContext.seLinuxOptions` | Set SELinux options in container                                                                                                                                                                                                                      | `{}`                       |
 | `volumePermissions.containerSecurityContext.runAsUser`      | Set init container's Security Context runAsUser                                                                                                                                                                                                       | `0`                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -713,6 +739,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 1.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ### To 1.0.0
 
 This major bump changes the following security defaults:
@@ -726,7 +756,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

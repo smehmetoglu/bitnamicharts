@@ -1,8 +1,323 @@
 # Changelog
 
-## 10.2.6 (2024-07-04)
+## 12.0.18 (2025-08-14)
 
-* [bitnami/etcd] Release 10.2.6 ([#27765](https://github.com/bitnami/charts/pull/27765))
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references ([#35870](https://github.com/bitnami/charts/pull/35870))
+
+## <small>12.0.17 (2025-08-07)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35604) ([ddedccc](https://github.com/bitnami/charts/commit/ddedccca22495fb8e688a692f096419a80218d57)), closes [#35604](https://github.com/bitnami/charts/issues/35604)
+
+## <small>12.0.16 (2025-08-07)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35560) ([927680c](https://github.com/bitnami/charts/commit/927680c92928e98e7ea4d409d6e87726be9bed06)), closes [#35560](https://github.com/bitnami/charts/issues/35560)
+
+## <small>12.0.15 (2025-08-07)</small>
+
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35468) ([d4a99d5](https://github.com/bitnami/charts/commit/d4a99d5a500158023662829d1990e4a01c3e5d1f)), closes [#35468](https://github.com/bitnami/charts/issues/35468)
+
+## <small>12.0.14 (2025-07-25)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35303) ([f56cd4a](https://github.com/bitnami/charts/commit/f56cd4aafd2ce67870d406d6cbe02ac4f7337355)), closes [#35303](https://github.com/bitnami/charts/issues/35303)
+
+## <small>12.0.13 (2025-07-24)</small>
+
+* [bitnami/etcd] feat: introduce preUpgrade job delay (#34973) ([36b2825](https://github.com/bitnami/charts/commit/36b2825bb4f8cc66c70b656dac06859651c79c83)), closes [#34973](https://github.com/bitnami/charts/issues/34973)
+
+## <small>12.0.12 (2025-07-22)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35249) ([f4dda1b](https://github.com/bitnami/charts/commit/f4dda1bab2cf8636652c68d4b9441c91c40c5c26)), closes [#35249](https://github.com/bitnami/charts/issues/35249)
+
+## <small>12.0.11 (2025-07-16)</small>
+
+* [bitnami/etcd] Always use initial cluster token (#35160) ([3d49e70](https://github.com/bitnami/charts/commit/3d49e70015e2dd434b4e77643b1dc530803a6ef9)), closes [#35160](https://github.com/bitnami/charts/issues/35160)
+
+## <small>12.0.10 (2025-07-15)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#35084) ([6e98277](https://github.com/bitnami/charts/commit/6e982774426942dd86fc4375f3968b7a37e68fee)), closes [#35084](https://github.com/bitnami/charts/issues/35084)
+
+## <small>12.0.9 (2025-07-10)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34997) ([45ad7d6](https://github.com/bitnami/charts/commit/45ad7d61d7261a51f433d6420549ea982b9d8c9f)), closes [#34997](https://github.com/bitnami/charts/issues/34997)
+
+## <small>12.0.8 (2025-07-08)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34881) ([6d91652](https://github.com/bitnami/charts/commit/6d916522b51a18123e5c70705996d37549820bb0)), closes [#34881](https://github.com/bitnami/charts/issues/34881)
+
+## <small>12.0.7 (2025-07-03)</small>
+
+* [bitnami/etcd] Fix protocol selection in defrag job (#34767) ([d6916ae](https://github.com/bitnami/charts/commit/d6916aef81a368351747137f8107fe6add7e3e93)), closes [#34767](https://github.com/bitnami/charts/issues/34767)
+
+## <small>12.0.6 (2025-06-17)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34427) ([9cf5b43](https://github.com/bitnami/charts/commit/9cf5b43efaf70d8e0490b3e0af08a11276cc528b)), closes [#34427](https://github.com/bitnami/charts/issues/34427)
+
+## <small>12.0.5 (2025-06-16)</small>
+
+* [bitnami/etcd] Add values for etcd preUpgradeJob scheduling parameters (#34367) ([a68568b](https://github.com/bitnami/charts/commit/a68568bf913f20198f62f1c7435ebc2bf4f47670)), closes [#34367](https://github.com/bitnami/charts/issues/34367)
+
+## <small>12.0.4 (2025-06-11)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34350) ([fd5b5f5](https://github.com/bitnami/charts/commit/fd5b5f563fb0baeab3b69bd23cbac99040831d2d)), closes [#34350](https://github.com/bitnami/charts/issues/34350)
+
+## <small>12.0.3 (2025-06-06)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34244) ([3359be4](https://github.com/bitnami/charts/commit/3359be42c419564ea972adf895828ce3da92052f)), closes [#34244](https://github.com/bitnami/charts/issues/34244)
+
+## <small>12.0.2 (2025-06-05)</small>
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#34152) ([321b964](https://github.com/bitnami/charts/commit/321b96464c71b78121e60b99c08d69eadfad9024)), closes [#34152](https://github.com/bitnami/charts/issues/34152)
+
+## <small>12.0.1 (2025-06-03)</small>
+
+* [etcd] add priorityClass to preupgrade-hook-job. (#34035) ([320d606](https://github.com/bitnami/charts/commit/320d6068c96f78f18e99446f3214afec6cffc3c6)), closes [#34035](https://github.com/bitnami/charts/issues/34035)
+
+## 12.0.0 (2025-05-23)
+
+* [bitnami/etcd] :zap: :arrow_up: Update dependency references (#33840) ([f1bf7cb](https://github.com/bitnami/charts/commit/f1bf7cb2bbc239632a46fb04db7b6e3c5ccf6efc)), closes [#33840](https://github.com/bitnami/charts/issues/33840)
+
+## <small>11.3.6 (2025-05-19)</small>
+
+* [bitnami/etcd] Allow release namespace to be overridden (#33550) ([b14c079](https://github.com/bitnami/charts/commit/b14c0794110027fb4198f9529c1b43ae34213d9c)), closes [#33550](https://github.com/bitnami/charts/issues/33550)
+
+## <small>11.3.5 (2025-05-16)</small>
+
+* [bitnami/etcd] fix type of GOMAXPROCS in envs (#33477) ([0a6e907](https://github.com/bitnami/charts/commit/0a6e907ab91b4ed81541b6243d981289deee636d)), closes [#33477](https://github.com/bitnami/charts/issues/33477)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>11.3.4 (2025-05-08)</small>
+
+* [bitnami/etcd]fix(cronjob-defrag):Remove JWT restrictions (#33321) ([02d7b94](https://github.com/bitnami/charts/commit/02d7b94f68d17fc6ebdc9f7431510b6d6d12f444)), closes [#33321](https://github.com/bitnami/charts/issues/33321)
+
+## <small>11.3.3 (2025-05-07)</small>
+
+* [bitnami/etcd] Release 11.3.3 (#33511) ([92517f3](https://github.com/bitnami/charts/commit/92517f3d191313e140bbee83b5fd5eb22af786a9)), closes [#33511](https://github.com/bitnami/charts/issues/33511)
+
+## <small>11.3.2 (2025-05-07)</small>
+
+* [bitnami/etcd] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 references (#33358) ([c7f00d1](https://github.com/bitnami/charts/commit/c7f00d1ce5daeb4a2152139724308da61fc47bb8)), closes [#33358](https://github.com/bitnami/charts/issues/33358)
+
+## <small>11.3.1 (2025-05-01)</small>
+
+* [bitnami/etcd] Release 11.3.1 (#33289) ([831c6a5](https://github.com/bitnami/charts/commit/831c6a597f8d157f8e7e25e3d52872860fc49691)), closes [#33289](https://github.com/bitnami/charts/issues/33289)
+
+## 11.3.0 (2025-04-23)
+
+* [bitnami/etcd] Add possibility to pass extra env vars to the defrag cronjob (#32953) ([9df94d0](https://github.com/bitnami/charts/commit/9df94d083dbc03eb22202dbbc691fd687827ac66)), closes [#32953](https://github.com/bitnami/charts/issues/32953)
+
+## <small>11.2.4 (2025-04-11)</small>
+
+* [bitnami/etcd] Simplify condition (#32814) ([4b9196b](https://github.com/bitnami/charts/commit/4b9196b591ac921706c23dc47512f54d2f374beb)), closes [#32814](https://github.com/bitnami/charts/issues/32814)
+
+## <small>11.2.3 (2025-04-09)</small>
+
+* [bitnami/etcd] fix livenessprobe when metrics.useSeparateEndpoint is set (#32870) ([0f3c1cc](https://github.com/bitnami/charts/commit/0f3c1ccdeefe6e244c9ff9577e06b6c7e9b4bb15)), closes [#32870](https://github.com/bitnami/charts/issues/32870)
+
+## <small>11.2.2 (2025-04-01)</small>
+
+* [bitnami/etcd] Release 11.2.2 (#32727) ([b34eff7](https://github.com/bitnami/charts/commit/b34eff75291633a39b02ed46c27c60250a07d3f9)), closes [#32727](https://github.com/bitnami/charts/issues/32727)
+
+## <small>11.2.1 (2025-03-28)</small>
+
+* [bitnami/etcd] Release 11.2.1 (#32654) ([5822809](https://github.com/bitnami/charts/commit/5822809df8949d943bcde1d8f6521a2484a8b5cc)), closes [#32654](https://github.com/bitnami/charts/issues/32654)
+
+## 11.2.0 (2025-03-27)
+
+* [bitnami/etcd] Set `usePasswordFiles=true` by default (#32345) ([c46b195](https://github.com/bitnami/charts/commit/c46b195f624cdcc487dc503fed040bf80278b615)), closes [#32345](https://github.com/bitnami/charts/issues/32345)
+
+## <small>11.1.6 (2025-03-21)</small>
+
+* [bitnami/etcd] Release 11.1.6 (#32555) ([5c90087](https://github.com/bitnami/charts/commit/5c900872e5d10675b56c53046cfca275cb01e601)), closes [#32555](https://github.com/bitnami/charts/issues/32555)
+
+## <small>11.1.5 (2025-03-12)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/etcd] bugfix: skip TLS verification with self-signed certs (#32417) ([2ca96b6](https://github.com/bitnami/charts/commit/2ca96b6a2b019eb838e352dd98142bf20d443990)), closes [#32417](https://github.com/bitnami/charts/issues/32417)
+
+## <small>11.1.4 (2025-03-11)</small>
+
+* [bitnami/etcd] Release 11.1.4 (#32397) ([0ce5db9](https://github.com/bitnami/charts/commit/0ce5db9b0e37162cec32789580d4892264783a88)), closes [#32397](https://github.com/bitnami/charts/issues/32397)
+
+## <small>11.1.3 (2025-03-05)</small>
+
+* [bitnami/etcd] Release 11.1.3 (#32330) ([87e001e](https://github.com/bitnami/charts/commit/87e001e707c4abe8f368e0d151c5b73f6870b81a)), closes [#32330](https://github.com/bitnami/charts/issues/32330)
+
+## <small>11.1.2 (2025-03-05)</small>
+
+* [bitnami/etcd] Release 11.1.2 (#32286) ([447bd72](https://github.com/bitnami/charts/commit/447bd72be474be3ddacc90c4dc52c80a66254d2f)), closes [#32286](https://github.com/bitnami/charts/issues/32286)
+
+## <small>11.1.1 (2025-03-04)</small>
+
+* [bitnami/etcd] bugfix: probes to use healthcheck when TLS client-to-server authentication (#32258) ([a6791c5](https://github.com/bitnami/charts/commit/a6791c5ee6b83f963406a8b046d424949269e06c)), closes [#32258](https://github.com/bitnami/charts/issues/32258)
+
+## 11.1.0 (2025-02-24)
+
+* [bitnami/etcd] feat: basic customization params for etcd upgrade-job (#32099) ([b820c10](https://github.com/bitnami/charts/commit/b820c10df5a2066e25ef101f1a279819a83c238b)), closes [#32099](https://github.com/bitnami/charts/issues/32099)
+
+## <small>11.0.8 (2025-02-19)</small>
+
+* [bitnami/etcd] Release 11.0.8 (#31993) ([d854fdd](https://github.com/bitnami/charts/commit/d854fdd029c002ec6591bd948a1c69a5c5bdb2c4)), closes [#31993](https://github.com/bitnami/charts/issues/31993)
+
+## <small>11.0.7 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/etcd] Release 11.0.7 (#31886) ([04e29ce](https://github.com/bitnami/charts/commit/04e29ce87c72cb596b1e504e3ee89ebf2a786f98)), closes [#31886](https://github.com/bitnami/charts/issues/31886)
+
+## <small>11.0.6 (2025-02-04)</small>
+
+* [bitnami/etcd] Release 11.0.6 (#31750) ([a99c4ae](https://github.com/bitnami/charts/commit/a99c4ae6f11749ed920bcc9fd05b81f7ebdf0f6b)), closes [#31750](https://github.com/bitnami/charts/issues/31750)
+
+## <small>11.0.5 (2025-01-31)</small>
+
+* [bitnami/etcd] Fix: issue with preupgrade job during scale down (#31539) ([36f16bf](https://github.com/bitnami/charts/commit/36f16bf90cc1461000a8f73341e0b770be0b6413)), closes [#31539](https://github.com/bitnami/charts/issues/31539)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>11.0.4 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.4 (#31591) ([b342ec8](https://github.com/bitnami/charts/commit/b342ec844c9106fb724ec952fa4abbe7f26844d1)), closes [#31591](https://github.com/bitnami/charts/issues/31591)
+
+## <small>11.0.3 (2025-01-24)</small>
+
+* [bitnami/etcd] Release 11.0.3 (#31549) ([a3b65e5](https://github.com/bitnami/charts/commit/a3b65e57e2030811813cfcd132c94efa45f57eb5)), closes [#31549](https://github.com/bitnami/charts/issues/31549)
+
+## <small>11.0.2 (2025-01-23)</small>
+
+* [bitnami/etcd] fix for PreUpgrade Job Issue (#31524) ([3bf5de8](https://github.com/bitnami/charts/commit/3bf5de8c881d945a4542784a3628fd8fd7c2f668)), closes [#31524](https://github.com/bitnami/charts/issues/31524)
+
+## <small>11.0.1 (2025-01-20)</small>
+
+* [bitnami/etcd] fixed tls enable handling and v3 environment variable support for defrag cronjob (#31 ([c3c3e43](https://github.com/bitnami/charts/commit/c3c3e4327129db9fa1a88ee7a79227647404d63f)), closes [#31270](https://github.com/bitnami/charts/issues/31270)
+
+## 11.0.0 (2025-01-20)
+
+* [bitnami/etcd] Add pre-upgrade hook (#31161) ([38be6c5](https://github.com/bitnami/charts/commit/38be6c5dcd4ed7bff0c830d8eefe98962310c54d)), closes [#31161](https://github.com/bitnami/charts/issues/31161)
+
+## <small>10.7.3 (2025-01-17)</small>
+
+* [bitnami/etcd] Release 10.7.3 (#31419) ([7ef8d56](https://github.com/bitnami/charts/commit/7ef8d562ec9953460d675b02cfbce336ab66bceb)), closes [#31419](https://github.com/bitnami/charts/issues/31419)
+
+## <small>10.7.2 (2025-01-12)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/etcd] Release 10.7.2 (#31312) ([0e47c54](https://github.com/bitnami/charts/commit/0e47c5464e650b9149a87fbeac84f5a497012f36)), closes [#31312](https://github.com/bitnami/charts/issues/31312)
+
+## <small>10.7.1 (2024-12-11)</small>
+
+* [bitnami/etcd] keep snapshot-pvc (#30815) ([2a63958](https://github.com/bitnami/charts/commit/2a639583f613184bb1e05346ba25169d872db3cf)), closes [#30815](https://github.com/bitnami/charts/issues/30815)
+
+## 10.7.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/etcd] Detect non-standard images (#30895) ([3e2009f](https://github.com/bitnami/charts/commit/3e2009f4310e4c3402df62e5dcc73d911fa4d0b7)), closes [#30895](https://github.com/bitnami/charts/issues/30895)
+
+## <small>10.6.1 (2024-12-04)</small>
+
+* [bitnami/etcd] Release 10.6.1 (#30746) ([9d81d81](https://github.com/bitnami/charts/commit/9d81d81ddbf73b9453468972a8c1501879888d32)), closes [#30746](https://github.com/bitnami/charts/issues/30746)
+
+## 10.6.0 (2024-12-02)
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 2) (#30662) ([50e0570](https://github.com/bitnami/charts/commit/50e0570f98ab15308af7910b405baa4480e5fe3f)), closes [#30662](https://github.com/bitnami/charts/issues/30662)
+* [bitnami/*] docs: :memo: Add "Update Credentials" (batch 1) (#30685) ([be6aa1d](https://github.com/bitnami/charts/commit/be6aa1df0bd4479173a78400fef7295de15b408d)), closes [#30685](https://github.com/bitnami/charts/issues/30685)
+* [bitnami/etcd] Add loadBalancerClass for Etcd chart (#30697) ([7ee741a](https://github.com/bitnami/charts/commit/7ee741ab42e6d1f22c7f3dca386542d7be801dac)), closes [#30697](https://github.com/bitnami/charts/issues/30697)
+
+## <small>10.5.3 (2024-11-12)</small>
+
+* [bitnami/etcd] Release 10.5.3 (#30432) ([5f6b173](https://github.com/bitnami/charts/commit/5f6b173360444a3d78b365f7346c373338db5a90)), closes [#30432](https://github.com/bitnami/charts/issues/30432)
+
+## <small>10.5.2 (2024-11-07)</small>
+
+* [bitnami/etcd] Release 10.5.2 (#30261) ([6944f1e](https://github.com/bitnami/charts/commit/6944f1e3dc10cfaba00e5fd7845a7ed8ae3ad9a5)), closes [#30261](https://github.com/bitnami/charts/issues/30261)
+
+## <small>10.5.1 (2024-11-06)</small>
+
+* [bitnami/etcd]: Fix volume indentation for defrag cronjob (#30192) ([5ef34f9](https://github.com/bitnami/charts/commit/5ef34f968b33e72a065ac6ad1249a1828a5744fd)), closes [#30192](https://github.com/bitnami/charts/issues/30192)
+
+## 10.5.0 (2024-11-05)
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/etcd]: Fix Defrag "bug" and prevent CronJob templates ambiguity (#30077) ([15e3fea](https://github.com/bitnami/charts/commit/15e3feae76b32ac9c6af4588c7b12a14cb76c3b2)), closes [#30077](https://github.com/bitnami/charts/issues/30077) [#30053](https://github.com/bitnami/charts/issues/30053) [#30053](https://github.com/bitnami/charts/issues/30053)
+
+## <small>10.4.2 (2024-10-28)</small>
+
+* [bitnami/etcd] Fixing defrag etcd for authenticated and tls clusters (#30096) ([558e971](https://github.com/bitnami/charts/commit/558e971fd3951ea349cb14739920d3c948f84edb)), closes [#30096](https://github.com/bitnami/charts/issues/30096)
+
+## <small>10.4.1 (2024-10-24)</small>
+
+* [bitnami/etcd]: Fix podLabels bug (#30052) ([9a5b58e](https://github.com/bitnami/charts/commit/9a5b58eff6fadde572f596f387ee921259a80469)), closes [#30052](https://github.com/bitnami/charts/issues/30052)
+
+## 10.4.0 (2024-10-22)
+
+* [bitnami/etcd]: Automatic etcd defragmentation (#29967) ([ea1683d](https://github.com/bitnami/charts/commit/ea1683dabaf7448a1e2fc6eca0a37a70899270e2)), closes [#29967](https://github.com/bitnami/charts/issues/29967)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>10.3.1 (2024-10-16)</small>
+
+* [bitnami/etcd] fix etcd cronjob volume (#29895) ([64aad9b](https://github.com/bitnami/charts/commit/64aad9b12ec2e7f48636944a4cc9d180b5c761a4)), closes [#29895](https://github.com/bitnami/charts/issues/29895)
+
+## 10.3.0 (2024-10-14)
+
+* [bitnami/etcd]: Allow overriding of snapshot command (#29873) ([5b8af4f](https://github.com/bitnami/charts/commit/5b8af4f5b340ef784955b1714741ec0f33051129)), closes [#29873](https://github.com/bitnami/charts/issues/29873)
+
+## <small>10.2.19 (2024-10-02)</small>
+
+* [bitnami/etcd] Release 10.2.19 (#29689) ([624fa30](https://github.com/bitnami/charts/commit/624fa30d7eaaf67557a9dd6ba3393ced2419256b)), closes [#29689](https://github.com/bitnami/charts/issues/29689)
+
+## <small>10.2.18 (2024-09-23)</small>
+
+* [bitnami/etcd] Release 10.2.18 (#29567) ([4c79d16](https://github.com/bitnami/charts/commit/4c79d16b6a975868603490473c50dc709ca51b9e)), closes [#29567](https://github.com/bitnami/charts/issues/29567)
+
+## <small>10.2.17 (2024-09-17)</small>
+
+* [bitnami/etcd] test: :white_check_mark: Improve reliability of ginkgo tests (#29476) ([03fc421](https://github.com/bitnami/charts/commit/03fc4212a65b2af824cc32e7d4b19dd48686b947)), closes [#29476](https://github.com/bitnami/charts/issues/29476)
+
+## <small>10.2.16 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.16 (#29380) ([250df75](https://github.com/bitnami/charts/commit/250df756b74ba578a9e4521c2a958e3860ec1166)), closes [#29380](https://github.com/bitnami/charts/issues/29380)
+
+## <small>10.2.15 (2024-09-12)</small>
+
+* [bitnami/etcd] Release 10.2.15 (#29373) ([be542d6](https://github.com/bitnami/charts/commit/be542d607f92d6efbc7e32331199354d21d46384)), closes [#29373](https://github.com/bitnami/charts/issues/29373)
+
+## <small>10.2.14 (2024-09-05)</small>
+
+* [bitnami/etcd] Release 10.2.14 (#29233) ([72a3026](https://github.com/bitnami/charts/commit/72a30265033f92f4b1e2d357948140ffd5ab4751)), closes [#29233](https://github.com/bitnami/charts/issues/29233)
+
+## <small>10.2.13 (2024-08-27)</small>
+
+* [bitnami/etcd] Release 10.2.13 (#29048) ([14a9538](https://github.com/bitnami/charts/commit/14a9538b0d55f496b5ce4387307b1fa5c0bc2378)), closes [#29048](https://github.com/bitnami/charts/issues/29048)
+
+## <small>10.2.12 (2024-08-07)</small>
+
+* [bitnami/etcd] Release 10.2.12 (#28712) ([4a5fc9e](https://github.com/bitnami/charts/commit/4a5fc9ee1b8d34ea953c3c5f9135297611801859)), closes [#28712](https://github.com/bitnami/charts/issues/28712)
+
+## <small>10.2.11 (2024-07-25)</small>
+
+* [bitnami/etcd] Release 10.2.11 (#28404) ([993529a](https://github.com/bitnami/charts/commit/993529a5f95e8d5126108f40fc1cb0b07cc04526)), closes [#28404](https://github.com/bitnami/charts/issues/28404)
+
+## <small>10.2.10 (2024-07-24)</small>
+
+* [bitnami/etcd] Release 10.2.10 (#28309) ([c247f40](https://github.com/bitnami/charts/commit/c247f40778e1183d69e7956d39a277f425600d61)), closes [#28309](https://github.com/bitnami/charts/issues/28309)
+
+## <small>10.2.9 (2024-07-24)</small>
+
+* [bitnami/etcd] Release 10.2.9 (#28240) ([9f7651d](https://github.com/bitnami/charts/commit/9f7651d9e6790103a6ece29d28aaa5c3e3c5b944)), closes [#28240](https://github.com/bitnami/charts/issues/28240)
+
+## <small>10.2.8 (2024-07-23)</small>
+
+* [bitnami/etcd] Release 10.2.8 (#28218) ([b4cc3af](https://github.com/bitnami/charts/commit/b4cc3af8434acad96153e3e35bffd80dfab7f3c8)), closes [#28218](https://github.com/bitnami/charts/issues/28218)
+
+## <small>10.2.7 (2024-07-16)</small>
+
+* [bitnami/etcd] Global StorageClass as default value (#28016) ([983fdc1](https://github.com/bitnami/charts/commit/983fdc186ab87520e8d06ff02a8bbbcb817edb82)), closes [#28016](https://github.com/bitnami/charts/issues/28016)
+
+## <small>10.2.6 (2024-07-04)</small>
+
+* [bitnami/etcd] Release 10.2.6 (#27765) ([7576e0c](https://github.com/bitnami/charts/commit/7576e0c6f828ce1ac3fdce780764a6f311a9a773)), closes [#27765](https://github.com/bitnami/charts/issues/27765)
 
 ## <small>10.2.5 (2024-07-03)</small>
 
@@ -1106,7 +1421,7 @@
 
 ## <small>4.8.4 (2020-06-16)</small>
 
-* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5)), closes [#2837](https://github.com/bitnami/charts/issues/2837)
+* [bitnami/etcd] make cluster state variable configurable to fix https://github.com/bitnami/charts/iss ([bd7f575](https://github.com/bitnami/charts/commit/bd7f575ebad9c200cd8e90f9fb3e17451ce607f5))
 
 ## <small>4.8.3 (2020-06-15)</small>
 
@@ -1388,7 +1703,7 @@
 ## <small>2.2.5 (2019-05-29)</small>
 
 * Change syntax because of linter failing ([adfc357](https://github.com/bitnami/charts/commit/adfc35728c2a8a9def9e1897b3772d64df621354))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 
 ## <small>2.2.4 (2019-05-28)</small>

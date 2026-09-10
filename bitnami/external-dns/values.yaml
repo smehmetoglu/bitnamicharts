@@ -17,6 +17,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -29,12 +34,15 @@ global:
 ## @section Common parameters
 ##
 
-## @param nameOverride String to partially override external-dns.fullname template (will maintain the release name)
+## @param nameOverride String to partially override common.names.fullname template (will maintain the release name)
 ##
 nameOverride: ""
-## @param fullnameOverride String to fully override external-dns.fullname template
+## @param fullnameOverride String to fully override common.names.fullname template
 ##
 fullnameOverride: ""
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
 ## @param clusterDomain Kubernetes Cluster Domain
 ##
 clusterDomain: cluster.local
@@ -51,9 +59,7 @@ extraDeploy: []
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
-## @param watchReleaseNamespace Watch only namepsace used for the release
-##
-watchReleaseNamespace: false
+
 ## @section external-dns parameters
 ##
 
@@ -69,10 +75,9 @@ watchReleaseNamespace: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.14.2-debian-12-r4
+  tag: 0.18.0-debian-12-r4
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -84,6 +89,9 @@ image:
   ##   - myRegistryKeySecretName
   ##
   pullSecrets: []
+## @param revisionHistoryLimit sets number of replicaset to keep in k8s
+##
+revisionHistoryLimit: 10
 ## @param automountServiceAccountToken Mount Service Account token in pod
 ##
 automountServiceAccountToken: true
@@ -110,7 +118,7 @@ sources:
   # - contour-httpproxy
 ## @param provider DNS provider where the DNS records will be created.
 ## Available providers are:
-## - akamai, alibabacloud, aws, azure, azure-private-dns, cloudflare, coredns, designate, digitalocean, google, hetzner, infoblox, linode, rfc2136, transip, oci
+## - akamai, alibabacloud, aws, azure, azure-private-dns, civo, cloudflare, coredns, digitalocean, exoscale, google, linode, ns1, oci, ovh, pdns, pihole, rfc2136, scaleway, transip
 ##
 provider: aws
 ## @param initContainers Attach additional init containers to the pod (evaluated as a template)
@@ -146,6 +154,9 @@ sidecars: []
 ## @param namespace Limit sources of endpoints to a specific namespace (default: all namespaces)
 ##
 namespace: ""
+## @param watchReleaseNamespace Watch only namespace used for the release
+##
+watchReleaseNamespace: false
 ## @param fqdnTemplates Templated strings that are used to generate DNS names from sources that don't define a hostname themselves
 ##
 fqdnTemplates: []
@@ -358,6 +369,13 @@ cloudflare:
   ## When using the Cloudflare provider, specify how many DNS records listed per page, max possible 5,000 (default: 100)
   ##
   dnsRecordsPerPage: 100
+  ## @param cloudflare.regionalServices Enable configuration of Cloudflare Regional Services. (optional)
+  ##
+  regionalServices: false
+  ## @param cloudflare.regionKey Set default region, when Cloudflare Regional Services are enabled. (optional)
+  ## Using the "external-dns.alpha.kubernetes.io/cloudflare-region-key" annotation on your ingress, you can specify the region for that record.
+  ##
+  regionKey: ""
 ## CoreDNS configuration to be set via arguments/env variables
 ##
 coredns:
@@ -396,52 +414,6 @@ coredns:
     ## Will be used by external-dns to authenticate against etcd
     ##
     keyFilename: "key.pem"
-## OpenStack Designate provider configuration to be set via arguments/env. variables
-##
-designate:
-  ## Set Openstack environment variables (optional). Username and password will be saved in a kubernetes secret
-  ## The alternative to this is to export the necessary Openstack environment variables in the extraEnv argument
-  ## @param designate.username When using the Designate provider, specify the OpenStack authentication username. (optional)
-  ## @param designate.password When using the Designate provider, specify the OpenStack authentication password. (optional)
-  ## @param designate.applicationCredentialId When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.username`. (optional)
-  ## @param designate.applicationCredentialSecret When using the Designate provider, specify the OpenStack authentication application credential ID. This conflicts with `designate.password`. (optional)
-  ## @param designate.authUrl When using the Designate provider, specify the OpenStack authentication Url. (optional)
-  ## @param designate.regionName When using the Designate provider, specify the OpenStack region name. (optional)
-  ## @param designate.userDomainName When using the Designate provider, specify the OpenStack user domain name. (optional)
-  ## @param designate.projectName When using the Designate provider, specify the OpenStack project name. (optional)
-  ## @param designate.authType When using the Designate provider, specify the OpenStack auth type. (optional)
-  ## e.g:
-  ##   username: "someuser"
-  ##   password: "p@55w0rd"
-  ##   authUrl: "https://mykeystone.example.net:5000/v3/"
-  ##   regionName: "dev"
-  ##   userDomainName: "development"
-  ##   projectName: "myteamname"
-  ##
-  username: ""
-  password: ""
-  applicationCredentialId: ""
-  applicationCredentialSecret: ""
-  authUrl: ""
-  regionName: ""
-  userDomainName: ""
-  projectName: ""
-  authType: ""
-  ## @param designate.customCAHostPath When using the Designate provider, use a CA file already on the host to validate Openstack APIs.  This conflicts with `designate.customCA.enabled`
-  ## This conflicts setting the above customCA to true and chart rendering will fail if you set customCA to true and specify customCAHostPath
-  ##
-  customCAHostPath: ""
-  ## Use a custom CA (optional)
-  ## @param designate.customCA.enabled When using the Designate provider, enable a custom CA (optional)
-  ## @param designate.customCA.content When using the Designate provider, set the content of the custom CA
-  ## @param designate.customCA.mountPath When using the Designate provider, set the mountPath in which to mount the custom CA configuration
-  ## @param designate.customCA.filename When using the Designate provider, set the custom CA configuration filename
-  ##
-  customCA:
-    enabled: false
-    content: ""
-    mountPath: "/config/designate"
-    filename: "designate-ca.pem"
 ## Exoscale configuration to be set via arguments/env. variables
 ##
 exoscale:
@@ -488,65 +460,6 @@ google:
   ## @param google.zoneVisibility When using the Google provider, fiter for zones of a specific visibility (private or public)
   ##
   zoneVisibility: ""
-## Hetzner configuration to be set via arguments/env. variables
-##
-hetzner:
-  ## @param hetzner.token When using the Hetzner provider, specify your token here. (required when `hetzner.secretName` is not provided. In this case a new secret will be created holding the token.)
-  ## Mutually exclusive with `hetzner.secretName`.
-  ##
-  token: ""
-  ## @param hetzner.secretName When using the Hetzner provider, specify the existing secret which contains your token. Disables the usage of `hetzner.token` (optional)
-  ##
-  secretName: ""
-  ## @param hetzner.secretKey When using the Hetzner provider with an existing secret, specify the key name (optional)
-  ##
-  secretKey: "hetzner_token"
-## Infoblox configuration to be set via arguments/env. variables
-##
-infoblox:
-  ## @param infoblox.wapiUsername When using the Infoblox provider, specify the Infoblox WAPI username
-  ##
-  wapiUsername: "admin"
-  ## @param infoblox.wapiPassword When using the Infoblox provider, specify the Infoblox WAPI password (required when provider=infoblox)
-  ##
-  wapiPassword: ""
-  ## @param infoblox.gridHost When using the Infoblox provider, specify the Infoblox Grid host (required when provider=infoblox)
-  ##
-  gridHost: ""
-  ## @param infoblox.view Infoblox view
-  ##
-  view: ""
-  ## Optional keys
-  ##
-  ## @param infoblox.secretName Existing secret name, when in place wapiUsername and wapiPassword are not required
-  ##
-  secretName: ""
-  ##
-  ## @param infoblox.domainFilter When using the Infoblox provider, specify the domain (optional)
-  ##
-  domainFilter: ""
-  ##
-  ## @param infoblox.nameRegex When using the Infoblox provider, specify the name regex filter (optional)
-  ##
-  nameRegex: ""
-  ## @param infoblox.noSslVerify When using the Infoblox provider, disable SSL verification (optional)
-  ##
-  noSslVerify: false
-  ## @param infoblox.wapiPort When using the Infoblox provider, specify the Infoblox WAPI port (optional)
-  ##
-  wapiPort: ""
-  ## @param infoblox.wapiVersion When using the Infoblox provider, specify the Infoblox WAPI version (optional)
-  ##
-  wapiVersion: ""
-  ## @param infoblox.wapiConnectionPoolSize When using the Infoblox provider, specify the Infoblox WAPI request connection pool size (optional)
-  ##
-  wapiConnectionPoolSize: ""
-  ## @param infoblox.wapiHttpTimeout When using the Infoblox provider, specify the Infoblox WAPI request timeout in seconds (optional)
-  ##
-  wapiHttpTimeout: ""
-  ## @param infoblox.maxResults When using the Infoblox provider, specify the Infoblox Max Results (optional)
-  ##
-  maxResults: ""
 ## Linode configuration to be set via arguments/env. variables
 ##
 linode:
@@ -579,9 +492,21 @@ pihole:
   ## @param pihole.tlsSkipVerify When using the Pi-hole provider, specify wheter to skip verification of any TLS certificates served by the Pi-hole web server
   ##
   tlsSkipVerify: ""
+  ## @param pihole.password When using the Pi-hole provider, specify a password to use
+  ##
+  password: ""
   ## @param pihole.secretName Use an existing secret with key "pihole_password" defined.
   ##
   secretName: ""
+## Compatibility adaptations for Traefik
+##
+traefik:
+  ## @param traefik.disableNew Disable listeners on Resources under traefik.io
+  ##
+  disableNew: false
+  ## @param traefik.disableLegacy Disable listeners on Resources under traefik.containo.us
+  ##
+  disableLegacy: false
 ## oci configuration to be set via arguments/env. variables
 ##
 oci:
@@ -647,6 +572,10 @@ scaleway:
   ## @param scaleway.scwSecretKey When using the Scaleway provider, specify an existing secret key. (required when provider=scaleway)
   ##
   scwSecretKey: ""
+  ## @param scaleway.secretName Use an existing secret with keys "scaleway_access_key" and "scaleway_secret_key" defined (optional).
+  ## This ignores scaleway.scwAccessKey and scaleway.scwSecretKey
+  ##
+  secretName: ""
 ## RFC 2136 configuration to be set via arguments/env. variables
 ##
 rfc2136:
@@ -656,9 +585,13 @@ rfc2136:
   ## @param rfc2136.port When using the rfc2136 provider, specify the RFC2136 port (optional)
   ##
   port: 53
-  ## @param rfc2136.zone When using the rfc2136 provider, specify the zone (required when provider=rfc2136)
+  ## @param rfc2136.zone DEPRECATED: use rfc2136.zones instead.
+  ## Currently, the contents of rfc2136.zone and rfc2136.zones will be merged and deduplicated, in a future release this value will be removed in favor of `rfc2136.zones`.
   ##
   zone: ""
+  ## @param rfc2136.zones When using the rfc2136 provider, specify the zones (required when provider=rfc2136 and `rfc2136.zone` is not provided.)
+  ##
+  zones: []
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
@@ -716,18 +649,6 @@ transip:
   ## @param transip.apiKey When using the TransIP provider, specify the API key to use.
   ##
   apiKey: ""
-## VinylDNS configuration to be set via arguments/env. variables
-##
-vinyldns:
-  ## @param vinyldns.host When using the VinylDNS provider, specify the VinylDNS API host.
-  ##
-  host: ""
-  ## @param vinyldns.accessKey When using the VinylDNS provider, specify the Access Key to use.
-  ##
-  accessKey: ""
-  ## @param vinyldns.secretKey When using the VinylDNS provider, specify the Secret key to use.
-  ##
-  secretKey: ""
 ## @param domainFilters Limit possible target zones by domain suffixes (optional)
 ##
 domainFilters: []
@@ -779,7 +700,7 @@ logFormat: text
 ##
 policy: upsert-only
 ## @param registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
-## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/proposal/registry.md
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/registry.md
 ##
 registry: "txt"
 ## @param txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)
@@ -788,6 +709,10 @@ txtPrefix: ""
 ## @param txtSuffix When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)
 ##
 txtSuffix: ""
+## @param txtNewFormatOnly When using the TXT registry, use only the new format for ownership records (optional)
+## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#record-format-options
+##
+txtNewFormatOnly: false
 ## @param txtOwnerId A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)
 ## But other registry types might be added in the future.
 ##
@@ -812,12 +737,12 @@ forceTxtOwnerId: false
 ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#encryption
 ##
 txtEncrypt:
-  ## @param txtEncrypt.enabled Enable TXT record encrypencryption
+  ## @param txtEncrypt.enabled Enable TXT record encryption
   ##
   enabled: false
   ## @param txtEncrypt.aesKey 32-byte AES-256-GCM encryption key.
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/registry/txt.md#generating-the-txt-encryption-key
-  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set a default key will be generated.
+  ## Note: If txtEncrypt.enabled is enabled and txtEncrypt.aesKey is not set, a default key will be generated.
   ##
   aesKey: ""
   ## @param txtEncrypt.secretName Use an existing secret with key "txt_aes_encryption_key" defined.
@@ -827,6 +752,10 @@ txtEncrypt:
 ## @param extraArgs Extra arguments to be passed to external-dns
 ##
 extraArgs: {}
+##extraArgs:
+##  rfc2136-zone:
+##    - extra-zone1.com
+##    - extra-zone2.com
 ## @param extraEnvVars An array to add extra env vars
 ##
 extraEnvVars: []
@@ -1040,7 +969,7 @@ serviceAccount:
   ## @param serviceAccount.create Determine whether a Service Account should be created or it should reuse a exiting one.
   ##
   create: true
-  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the external-dns.fullname template if it is not set
+  ## @param serviceAccount.name ServiceAccount to use. A name is generated using the common.names.fullname template if it is not set
   ##
   name: ""
   ## @param serviceAccount.annotations Additional Service Account annotations
@@ -1250,6 +1179,10 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.targetLabels Labels from the Kubernetes service to be transferred to the created metrics
+    targetLabels: []
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    podTargetLabels: []
     ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
     ##
     annotations: {}

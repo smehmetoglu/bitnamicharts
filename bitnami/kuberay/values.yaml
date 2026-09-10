@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -34,6 +41,9 @@ global:
 ## @param kubeVersion Override Kubernetes version
 ##
 kubeVersion: ""
+## @param apiVersions Override Kubernetes API versions reported by .Capabilities
+##
+apiVersions: []
 ## @param nameOverride String to partially override common.names.name
 ##
 nameOverride: ""
@@ -82,10 +92,9 @@ diagnosticMode:
 rayImage:
   registry: docker.io
   repository: bitnami/ray
-  tag: 2.31.0-debian-12-r1
+  tag: 2.49.0-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -119,10 +128,9 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/kuberay-operator
-    tag: 1.1.1-debian-12-r8
+    tag: 1.4.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -205,6 +213,9 @@ operator:
   ## @param operator.watchNamespaces [array] Watch for KubeRay resources in the given namespaces
   ##
   watchNamespaces: []
+  ## @param operator.crNamespacedRbacEnable Specifies whether a RBAC resources should be created when `operator.watchAllNamespaces` is set to `false`
+  ##
+  crNamespacedRbacEnable: true
   ## @param operator.enableBatchScheduler Enable batch scheduler component
   ##
   enableBatchScheduler: false
@@ -727,7 +738,7 @@ operator:
       jobLabel: ""
       ## @param operator.metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
       ##
-      honorLabels: false
+      honorLabels: true
       ## @param operator.metrics.serviceMonitor.interval Interval at which metrics should be scraped.
       ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ## e.g:
@@ -771,10 +782,9 @@ apiserver:
   image:
     registry: docker.io
     repository: bitnami/kuberay-apiserver
-    tag: 1.1.1-debian-12-r7
+    tag: 1.4.2-debian-12-r2
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -1425,7 +1435,7 @@ cluster:
     ## @param cluster.head.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if cluster.head.resources is set (cluster.head.resources is recommended for production).
     ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
     ##
-    resourcesPreset: "medium"
+    resourcesPreset: "large"
     ## @param cluster.head.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
     ## Example:
     ## resources:

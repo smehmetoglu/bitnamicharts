@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,7 +18,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -79,10 +86,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.29-debian-12-r0
+  tag: 1.6.39-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -116,6 +122,9 @@ auth:
   ## @param auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
   ##
   existingPasswordSecret: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using environment variables
+  ##
+  usePasswordFiles: true
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -270,6 +279,10 @@ automountServiceAccountToken: false
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param hostNetwork Use host's network namespace
+## https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#hosts-namespaces
+##
+hostNetwork: false
 ## @param podLabels Extra labels for Memcached pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
@@ -345,6 +358,10 @@ terminationGracePeriodSeconds: ""
 updateStrategy:
   type: RollingUpdate
   rollingUpdate: {}
+## @param emptyDir.medium Override emptyDir Volume type, defaults to emptyDir: {}
+## Possible values: "Memory", ""
+emptyDir:
+  medium: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for the Memcached pod(s)
 ## Example Use Case: mount certificates to enable TLS
 ## e.g:
@@ -447,6 +464,10 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## @param service.trafficDistribution Traffic distribution preference
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+  ##
+  trafficDistribution: ""
   ## @param service.clusterIP Memcached service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -614,7 +635,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r23
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -669,7 +690,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/memcached-exporter
-    tag: 0.14.4-debian-12-r0
+    tag: 0.15.3-debian-12-r5
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -827,6 +848,8 @@ metrics:
     ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
     labels: {}
+    ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
+    podTargetLabels: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##

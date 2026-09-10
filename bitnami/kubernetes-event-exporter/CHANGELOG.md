@@ -1,8 +1,154 @@
 # Changelog
 
-## 3.2.7 (2024-07-04)
+## 3.6.3 (2025-08-15)
 
-* [bitnami/kubernetes-event-exporter] Release 3.2.7 ([#27802](https://github.com/bitnami/charts/pull/27802))
+* [bitnami/kubernetes-event-exporter] fix: kubernetes-event-exporter default config layout shows empty logs ([#35983](https://github.com/bitnami/charts/pull/35983))
+
+## <small>3.6.2 (2025-08-14)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#35876) ([b0c5443](https://github.com/bitnami/charts/commit/b0c54435261faca50b050fb06cb55a81fc82af8b)), closes [#35876](https://github.com/bitnami/charts/issues/35876)
+
+## <small>3.6.1 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#35495) ([fa1b667](https://github.com/bitnami/charts/commit/fa1b667f087657e27a5abcdf3d89a364600b74df)), closes [#35495](https://github.com/bitnami/charts/issues/35495)
+
+## 3.6.0 (2025-07-10)
+
+* [bitnami/kubernetes-event-exporter] Add tpl ability to .Values.Config (#34855) ([3f448fb](https://github.com/bitnami/charts/commit/3f448fb644c10f553471e8e8aade678efb18f0ea)), closes [#34855](https://github.com/bitnami/charts/issues/34855)
+
+## <small>3.5.7 (2025-07-09)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34918) ([e43eca6](https://github.com/bitnami/charts/commit/e43eca6944888378137f34da49e27c65425912f9)), closes [#34918](https://github.com/bitnami/charts/issues/34918)
+
+## <small>3.5.6 (2025-06-16)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34460) ([8b3dc19](https://github.com/bitnami/charts/commit/8b3dc194e907af22a4b35809af93d42479244e9a)), closes [#34460](https://github.com/bitnami/charts/issues/34460)
+
+## <small>3.5.5 (2025-06-11)</small>
+
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34319) ([8c09205](https://github.com/bitnami/charts/commit/8c09205649190ac73bbbf53c1fd1f0055b496a63)), closes [#34319](https://github.com/bitnami/charts/issues/34319)
+
+## <small>3.5.4 (2025-06-06)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/kubernetes-event-exporter] :zap: :arrow_up: Update dependency references (#34190) ([b9e4780](https://github.com/bitnami/charts/commit/b9e47805259f63cb54c96d1a24c8e79fe11c8bb2)), closes [#34190](https://github.com/bitnami/charts/issues/34190)
+
+## <small>3.5.3 (2025-05-07)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.5.3 (#33484) ([1108861](https://github.com/bitnami/charts/commit/110886143cd8c73a5090d7a5502cc25c05d13890)), closes [#33484](https://github.com/bitnami/charts/issues/33484)
+
+## <small>3.5.2 (2025-05-06)</small>
+
+* [bitnami/kubernetes-event-exporter] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23  ([e95d150](https://github.com/bitnami/charts/commit/e95d15019116d3f6a08913d0bbb664369eece12d)), closes [#33391](https://github.com/bitnami/charts/issues/33391)
+
+## <small>3.5.1 (2025-05-01)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.5.1 (#33293) ([18969d9](https://github.com/bitnami/charts/commit/18969d97dd900f78bdd004b774954dbc65c5e09c)), closes [#33293](https://github.com/bitnami/charts/issues/33293)
+
+## 3.5.0 (2025-04-16)
+
+* [bitnami/kubernetes-event-exporter] Add clusterName config setting to values (#32852) ([d04b96f](https://github.com/bitnami/charts/commit/d04b96f2655d9cef448f299bdca0ab6cd1b6950f)), closes [#32852](https://github.com/bitnami/charts/issues/32852)
+
+## <small>3.4.5 (2025-04-01)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.5 (#32742) ([ec49159](https://github.com/bitnami/charts/commit/ec491594d18b52c631f8b5242676a8a9930febc8)), closes [#32742](https://github.com/bitnami/charts/issues/32742)
+
+## <small>3.4.4 (2025-03-17)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kubernetes-event-exporter] ci: more flexible regexp on Ginkgo tests (#32481) ([0a716b2](https://github.com/bitnami/charts/commit/0a716b2248d6648e03afd7e160fc5b424230bdc5)), closes [#32481](https://github.com/bitnami/charts/issues/32481)
+
+## <small>3.4.3 (2025-03-05)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.3 (#32300) ([44db9c2](https://github.com/bitnami/charts/commit/44db9c27201acce8545c6e3547216c1301041333)), closes [#32300](https://github.com/bitnami/charts/issues/32300)
+
+## <small>3.4.2 (2025-03-04)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.2 (#32262) ([dfc690e](https://github.com/bitnami/charts/commit/dfc690ea013d3847cba2e0a5f4ad5ac588d700d5)), closes [#32262](https://github.com/bitnami/charts/issues/32262)
+
+## <small>3.4.1 (2025-02-21)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.4.1 (#32011) ([9fffa0c](https://github.com/bitnami/charts/commit/9fffa0c7f5e6ca6edad485fd6867bf6720615e1c)), closes [#32011](https://github.com/bitnami/charts/issues/32011)
+
+## 3.4.0 (2025-02-20)
+
+* [bitnami/kubernetes-event-exporter] feat: use new helper for checking API versions (#32055) ([b4998a2](https://github.com/bitnami/charts/commit/b4998a228434f7bbdfec1d381b5dbf7aa0411fb0)), closes [#32055](https://github.com/bitnami/charts/issues/32055)
+
+## <small>3.3.5 (2025-02-12)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kubernetes-event-exporter] Release 3.3.5 (#31894) ([cd0fea6](https://github.com/bitnami/charts/commit/cd0fea6315f24d97c50e26951ad70f644ed37787)), closes [#31894](https://github.com/bitnami/charts/issues/31894)
+
+## <small>3.3.4 (2025-02-05)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.4 (#31764) ([1673dbe](https://github.com/bitnami/charts/commit/1673dbe9d1f675a39c7b892a5f3b1993c13ed65e)), closes [#31764](https://github.com/bitnami/charts/issues/31764)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>3.3.3 (2025-01-24)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.3 (#31567) ([73307f5](https://github.com/bitnami/charts/commit/73307f5c5fed480faaa3c9f165441e259feb0525)), closes [#31567](https://github.com/bitnami/charts/issues/31567)
+
+## <small>3.3.2 (2025-01-17)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.3.2 (#31430) ([597de89](https://github.com/bitnami/charts/commit/597de890817500e13fecc7aa8547efb49550354a)), closes [#31430](https://github.com/bitnami/charts/issues/31430)
+
+## <small>3.3.1 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kubernetes-event-exporter] Release 3.3.1 (#31318) ([4e1e6e1](https://github.com/bitnami/charts/commit/4e1e6e1fb842149248df824d964b9fe093297f47)), closes [#31318](https://github.com/bitnami/charts/issues/31318)
+
+## 3.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kubernetes-event-exporter] Detect non-standard images (#30955) ([b33a1a0](https://github.com/bitnami/charts/commit/b33a1a00073522abb8b6d49f5a66526c9a28dfa7)), closes [#30955](https://github.com/bitnami/charts/issues/30955)
+
+## <small>3.2.16 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 3) (#30666) ([82fc7e2](https://github.com/bitnami/charts/commit/82fc7e2fc12e2648ed22069942203c02bf5d4cc6)), closes [#30666](https://github.com/bitnami/charts/issues/30666)
+* [bitnami/kubernetes-event-exporter] Release 3.2.16 (#30761) ([e5ae0b8](https://github.com/bitnami/charts/commit/e5ae0b83dc8f34ed2ebd6fca13f2026905d001f2)), closes [#30761](https://github.com/bitnami/charts/issues/30761)
+
+## <small>3.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kubernetes-event-exporter] Release 3.2.15 (#30279) ([71e04cf](https://github.com/bitnami/charts/commit/71e04cfdd3a035a210bd8ead7b4b726734249d2b)), closes [#30279](https://github.com/bitnami/charts/issues/30279)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>3.2.14 (2024-10-08)</small>
+
+* [bitnami/kubernetes-event-exporter] Add  to leader election RoleBinding (#29804) ([cf29d5f](https://github.com/bitnami/charts/commit/cf29d5fdff96884c7c94ad19875745f7ad664679)), closes [#29804](https://github.com/bitnami/charts/issues/29804)
+
+## <small>3.2.13 (2024-10-02)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.13 (#29704) ([6eae2ee](https://github.com/bitnami/charts/commit/6eae2eef6d1ebef26305ec5238b49adf650cc359)), closes [#29704](https://github.com/bitnami/charts/issues/29704)
+
+## <small>3.2.12 (2024-09-06)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.12 (#29247) ([58f2aa9](https://github.com/bitnami/charts/commit/58f2aa96397d7ca84d7652a26b984ce765a87a36)), closes [#29247](https://github.com/bitnami/charts/issues/29247)
+
+## <small>3.2.11 (2024-08-27)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.11 (#29055) ([dae7e4c](https://github.com/bitnami/charts/commit/dae7e4cd6df6c2e6675cf45390975a9ea9580e1d)), closes [#29055](https://github.com/bitnami/charts/issues/29055)
+
+## <small>3.2.10 (2024-08-07)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.10 (#28727) ([ee8a93d](https://github.com/bitnami/charts/commit/ee8a93d17ab96436837a54a779eaab6731bf35a6)), closes [#28727](https://github.com/bitnami/charts/issues/28727)
+
+## <small>3.2.9 (2024-07-25)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.9 (#28432) ([d80dd19](https://github.com/bitnami/charts/commit/d80dd19852d08c43c818980d9742854b489b09cb)), closes [#28432](https://github.com/bitnami/charts/issues/28432)
+
+## <small>3.2.8 (2024-07-24)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.8 (#28304) ([88b21a2](https://github.com/bitnami/charts/commit/88b21a2b94dd0085615158f8d9b61724fc932e40)), closes [#28304](https://github.com/bitnami/charts/issues/28304)
+
+## <small>3.2.7 (2024-07-04)</small>
+
+* [bitnami/kubernetes-event-exporter] Release 3.2.7 (#27802) ([c7dd23a](https://github.com/bitnami/charts/commit/c7dd23a40f206ff3d6de389164b6b9341138cf78)), closes [#27802](https://github.com/bitnami/charts/issues/27802)
 
 ## <small>3.2.6 (2024-07-03)</small>
 

@@ -1,6 +1,6 @@
 <!--- app-name: Matomo -->
 
-# Bitnami package for Matomo
+# Bitnami Secure Images Helm chart for Matomo
 
 Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/matomo
 ```
 
-Looking to use Matomo in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [Matomo](https://github.com/bitnami/containers/tree/main/bitnami/matomo) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment as a database for the Matomo application.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
 
 ## Prerequisites
 
@@ -51,9 +64,38 @@ The command deploys Matomo on the Kubernetes cluster in the default configuratio
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://matomo.org/faq/how-to/faq_139/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and SMTP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=matomo-password=PASSWORD --from-literal=smtp-password=SMTP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [apache-exporter](https://github.com/Lusitaniae/apache_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -82,6 +124,10 @@ If you configure the `image` value to one in a private registry, you will need t
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
 As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Persistence
 
@@ -127,24 +173,26 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
-| Name                | Description                                                                                                | Value |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`  |
-| `nameOverride`      | String to partially override matomo.fullname template (will maintain the release name)                     | `""`  |
-| `fullnameOverride`  | String to fully override matomo.fullname template                                                          | `""`  |
-| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`  |
-| `commonAnnotations` | Common annotations to add to all Matomo resources (sub-charts are not considered). Evaluated as a template | `{}`  |
-| `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`  |
+| Name                | Description                                                                                                | Value  |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ------ |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                       | `""`   |
+| `nameOverride`      | String to partially override matomo.fullname template (will maintain the release name)                     | `""`   |
+| `fullnameOverride`  | String to fully override matomo.fullname template                                                          | `""`   |
+| `namespaceOverride` | String to fully override common.names.namespace                                                            | `""`   |
+| `commonAnnotations` | Common annotations to add to all Matomo resources (sub-charts are not considered). Evaluated as a template | `{}`   |
+| `commonLabels`      | Common labels to add to all Matomo resources (sub-charts are not considered). Evaluated as a template      | `{}`   |
+| `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                               | `[]`   |
+| `usePasswordFiles`  | Mount credentials as files instead of using environment variables                                          | `true` |
 
 ### Matomo parameters
 
@@ -186,7 +234,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `serviceAccountName`                                | Attach serviceAccountName to the pod and sidecars                                                                                                                                                                 | `""`                     |
 | `tolerations`                                       | Tolerations for pod assignment                                                                                                                                                                                    | `[]`                     |
 | `existingSecret`                                    | Name of a secret with the application password                                                                                                                                                                    | `""`                     |
-| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                                                                                                                    | `""`                     |
+| `smtpAuth`                                          | SMTP authentication mechanism (options: Plain, Login, Cram-md5)                                                                                                                                                   | `""`                     |
 | `smtpHost`                                          | SMTP host                                                                                                                                                                                                         | `""`                     |
 | `smtpPort`                                          | SMTP port                                                                                                                                                                                                         | `""`                     |
 | `smtpUser`                                          | SMTP user                                                                                                                                                                                                         | `""`                     |
@@ -380,6 +428,8 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `cronjobs.taskScheduler.enabled`                                           | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.taskScheduler.schedule`                                          | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.taskScheduler.serviceAccountName`                                | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.taskScheduler.automountServiceAccountToken`                      | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.taskScheduler.suspend`                                           | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.taskScheduler.affinity`                                          | Affinity for CronJob pod assignment                                                                               | `{}`             |
 | `cronjobs.taskScheduler.nodeSelector`                                      | Node labels for CronJob pod assignment. Evaluated as a template.                                                  | `{}`             |
@@ -407,8 +457,11 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.taskScheduler.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.taskScheduler.podSecurityContext.fsGroup`                        | Task scheduler cronjob pods' group ID                                                                             | `1001`           |
 | `cronjobs.taskScheduler.extraEnvVars`                                      | Extra environment variables for the taskScheduler CronJob                                                         | `[]`             |
+| `cronjobs.taskScheduler.initContainers`                                    | Additional init containers for the taskScheduler CronJob                                                          | `[]`             |
 | `cronjobs.archive.enabled`                                                 | Whether to enable scheduled mail-to-task CronJob                                                                  | `true`           |
 | `cronjobs.archive.schedule`                                                | Kubernetes CronJob schedule                                                                                       | `*/5 * * * *`    |
+| `cronjobs.archive.serviceAccountName`                                      | Attach serviceAccountName to the pod of the CronJob                                                               | `""`             |
+| `cronjobs.archive.automountServiceAccountToken`                            | Mount Service Account token in pod of the CronJob                                                                 | `true`           |
 | `cronjobs.archive.suspend`                                                 | Whether to create suspended CronJob                                                                               | `false`          |
 | `cronjobs.archive.affinity`                                                | Affinity for CronJob pod assignment                                                                               | `{}`             |
 | `cronjobs.archive.tolerations`                                             | Tolerations for CronJob pod assignment                                                                            | `[]`             |
@@ -436,6 +489,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://REGISTRY_
 | `cronjobs.archive.podSecurityContext.supplementalGroups`                   | Set filesystem extra groups                                                                                       | `[]`             |
 | `cronjobs.archive.podSecurityContext.fsGroup`                              | Archive cronjob pods' group ID                                                                                    | `1001`           |
 | `cronjobs.archive.extraEnvVars`                                            | Extra environment variables for the archive CronJob                                                               | `[]`             |
+| `cronjobs.archive.initContainers`                                          | Additional init containers for the archive CronJob                                                                | `[]`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -465,6 +519,32 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/matom
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 11.0.0
+
+This major release bumps the MariaDB version to 12.0. Follow the [upstream instructions](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/upgrading) for upgrading from MariaDB 11.8 to 12.0. No major issues are expected during the upgrade.
+
+### To 10.0.0
+
+This major release bumps the MariaDB version to 11.8. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-4-to-mariadb-11-8/) for upgrading from MariaDB 11.4 to 11.8. No major issues are expected during the upgrade.
+
+### To 9.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 9.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+### To 8.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
 
 ### To 7.0.0
 
@@ -505,7 +585,7 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

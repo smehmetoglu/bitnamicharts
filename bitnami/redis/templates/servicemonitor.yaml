@@ -19,6 +19,10 @@ metadata:
 spec:
   endpoints:
     - port: {{ .Values.metrics.serviceMonitor.port }}
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      scheme: https
+      tlsConfig: {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 8 }}
+      {{- end }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
@@ -36,6 +40,10 @@ spec:
       {{- end }}
       {{- range .Values.metrics.serviceMonitor.additionalEndpoints }}
     - port: {{ .port }}
+      {{- if .tlsConfig }}
+      scheme: https
+      tlsConfig: {{- toYaml .tlsConfig | nindent 8 }}
+      {{- end }}
       {{- if .interval }}
       interval: {{ .interval }}
       {{- end }}
@@ -45,7 +53,7 @@ spec:
       {{- if .honorLabels }}
       honorLabels: {{ .honorLabels }}
       {{- end }}
-      {{- with concat .Values.metrics.serviceMonitor.relabelings .Values.metrics.serviceMonitor.relabellings }}
+      {{- with concat $.Values.metrics.serviceMonitor.relabelings $.Values.metrics.serviceMonitor.relabellings }}
       relabelings: {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- if .metricRelabelings }}

@@ -1,6 +1,10 @@
-CHART NAME: {{ .Chart.Name  }}
-CHART VERSION: {{ .Chart.Version  }}
-APP VERSION: {{ .Chart.AppVersion  }}
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+⚠ WARNING: Since August 28th, 2025, only a limited subset of images/charts are available for free.
+    Subscribe to Bitnami Secure Images to receive continued support and security updates.
+    More info at https://bitnami.com and https://github.com/bitnami/containers/issues/83267
 
 ** Please be patient while the chart is being deployed **
 
@@ -47,3 +51,4 @@ https://docs.ray.io/en/latest/cluster/kubernetes/getting-started.html
 {{- include "kuberay.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "apiserver" "cluster.head" "cluster.worker.common" "operator") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.rayImage .Values.operator.image .Values.apiserver.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.rayImage .Values.operator.image .Values.apiserver.image) "context" $) }}

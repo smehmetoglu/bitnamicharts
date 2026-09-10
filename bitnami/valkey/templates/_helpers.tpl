@@ -48,17 +48,6 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the appropriate apiGroup for PodSecurityPolicy.
-*/}}
-{{- define "podSecurityPolicy.apiGroup" -}}
-{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "policy" -}}
-{{- else -}}
-{{- print "extensions" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Return true if a TLS secret object should be created
 */}}
 {{- define "valkey.createTlsSecret" -}}
@@ -72,7 +61,7 @@ Return the secret containing Valkey TLS certificates
 */}}
 {{- define "valkey.tlsSecretName" -}}
 {{- if .Values.tls.existingSecret -}}
-    {{- print .Values.tls.existingSecret -}}
+    {{- printf "%s" (tpl .Values.tls.existingSecret $) -}}
 {{- else -}}
     {{- printf "%s-crt" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -132,16 +121,16 @@ Create the name of the shared service account to use
 {{- end -}}
 
 {{/*
-Create the name of the master service account to use
+Create the name of the primary service account to use
 */}}
-{{- define "valkey.masterServiceAccountName" -}}
-{{- if .Values.master.serviceAccount.create -}}
-    {{ default (printf "%s-master" (include "common.names.fullname" .)) .Values.master.serviceAccount.name }}
+{{- define "valkey.primaryServiceAccountName" -}}
+{{- if .Values.primary.serviceAccount.create -}}
+    {{ default (printf "%s-primary" (include "common.names.fullname" .)) .Values.primary.serviceAccount.name }}
 {{- else -}}
     {{- if .Values.serviceAccount.create -}}
         {{ template "valkey.serviceAccountName" . }}
     {{- else -}}
-        {{ default "default" .Values.master.serviceAccount.name }}
+        {{ default "default" .Values.primary.serviceAccount.name }}
     {{- end -}}
 {{- end -}}
 {{- end -}}
@@ -216,25 +205,15 @@ Compile all warnings into a single message, and call fail.
 */}}
 {{- define "valkey.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "valkey.validateValues.topologySpreadConstraints" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.architecture" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.podSecurityPolicy.create" .) -}}
 {{- $messages := append $messages (include "valkey.validateValues.tls" .) -}}
-{{- $messages := append $messages (include "valkey.validateValues.createMaster" .) -}}
+{{- $messages := append $messages (include "valkey.validateValues.createPrimary" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
-{{- end -}}
-{{- end -}}
-
-{{/* Validate values of Valkey - spreadConstrainsts K8s version */}}
-{{- define "valkey.validateValues.topologySpreadConstraints" -}}
-{{- if and (semverCompare "<1.16-0" .Capabilities.KubeVersion.GitVersion) .Values.replica.topologySpreadConstraints -}}
-valkey: topologySpreadConstraints
-    Pod Topology Spread Constraints are only available on K8s  >= 1.16
-    Find more information at https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
 {{- end -}}
 {{- end -}}
 
@@ -272,11 +251,11 @@ valkey: tls.enabled
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Valkey - master service enabled */}}
-{{- define "valkey.validateValues.createMaster" -}}
-{{- if and .Values.sentinel.service.createMaster (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
-valkey: sentinel.service.createMaster
-    In order to redirect requests only to the master pod via the service, you also need to
+{{/* Validate values of Valkey - primary service enabled */}}
+{{- define "valkey.validateValues.createPrimary" -}}
+{{- if and .Values.sentinel.service.createPrimary (or (not .Values.rbac.create) (not .Values.replica.automountServiceAccountToken) (not .Values.serviceAccount.create)) }}
+valkey: sentinel.service.createPrimary
+    In order to redirect requests only to the primary pod via the service, you also need to
     create rbac and serviceAccount. In addition, you need to enable
     replica.automountServiceAccountToken.
 {{- end -}}

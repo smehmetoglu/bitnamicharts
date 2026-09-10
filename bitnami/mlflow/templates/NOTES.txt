@@ -1,6 +1,10 @@
-CHART NAME: {{ .Chart.Name  }}
-CHART VERSION: {{ .Chart.Version  }}
-APP VERSION: {{ .Chart.AppVersion  }}
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+⚠ WARNING: Since August 28th, 2025, only a limited subset of images/charts are available for free.
+    Subscribe to Bitnami Secure Images to receive continued support and security updates.
+    More info at https://bitnami.com and https://github.com/bitnami/containers/issues/83267
 
 ** Please be patient while the chart is being deployed **
 
@@ -53,7 +57,17 @@ MLflow Tracking Server can be accessed through the following DNS name from withi
 
 To access your MLflow site from outside the cluster follow the steps below:
 
-{{- if .Values.tracking.ingress.enabled }}
+{{- if .Values.tracking.httproute.enabled }}
+
+1. Get the MLflow URL and associate its hostname to your Gateway's external IP:
+
+    GATEWAY_NAME=$(kubectl get --namespace {{ include "common.names.namespace" . }} httproute {{ include "mlflow.v0.tracking.fullname" . }} -o jsonpath="{.spec.parentRefs[0].name}")
+    GATEWAY_NAMESPACE=$(kubectl get --namespace {{ include "common.names.namespace" . }} httproute {{ include "mlflow.v0.tracking.fullname" . }} -o jsonpath="{.spec.parentRefs[0].namespace}")
+    GATEWAY_IP=$(kubectl get gateway --namespace $GATEWAY_NAMESPACE $GATEWAY_NAME -o jsonpath="{.status.addresses[0].value}")
+    echo "MLflow URL: https://{{ .Values.tracking.httproute.hostnames | first }}"
+    echo "$GATEWAY_IP {{ .Values.tracking.httproute.hostnames | first }}" | sudo tee -a /etc/hosts
+
+{{- else if .Values.tracking.ingress.enabled }}
 
 1. Get the MLflow URL and associate MLflow hostname to your cluster external IP:
 
@@ -103,3 +117,4 @@ To access your MLflow site from outside the cluster follow the steps below:
 {{- include "mlflow.v0.validateValues" . }}
 {{- include "common.warnings.resources" (dict "sections" (list "run" "tracking" "volumePermissions") "context" $) }}
 {{- include "common.warnings.modifiedImages" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image .Values.waitContainer.image) "context" $) }}
+{{- include "common.errors.insecureImages" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image .Values.waitContainer.image) "context" $) }}

@@ -14,14 +14,14 @@ Return the proper Mastodon image name
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "mastodon.volumePermissions.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.defaultInitContainers.volumePermissions.image "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "mastodon.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.defaultInitContainers.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -43,7 +43,7 @@ Return the proper Mastodon tootctl media option to include follows
 */}}
 {{- define "mastodon.tootctlMediaManagement.includeFollows" -}}
     {{- if .Values.tootctlMediaManagement.includeFollows -}}
-    	{{- print "--include-follows" -}}	
+    	{{- print "--include-follows" -}}
     {{- end -}}
 {{- end -}}
 
@@ -77,7 +77,7 @@ Return Mastodon streaming url
     {{- printf "wss://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
   {{- else -}}
     {{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
-  {{- end -}}  
+  {{- end -}}
 {{- end -}}
 
 {{/*
@@ -273,7 +273,7 @@ Return the proper Mastodon sidekiq fullname
 Return true if the init job should be created
 */}}
 {{- define "mastodon.createInitJob" -}}
-{{- if or .Values.initJob.migrateDB .Values.initJob.createAdmin .Values.initJob.precompileAssets .Values.initJob.migrateElasticsearch -}}
+{{- if or .Values.initJob.migrateAndCreateAdmin.migrateDB .Values.initJob.migrateAndCreateAdmin .Values.initJob.precompileAssets.enabled .Values.initJob.migrateAndCreateAdmin.migrateElasticsearch -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -566,8 +566,13 @@ Init container definition for waiting for the database to be ready
 - name: wait-for-db
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForBackends.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -593,11 +598,16 @@ Init container definition for waiting for the database to be ready
       value: {{ include "mastodon.database.host" . | quote }}
     - name: MASTODON_DATABASE_PORT_NUMBER
       value: {{ include "mastodon.database.port" . | quote }}
+    {{- if .Values.usePasswordFiles }}
+    - name: MASTODON_DATABASE_PASSWORD_FILE
+      value: "/opt/bitnami/mastodon/secrets/db-password"
+    {{- else }}
     - name: MASTODON_DATABASE_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "mastodon.database.secretName" . }}
-          key: {{ include "mastodon.database.passwordKey" . }}
+          key: {{ include "mastodon.database.passwordKey" . | quote }}
+    {{- end }}
     - name: MASTODON_DATABASE_USER
       value: {{ include "mastodon.database.user" . }}
     - name: MASTODON_DATABASE_NAME
@@ -606,6 +616,10 @@ Init container definition for waiting for the database to be ready
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    {{- if .Values.usePasswordFiles }}
+    - name: mastodon-secrets
+      mountPath: /opt/bitnami/mastodon/secrets
+    {{- end }}
 {{- end -}}
 
 {{/*
@@ -618,8 +632,13 @@ Init container definition for waiting for Redis(TM) to be ready
 - name: wait-for-redis
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForBackends.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -646,16 +665,25 @@ Init container definition for waiting for Redis(TM) to be ready
     - name: MASTODON_REDIS_PORT_NUMBER
       value: {{ include "mastodon.redis.port" . | quote }}
     {{- if (include "mastodon.redis.auth.enabled" .) }}
+    {{- if .Values.usePasswordFiles }}
+    - name: MASTODON_REDIS_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.redis.passwordKey" .) }}
+    {{- else }}
     - name: MASTODON_REDIS_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "mastodon.redis.secretName" . }}
-          key: {{ include "mastodon.redis.passwordKey" . }}
+          key: {{ include "mastodon.redis.passwordKey" . | quote }}
+    {{- end }}
     {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    {{- if and .Values.usePasswordFiles (include "mastodon.redis.auth.enabled" .) }}
+    - name: mastodon-secrets
+      mountPath: /opt/bitnami/mastodon/secrets
+    {{- end }}
 {{- end -}}
 
 {{/*
@@ -665,8 +693,13 @@ Init container definition for waiting for Elasticsearch to be ready
 - name: wait-for-elasticsearch
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForBackends.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -693,16 +726,25 @@ Init container definition for waiting for Elasticsearch to be ready
     - name: MASTODON_ELASTICSEARCH_PORT_NUMBER
       value: {{ include "mastodon.elasticsearch.port" . | quote }}
     {{- if (include "mastodon.elasticsearch.auth.enabled" .) }}
+    {{- if .Values.usePasswordFiles }}
+    - name: MASTODON_ELASTICSEARCH_PASSWORD_FILE
+      value: {{ printf "/opt/bitnami/mastodon/secrets/%s" (include "mastodon.elasticsearch.passwordKey" .) }}
+    {{- else }}
     - name: MASTODON_ELASTICSEARCH_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "mastodon.elasticsearch.secretName" . }}
-          key: {{ include "mastodon.elasticsearch.passwordKey" . }}
+          key: {{ include "mastodon.elasticsearch.passwordKey" . | quote }}
+    {{- end }}
     {{- end }}
   volumeMounts:
     - name: empty-dir
       mountPath: /tmp
       subPath: tmp-dir
+    {{- if and .Values.usePasswordFiles (include "mastodon.elasticsearch.auth.enabled" .) }}
+    - name: mastodon-secrets
+      mountPath: /opt/bitnami/mastodon/secrets
+    {{- end }}
 {{- end -}}
 
 {{/*
@@ -712,8 +754,13 @@ Init container definition for waiting for S3 to be ready
 - name: wait-for-s3
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForBackends.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash
@@ -752,8 +799,13 @@ Init container definition for waiting for Mastodon Web to be ready
 - name: wait-for-web
   image: {{ template "mastodon.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
-  {{- if .Values.web.containerSecurityContext.enabled }}
-  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.web.containerSecurityContext "context" $) | nindent 4 }}
+  {{- if .Values.defaultInitContainers.waitForBackends.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.defaultInitContainers.waitForBackends.containerSecurityContext "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.defaultInitContainers.waitForBackends.resources }}
+  resources: {{- toYaml .Values.defaultInitContainers.waitForBackends.resources | nindent 4 }}
+  {{- else if ne .Values.defaultInitContainers.waitForBackends.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .Values.defaultInitContainers.waitForBackends.resourcesPreset) | nindent 4 }}
   {{- end }}
   command:
     - bash

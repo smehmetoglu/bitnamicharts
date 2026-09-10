@@ -27,7 +27,7 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if .Values.replica.minReadySeconds }}
   minReadySeconds: {{ .Values.replica.minReadySeconds }}
   {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
@@ -179,7 +179,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: VALKEY_MASTER_PORT_NUMBER
+            - name: VALKEY_PRIMARY_PORT_NUMBER
               value: {{ .Values.replica.containerPorts.valkey | quote }}
             - name: ALLOW_EMPTY_PASSWORD
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
@@ -187,7 +187,7 @@ spec:
             {{- if .Values.auth.usePasswordFiles }}
             - name: VALKEY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
-            - name: VALKEY_MASTER_PASSWORD_FILE
+            - name: VALKEY_PRIMARY_PASSWORD_FILE
               value: "/opt/bitnami/valkey/secrets/valkey-password"
             {{- else }}
             - name: VALKEY_PASSWORD
@@ -195,7 +195,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
                   key: {{ template "valkey.secretPasswordKey" . }}
-            - name: VALKEY_MASTER_PASSWORD
+            - name: VALKEY_PRIMARY_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
@@ -246,11 +246,11 @@ spec:
             {{- end }}
             - name: VALKEY_DATA_DIR
               value: {{ .Values.replica.persistence.path }}
-            {{- if .Values.replica.externalMaster.enabled }}
-            - name:  VALKEY_EXTERNAL_MASTER_HOST
-              value: {{ .Values.replica.externalMaster.host | quote }}
-            - name:  VALKEY_EXTERNAL_MASTER_PORT
-              value: {{ .Values.replica.externalMaster.port | quote }}
+            {{- if .Values.replica.externalPrimary.enabled }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_HOST
+              value: {{ .Values.replica.externalPrimary.host | quote }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_PORT
+              value: {{ .Values.replica.externalPrimary.port | quote }}
             {{- end }}
             {{- if .Values.replica.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.replica.extraEnvVars "context" $ ) | nindent 12 }}
@@ -267,7 +267,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: valkey
+            - name: redis
               containerPort: {{ .Values.replica.containerPorts.valkey }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.customStartupProbe }}
@@ -323,7 +323,7 @@ spec:
               mountPath: /health
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -425,11 +425,11 @@ spec:
             - name: VALKEY_SENTINEL_PORT
               value: {{ .Values.sentinel.containerPorts.sentinel | quote }}
             {{- end }}
-            {{- if .Values.sentinel.externalMaster.enabled }}
-            - name:  VALKEY_EXTERNAL_MASTER_HOST
-              value: {{ .Values.sentinel.externalMaster.host | quote }}
-            - name:  VALKEY_EXTERNAL_MASTER_PORT
-              value: {{ .Values.sentinel.externalMaster.port | quote }}
+            {{- if .Values.sentinel.externalPrimary.enabled }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_HOST
+              value: {{ .Values.sentinel.externalPrimary.host | quote }}
+            - name:  VALKEY_EXTERNAL_PRIMARY_PORT
+              value: {{ .Values.sentinel.externalPrimary.port | quote }}
             {{- end }}
             {{- if .Values.sentinel.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.extraEnvVars "context" $ ) | nindent 12 }}
@@ -505,13 +505,13 @@ spec:
               mountPath: /opt/bitnami/scripts/start-scripts
             - name: health
               mountPath: /health
-            {{- if .Values.sentinel.service.createMaster}}
+            {{- if .Values.sentinel.service.createPrimary}}
             - name: kubectl-shared
               mountPath: /etc/shared
             {{- end }}
             - name: sentinel-data
               mountPath: /opt/bitnami/valkey-sentinel/etc
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /opt/bitnami/valkey/secrets/
             {{- end }}
@@ -546,24 +546,27 @@ spec:
             - /bin/bash
             - -c
             - |
-              if [[ -f '/secrets/valkey-password' ]]; then
-                  export VALKEY_PASSWORD=$(cat /secrets/valkey-password)
-              fi
+              {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
+              export REDIS_PASSWORD="$(< $REDIS_PASSWORD_FILE)"
+              {{- end }}
               redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- end }}
           env:
-            - name: VALKEY_ALIAS
+            - name: REDIS_ALIAS
               value: {{ template "common.names.fullname" . }}
-            - name: VALKEY_EXPORTER_WEB_LISTEN_ADDRESS
+            - name: REDIS_EXPORTER_WEB_LISTEN_ADDRESS
               value: {{ printf ":%v" .Values.metrics.containerPorts.http }}
             {{- if .Values.auth.enabled }}
-            - name: VALKEY_USER
+            - name: REDIS_USER
               value: default
-            {{- if (not .Values.auth.usePasswordFiles) }}
-            - name: VALKEY_PASSWORD
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: REDIS_PASSWORD_FILE
+              value: "/secrets/valkey-password"
+            {{- else }}
+            - name: REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "valkey.secretName" . }}
@@ -571,15 +574,15 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.tls.enabled }}
-            - name: VALKEY_ADDR
+            - name: REDIS_ADDR
               value: valkeys://{{ .Values.metrics.valkeyTargetHost }}:{{ .Values.replica.containerPorts.valkey }}
             {{- if .Values.tls.authClients }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_KEY_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_KEY_FILE
               value: {{ template "valkey.tlsCertKey" . }}
-            - name: VALKEY_EXPORTER_TLS_CLIENT_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CLIENT_CERT_FILE
               value: {{ template "valkey.tlsCert" . }}
             {{- end }}
-            - name: VALKEY_EXPORTER_TLS_CA_CERT_FILE
+            - name: REDIS_EXPORTER_TLS_CA_CERT_FILE
               value: {{ template "valkey.tlsCACert" . }}
             {{- end }}
             {{- if .Values.metrics.extraEnvVars }}
@@ -621,7 +624,7 @@ spec:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
             - name: valkey-password
               mountPath: /secrets/
             {{- end }}
@@ -634,7 +637,7 @@ spec:
             {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.extraVolumeMounts "context" $ ) | nindent 12 }}
             {{- end }}
         {{- end }}
-        {{- if .Values.sentinel.service.createMaster }}
+        {{- if .Values.sentinel.service.createPrimary }}
         - name: kubectl-shared
           image: {{ template "valkey.kubectl.image" . }}
           imagePullPolicy: {{ .Values.kubectl.image.pullPolicy | quote }}
@@ -663,7 +666,7 @@ spec:
           configMap:
             name: {{ printf "%s-health" (include "common.names.fullname" .) }}
             defaultMode: 0755
-        {{- if .Values.sentinel.service.createMaster}}
+        {{- if .Values.sentinel.service.createPrimary}}
         - name: kubectl-shared
           emptyDir: {}
         - name: kubectl-scripts
@@ -671,7 +674,7 @@ spec:
             name: {{ printf "%s-kubectl-scripts" (include "common.names.fullname" .) }}
             defaultMode: 0755
         {{- end }}
-        {{- if .Values.auth.usePasswordFiles }}
+            {{- if and .Values.auth.enabled .Values.auth.usePasswordFiles }}
         - name: valkey-password
           {{ if .Values.auth.usePasswordFileFromSecret }}
           secret:
@@ -773,7 +776,9 @@ spec:
         {{- end }}
         {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 8 }}
     {{- if .Values.sentinel.persistence.enabled }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: sentinel-data
         {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}

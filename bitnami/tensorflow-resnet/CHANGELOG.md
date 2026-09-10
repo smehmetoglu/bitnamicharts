@@ -1,8 +1,119 @@
 # Changelog
 
-## 4.2.6 (2024-07-03)
+## 4.3.14 (2025-08-20)
 
-* [bitnami/tensorflow-resnet] Release 4.2.6 ([#27714](https://github.com/bitnami/charts/pull/27714))
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references ([#36147](https://github.com/bitnami/charts/pull/36147))
+
+## <small>4.3.13 (2025-08-14)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#35679) ([ec8ac72](https://github.com/bitnami/charts/commit/ec8ac723533d1306ac520eb1bf66e2d10781368a)), closes [#35679](https://github.com/bitnami/charts/issues/35679)
+
+## <small>4.3.12 (2025-08-11)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/tensorflow-resnet] bugfix: update model download url (#35733) ([361b1e9](https://github.com/bitnami/charts/commit/361b1e9d2f7eba438151c48640884858fc14e90f)), closes [#35733](https://github.com/bitnami/charts/issues/35733)
+
+## <small>4.3.11 (2025-07-12)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#35028) ([d63dca4](https://github.com/bitnami/charts/commit/d63dca42f20a209abb1f8dfcad81381aba296752)), closes [#35028](https://github.com/bitnami/charts/issues/35028)
+
+## <small>4.3.10 (2025-06-12)</small>
+
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#34368) ([c7e6d1b](https://github.com/bitnami/charts/commit/c7e6d1bc3584f1f409de2dc598a34f230f84dfb4)), closes [#34368](https://github.com/bitnami/charts/issues/34368)
+
+## <small>4.3.9 (2025-05-13)</small>
+
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+* [bitnami/tensorflow-resnet] :zap: :arrow_up: Update dependency references (#33658) ([031cd9f](https://github.com/bitnami/charts/commit/031cd9fc28d16e5dea7f04899be77c7b1c95504f)), closes [#33658](https://github.com/bitnami/charts/issues/33658)
+
+## <small>4.3.8 (2025-05-07)</small>
+
+* [bitnami/tensorflow-resnet] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 referenc ([814d0b1](https://github.com/bitnami/charts/commit/814d0b149a7a1f2c7203c746dff6705d5ee85c1e)), closes [#33440](https://github.com/bitnami/charts/issues/33440)
+
+## <small>4.3.7 (2025-05-06)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.7 (#33331) ([1209c0f](https://github.com/bitnami/charts/commit/1209c0f3ad121880ba407d5614a2135777b7dab6)), closes [#33331](https://github.com/bitnami/charts/issues/33331)
+
+## <small>4.3.6 (2025-04-18)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.6 (#33070) ([6e57de9](https://github.com/bitnami/charts/commit/6e57de9a9f02a50556ec2f94b4b60bbc5af5614b)), closes [#33070](https://github.com/bitnami/charts/issues/33070)
+
+## <small>4.3.5 (2025-03-19)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/tensorflow-resnet] Release 4.3.5 (#32512) ([f394a4e](https://github.com/bitnami/charts/commit/f394a4e763960f5d853d45cb24cc6c632f0120d7)), closes [#32512](https://github.com/bitnami/charts/issues/32512)
+
+## <small>4.3.4 (2025-02-20)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/tensorflow-resnet] Release 4.3.4 (#32039) ([7f6f784](https://github.com/bitnami/charts/commit/7f6f784179a1389bd44042aae2aae9feffc71267)), closes [#32039](https://github.com/bitnami/charts/issues/32039)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.3.3 (2025-01-28)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.3 (#31634) ([729d0dd](https://github.com/bitnami/charts/commit/729d0dd7c886b82ff3b3f609175cf6b657a2ce6d)), closes [#31634](https://github.com/bitnami/charts/issues/31634)
+
+## <small>4.3.2 (2025-01-20)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/tensorflow-resnet] Release 4.3.2 (#31479) ([8a2a477](https://github.com/bitnami/charts/commit/8a2a477bc67c7badb2fb32a1949d19b8801f7699)), closes [#31479](https://github.com/bitnami/charts/issues/31479)
+
+## <small>4.3.1 (2024-12-11)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.3.1 (#30987) ([495fc98](https://github.com/bitnami/charts/commit/495fc988405ce4917e5cfef01cd4cc1f2ff76eda)), closes [#30987](https://github.com/bitnami/charts/issues/30987)
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/*] docs: :memo: Add "Prometheus metrics" (batch 6) (#30675) ([7b9cd04](https://github.com/bitnami/charts/commit/7b9cd04c2ffc730a0d62da787f2d4967c0ede47c)), closes [#30675](https://github.com/bitnami/charts/issues/30675)
+* [bitnami/tensorflow-resnet] Detect non-standard images (#30969) ([65341d4](https://github.com/bitnami/charts/commit/65341d444cb3df3c1dda0b5a310e5a265fbaee2c)), closes [#30969](https://github.com/bitnami/charts/issues/30969)
+
+## <small>4.2.15 (2024-11-11)</small>
+
+* [bitnami/tensorflow-resnet] Unify seLinuxOptions default value (#30321) ([e7c7a90](https://github.com/bitnami/charts/commit/e7c7a90baca50093843b502c12f45837ef0a7b6d)), closes [#30321](https://github.com/bitnami/charts/issues/30321)
+
+## <small>4.2.14 (2024-11-01)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.14 (#30170) ([778d287](https://github.com/bitnami/charts/commit/778d2876bed3ce6b9ced8ae4e6666df2f45efa5f)), closes [#30170](https://github.com/bitnami/charts/issues/30170)
+
+## <small>4.2.13 (2024-10-31)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/tensorflow-resnet] Release 4.2.13 (#30154) ([95f4ee6](https://github.com/bitnami/charts/commit/95f4ee6bceb2d25fabec31004493a4065a960347)), closes [#30154](https://github.com/bitnami/charts/issues/30154)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.12 (2024-10-05)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.12 (#29786) ([3900b54](https://github.com/bitnami/charts/commit/3900b5400c9725095772d0d56fc55459bdc74ebc)), closes [#29786](https://github.com/bitnami/charts/issues/29786)
+
+## <small>4.2.11 (2024-08-26)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.11 (#29029) ([a00c55f](https://github.com/bitnami/charts/commit/a00c55f50f074844398f71c696c21dcfee393c52)), closes [#29029](https://github.com/bitnami/charts/issues/29029)
+
+## <small>4.2.10 (2024-08-26)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.10 (#29027) ([b93d655](https://github.com/bitnami/charts/commit/b93d6553acf1f4cecf1006a60c08306f67f9ca62)), closes [#29027](https://github.com/bitnami/charts/issues/29027)
+
+## <small>4.2.9 (2024-07-25)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.9 (#28494) ([9b26834](https://github.com/bitnami/charts/commit/9b2683405a987a57462c6b1e9144e5167f6f374c)), closes [#28494](https://github.com/bitnami/charts/issues/28494)
+
+## <small>4.2.8 (2024-07-24)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.8 (#28392) ([2d2b1ce](https://github.com/bitnami/charts/commit/2d2b1ce4543287c09d8cfb8414022c476e295711)), closes [#28392](https://github.com/bitnami/charts/issues/28392)
+
+## <small>4.2.7 (2024-07-23)</small>
+
+* [bitnami/tensorflow-resnet] Release 4.2.7 (#28216) ([0487c42](https://github.com/bitnami/charts/commit/0487c4284b82514ae80c0ad26e41c43fdf779ba7)), closes [#28216](https://github.com/bitnami/charts/issues/28216)
+
+## <small>4.2.6 (2024-07-03)</small>
+
+* [bitnami/*] Update README changing TAC wording (#27530) ([52dfed6](https://github.com/bitnami/charts/commit/52dfed6bac44d791efabfaf06f15daddc4fefb0c)), closes [#27530](https://github.com/bitnami/charts/issues/27530)
+* [bitnami/tensorflow-resnet] Release 4.2.6 (#27714) ([1d97768](https://github.com/bitnami/charts/commit/1d97768803359a386f0d0e1f1a3edf6702ae1645)), closes [#27714](https://github.com/bitnami/charts/issues/27714)
 
 ## <small>4.2.5 (2024-06-18)</small>
 
@@ -799,7 +910,7 @@
 ## <small>0.1.4 (2019-05-29)</small>
 
 * Check secondary images ([5327cfa](https://github.com/bitnami/charts/commit/5327cfa319191dd8067ce538d53f4c44edfdc012))
-* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79)), closes [#issuecomment-496883321](https://github.com/bitnami/charts/issues/issuecomment-496883321)
+* Fix https://github.com/helm/charts/pull/14199\#issuecomment-496883321 and support _sha256_ as an imm ([95957ea](https://github.com/bitnami/charts/commit/95957ea6430f28ec3593053afb0bfccb75703c79))
 * Fix tensorflow and others ([6252f12](https://github.com/bitnami/charts/commit/6252f125d307e55fd638687eac09f1df8451f22f))
 * Use immutable tags in the main images ([17ca4f5](https://github.com/bitnami/charts/commit/17ca4f5c91da33da03f9e2d411fe5e004e825c4d))
 

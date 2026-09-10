@@ -1,6 +1,6 @@
 <!--- app-name: Prometheus Operator -->
 
-# Bitnami package for Prometheus Operator
+# Bitnami Secure Images Helm chart for Prometheus Operator
 
 Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
 
@@ -14,7 +14,22 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-prometheus
 ```
 
-Looking to use Prometheus Operator in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
@@ -29,8 +44,6 @@ In the default configuration the chart deploys the following components on the K
 > **:warning: IMPORTANT**
 
 Only one instance of the Prometheus Operator component should be running in the cluster. If you wish to deploy this chart to **manage multiple instances** of Prometheus in your Kubernetes cluster, you **have to disable** the installation of the Prometheus Operator component using the `operator.enabled=false` chart installation argument.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -57,9 +70,9 @@ The command deploys kube-prometheus on the Kubernetes cluster in the default con
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -84,7 +97,7 @@ prometheus.additionalScrapeConfigs.external.name=kube-prometheus-prometheus-scra
 prometheus.additionalScrapeConfigs.external.key=additional-scrape-configs.yaml
 ```
 
-It is also possible to define scrape configuratios to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
+It is also possible to define scrape configurations to be managed by the Helm chart by setting `prometheus.additionalScrapeConfigs.enabled` to `true` and `prometheus.additionalScrapeConfigs.type` to `internal`. You can then use `prometheus.additionalScrapeConfigs.internal.jobList` to define a list of additional scrape jobs for Prometheus.
 
 ```text
 prometheus.additionalScrapeConfigs.enabled=true
@@ -111,6 +124,10 @@ prometheus.additionalAlertRelabelConfigsExternal.name=kube-prometheus-prometheus
 prometheus.additionalAlertRelabelConfigsExternal.key=additional-alert-relabel-configs.yaml
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Set Pod affinity
 
 This chart allows setting custom Pod affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
@@ -121,12 +138,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -294,6 +312,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                            | `""`                         |
 | `prometheus.image.pullPolicy`                                         | Prometheus image pull policy                                                                                                                                                                                                                          | `IfNotPresent`               |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                                                                                                                                      | `[]`                         |
+| `prometheus.defaultRules.create`                                      | Create default rules for Prometheus                                                                                                                                                                                                                   | `true`                       |
+| `prometheus.defaultRules.rules`                                       | Set of default rules for Prometheus that can be enabled/disabled                                                                                                                                                                                      | `{}`                         |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                                                                                                                                             | `true`                       |
 | `prometheus.serviceAccount.name`                                      | The name of the ServiceAccount to create                                                                                                                                                                                                              | `""`                         |
 | `prometheus.serviceAccount.annotations`                               | Additional annotations for created Prometheus ServiceAccount                                                                                                                                                                                          | `{}`                         |
@@ -418,6 +438,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.probeNamespaceSelector`                                   | Namespaces to be selected for Probe discovery                                                                                                                                                                                                         | `{}`                         |
 | `prometheus.scrapeConfigSelector`                                     | ScrapeConfig to be selected for target discovery.                                                                                                                                                                                                     | `{}`                         |
 | `prometheus.scrapeConfigNamespaceSelector`                            | Namespaces to be selected for ScrapeConfig discovery                                                                                                                                                                                                  | `{}`                         |
+| `prometheus.scrapeClasses`                                            | List of scrape classes to expose to scraping objects                                                                                                                                                                                                  | `[]`                         |
 | `prometheus.retention`                                                | Metrics retention days                                                                                                                                                                                                                                | `10d`                        |
 | `prometheus.retentionSize`                                            | Maximum size of metrics                                                                                                                                                                                                                               | `""`                         |
 | `prometheus.disableCompaction`                                        | Disable the compaction of the Prometheus TSDB                                                                                                                                                                                                         | `false`                      |
@@ -427,6 +448,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.shards`                                                   | Number of Prometheus shards desired                                                                                                                                                                                                                   | `1`                          |
 | `prometheus.logLevel`                                                 | Log level for Prometheus                                                                                                                                                                                                                              | `info`                       |
 | `prometheus.logFormat`                                                | Log format for Prometheus                                                                                                                                                                                                                             | `logfmt`                     |
+| `prometheus.nameValidationScheme`                                     | Specifies the validation scheme for metric and label names                                                                                                                                                                                            | `UTF8`                       |
 | `prometheus.podMetadata`                                              | Standard object's metadata                                                                                                                                                                                                                            | `{}`                         |
 | `prometheus.remoteRead`                                               | The remote_read spec configuration for Prometheus                                                                                                                                                                                                     | `[]`                         |
 | `prometheus.remoteWrite`                                              | The remote_write spec configuration for Prometheus                                                                                                                                                                                                    | `[]`                         |
@@ -449,9 +471,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.additionalScrapeConfigs.external.name`                    | Name of the secret that Prometheus should use for the additional external scrape configuration                                                                                                                                                        | `""`                         |
 | `prometheus.additionalScrapeConfigs.external.key`                     | Name of the key inside the secret to be used for the additional external scrape configuration                                                                                                                                                         | `""`                         |
 | `prometheus.additionalScrapeConfigs.internal.jobList`                 | A list of Prometheus scrape jobs                                                                                                                                                                                                                      | `[]`                         |
-| `prometheus.additionalScrapeConfigsExternal.enabled`                  | Deprecated: Enable additional scrape configs that are managed externally to this chart                                                                                                                                                                | `false`                      |
-| `prometheus.additionalScrapeConfigsExternal.name`                     | Deprecated: Name of the secret that Prometheus should use for the additional scrape configuration                                                                                                                                                     | `""`                         |
-| `prometheus.additionalScrapeConfigsExternal.key`                      | Deprecated: Name of the key inside the secret to be used for the additional scrape configuration                                                                                                                                                      | `""`                         |
 | `prometheus.additionalAlertRelabelConfigsExternal.enabled`            | Enable additional Prometheus alert relabel configs that are managed externally to this chart                                                                                                                                                          | `false`                      |
 | `prometheus.additionalAlertRelabelConfigsExternal.name`               | Name of the secret that Prometheus should use for the additional Prometheus alert relabel configuration                                                                                                                                               | `""`                         |
 | `prometheus.additionalAlertRelabelConfigsExternal.key`                | Name of the key inside the secret to be used for the additional Prometheus alert relabel configuration                                                                                                                                                | `""`                         |
@@ -480,6 +499,9 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                                                                                                                                           | `[]`                         |
 | `prometheus.thanos.objectStorageConfig.secretName`                    | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                                                                                                                                       | `""`                         |
 | `prometheus.thanos.objectStorageConfig.secretKey`                     | Secret key with the configuration file.                                                                                                                                                                                                               | `thanos.yaml`                |
+| `prometheus.thanos.extraEnvVars`                                      | Array with extra environment variables to add to the thanos sidecar container                                                                                                                                                                         | `[]`                         |
+| `prometheus.thanos.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for the thanos sidecar container                                                                                                                                                                 | `""`                         |
+| `prometheus.thanos.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for the thanos sidecar container                                                                                                                                                                    | `""`                         |
 | `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                                                                                                                                        | `[]`                         |
 | `prometheus.thanos.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if prometheus.thanos.resources is set (prometheus.thanos.resources is recommended for production). | `nano`                       |
 | `prometheus.thanos.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`                         |
@@ -499,6 +521,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                                                                                                                                                           | `1`                          |
 | `prometheus.thanos.service.type`                                      | Kubernetes service type                                                                                                                                                                                                                               | `ClusterIP`                  |
 | `prometheus.thanos.service.ports.grpc`                                | Thanos service port                                                                                                                                                                                                                                   | `10901`                      |
+| `prometheus.thanos.service.ports.http`                                | Thanos service port                                                                                                                                                                                                                                   | `10902`                      |
 | `prometheus.thanos.service.clusterIP`                                 | Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.                                                                                                                                                | `None`                       |
 | `prometheus.thanos.service.nodePorts.grpc`                            | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                                                                                                                                           | `""`                         |
 | `prometheus.thanos.service.loadBalancerIP`                            | `loadBalancerIP` if service type is `LoadBalancer`                                                                                                                                                                                                    | `""`                         |
@@ -524,6 +547,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `prometheus.thanos.ingress.extraTls`                                  | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                                                                                                                   | `[]`                         |
 | `prometheus.thanos.ingress.secrets`                                   | Custom TLS certificates as secrets                                                                                                                                                                                                                    | `[]`                         |
 | `prometheus.thanos.ingress.extraRules`                                | The list of additional rules to be added to this ingress record. Evaluated as a template                                                                                                                                                              | `[]`                         |
+| `prometheus.thanos.serviceMonitor.enabled`                            | Creates a ServiceMonitor to monitor Prometheus thanos sidecar                                                                                                                                                                                         | `false`                      |
+| `prometheus.thanos.serviceMonitor.interval`                           | Scrape interval (use by default, falling back to Prometheus' default)                                                                                                                                                                                 | `""`                         |
+| `prometheus.thanos.serviceMonitor.path`                               | HTTP path to scrape for metrics                                                                                                                                                                                                                       | `/metrics`                   |
+| `prometheus.thanos.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                                                                                                                                     | `""`                         |
+| `prometheus.thanos.serviceMonitor.metricRelabelings`                  | Metric relabeling                                                                                                                                                                                                                                     | `[]`                         |
+| `prometheus.thanos.serviceMonitor.relabelings`                        | Relabel configs                                                                                                                                                                                                                                       | `[]`                         |
+| `prometheus.thanos.serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                                                                  | `""`                         |
 | `prometheus.configReloader.service.enabled`                           | Enable config-reloader sidecar service                                                                                                                                                                                                                | `false`                      |
 | `prometheus.configReloader.service.type`                              | Kubernetes service type                                                                                                                                                                                                                               | `ClusterIP`                  |
 | `prometheus.configReloader.service.ports.http`                        | config-reloader sidecar container service port                                                                                                                                                                                                        | `8080`                       |
@@ -894,10 +924,131 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### RBAC parameters
 
-| Name              | Description                                                                                                                                                        | Value  |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `rbac.create`     | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
-| `rbac.pspEnabled` | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| Name                    | Description                                                                                                                                                        | Value  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| `rbac.create`           | Whether to create and use RBAC resources or not                                                                                                                    | `true` |
+| `rbac.pspEnabled`       | Whether to create a PodSecurityPolicy and bound it with RBAC. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `true` |
+| `rbac.rules.operator`   | Custom RBAC rules to set on Prometheus Operator ClusterRole                                                                                                        | `[]`   |
+| `rbac.rules.prometheus` | Custom RBAC rules to set on Prometheus ClusterRole                                                                                                                 | `[]`   |
+
+### Thanos Ruler Parameters
+
+| Name                                                      | Description                                                                                                                        | Value                    |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `thanosRuler.enabled`                                     | Enable/disable Thanos Ruler component                                                                                              | `false`                  |
+| `thanosRuler.image.registry`                              | Thanos image registry                                                                                                              | `REGISTRY_NAME`          |
+| `thanosRuler.image.repository`                            | Thanos image repository                                                                                                            | `bitnami/thanos`         |
+| `thanosRuler.image.digest`                                | Thanos image digest                                                                                                                | `""`                     |
+| `thanosRuler.image.pullPolicy`                            | Thanos image pull policy                                                                                                           | `IfNotPresent`           |
+| `thanosRuler.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
+| `thanosRuler.replicaCount`                                | Number of Thanos Ruler replicas to deploy                                                                                          | `1`                      |
+| `thanosRuler.paused`                                      | When a ThanosRuler deployment is paused, no actions except for deletion will be performed on the underlying objects                | `false`                  |
+| `thanosRuler.logFormat`                                   | Log format for Thanos Ruler                                                                                                        | `logfmt`                 |
+| `thanosRuler.logLevel`                                    | Log level for Thanos ruler                                                                                                         | `info`                   |
+| `thanosRuler.retention`                                   | Time duration ThanosRuler shall retain data for                                                                                    | `24h`                    |
+| `thanosRuler.evaluationInterval`                          | Interval between consecutive evaluations                                                                                           | `""`                     |
+| `thanosRuler.labels`                                      | Configures the external label pairs of the ThanosRuler resource                                                                    | `{}`                     |
+| `thanosRuler.storage`                                     | Storage spec to specify how storage shall be used.                                                                                 | `{}`                     |
+| `thanosRuler.volumes`                                     | Additional volumes on the output StatefulSet definition                                                                            | `[]`                     |
+| `thanosRuler.volumeMounts`                                | Additional VolumeMounts on the output StatefulSet definition.                                                                      | `[]`                     |
+| `thanosRuler.listenLocal`                                 | Makes Thanos Ruler listen on loopback, so that it does not bind against the Pod IP                                                 | `false`                  |
+| `thanosRuler.externalPrefix`                              | The external URL the Thanos Ruler instances will be available under. Maps to  --web.external-prefix on Thanos Ruler                | `""`                     |
+| `thanosRuler.service.type`                                | Kubernetes service type                                                                                                            | `ClusterIP`              |
+| `thanosRuler.service.ports.http`                          | Thanos Ruler service HTTP port                                                                                                     | `10902`                  |
+| `thanosRuler.service.ports.grpc`                          | Thanos Ruler service GRPC port                                                                                                     | `10901`                  |
+| `thanosRuler.service.nodePorts.http`                      | Specify the Thanos Ruler HTTP nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
+| `thanosRuler.service.nodePorts.grpc`                      | Specify the Thanos Ruler GRPC nodePort value for the LoadBalancer and NodePort service types                                       | `""`                     |
+| `thanosRuler.service.clusterIP`                           | Thanos Ruler service clusterIP IP                                                                                                  | `""`                     |
+| `thanosRuler.service.loadBalancerIP`                      | Load balancer IP if service type is `LoadBalancer`                                                                                 | `""`                     |
+| `thanosRuler.service.loadBalancerSourceRanges`            | Address that are allowed when service is LoadBalancer                                                                              | `[]`                     |
+| `thanosRuler.service.externalTrafficPolicy`               | Thanos Ruler service externalTrafficPolicy                                                                                         | `Cluster`                |
+| `thanosRuler.service.labels`                              | Extra labels for Thanos Ruler service                                                                                              | `{}`                     |
+| `thanosRuler.service.annotations`                         | Annotations for Thanos Ruler service                                                                                               | `{}`                     |
+| `thanosRuler.service.extraPorts`                          | Extra ports to expose in the Thanos Ruler service                                                                                  | `[]`                     |
+| `thanosRuler.service.labelSelectorsOverride`              | Selector for Thanos Query service                                                                                                  | `{}`                     |
+| `thanosRuler.service.additionalHeadless`                  | Additional Headless service                                                                                                        | `false`                  |
+| `thanosRuler.service.headless.annotations`                | Annotations for the headless service.                                                                                              | `{}`                     |
+| `thanosRuler.networkPolicy.enabled`                       | Specifies whether a NetworkPolicy should be created                                                                                | `true`                   |
+| `thanosRuler.networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                         | `true`                   |
+| `thanosRuler.networkPolicy.allowExternalEgress`           | Allow the pod to access any range of port and all destinations.                                                                    | `true`                   |
+| `thanosRuler.networkPolicy.extraIngress`                  | Add extra ingress rules to the NetworkPolicy                                                                                       | `[]`                     |
+| `thanosRuler.networkPolicy.extraEgress`                   | Add extra egress rules to the NetworkPolicy                                                                                        | `[]`                     |
+| `thanosRuler.networkPolicy.ingressNSMatchLabels`          | Labels to match to allow traffic from other namespaces                                                                             | `{}`                     |
+| `thanosRuler.networkPolicy.ingressNSPodMatchLabels`       | Pod labels to match to allow traffic from other namespaces                                                                         | `{}`                     |
+| `thanosRuler.routePrefix`                                 | Prefix used to register routes. Useful for proxies that rewrite URLs.                                                              | `/`                      |
+| `thanosRuler.ingress.enabled`                             | Enable ingress controller resource                                                                                                 | `false`                  |
+| `thanosRuler.ingress.hostname`                            | Default host for the ingress resource                                                                                              | `thanos-ruler.local`     |
+| `thanosRuler.ingress.ingressClassName`                    | IngressClass that will be used to implement the Ingress (Kubernetes 1.18+)                                                         | `""`                     |
+| `thanosRuler.ingress.labels`                              | Additional label for the Ingress resource.                                                                                         | `{}`                     |
+| `thanosRuler.ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.   | `{}`                     |
+| `thanosRuler.ingress.extraHosts`                          | The list of additional hostnames to be covered with this ingress record.                                                           | `[]`                     |
+| `thanosRuler.ingress.extraTls`                            | The tls configuration for additional hostnames to be covered with this ingress record.                                             | `[]`                     |
+| `thanosRuler.ingress.secrets`                             | If you're providing your own certificates, please use this to add the certificates as secrets                                      | `[]`                     |
+| `thanosRuler.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                            | `[]`                     |
+| `thanosRuler.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                      | `""`                     |
+| `thanosRuler.ingress.path`                                | Ingress path                                                                                                                       | `/`                      |
+| `thanosRuler.ingress.pathType`                            | Ingress path type                                                                                                                  | `ImplementationSpecific` |
+| `thanosRuler.ingress.tls`                                 | Enable TLS configuration for the hostname defined at `thanosRuler.ingress.hostname` parameter                                      | `false`                  |
+| `thanosRuler.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                       | `false`                  |
+| `thanosRuler.serviceAccount.create`                       | Specify whether to create a ServiceAccount for Thanos Ruler                                                                        | `true`                   |
+| `thanosRuler.serviceAccount.name`                         | The name of the ServiceAccount to create                                                                                           | `""`                     |
+| `thanosRuler.serviceAccount.annotations`                  | Additional annotations for the ServiceAccount                                                                                      | `{}`                     |
+| `thanosRuler.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                     | `false`                  |
+| `thanosRuler.podSecurityContext.enabled`                  | Enable security context                                                                                                            | `true`                   |
+| `thanosRuler.podSecurityContext.fsGroupChangePolicy`      | Set filesystem group change policy                                                                                                 | `Always`                 |
+| `thanosRuler.podSecurityContext.sysctls`                  | Set kernel settings using the sysctl interface                                                                                     | `[]`                     |
+| `thanosRuler.podSecurityContext.supplementalGroups`       | Set filesystem extra groups                                                                                                        | `[]`                     |
+| `thanosRuler.podSecurityContext.fsGroup`                  | Group ID for the container filesystem                                                                                              | `1001`                   |
+| `thanosRuler.resourcesPreset`                             | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). | `nano`                   |
+| `thanosRuler.resources`                                   | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                  | `{}`                     |
+| `thanosRuler.containerPorts.http`                         | HTTP container port                                                                                                                | `10902`                  |
+| `thanosRuler.containerPorts.grpc`                         | GRPC container port                                                                                                                | `10901`                  |
+| `thanosRuler.alertQueryUrl`                               | The external Query URL the Thanos Ruler will set in the ‘Source’ field of all alerts                                               | `""`                     |
+| `thanosRuler.alertmanagersConfig.existingSecret.name`     | Name of an existing secret to use for Alert Manager config                                                                         | `""`                     |
+| `thanosRuler.alertmanagersConfig.existingSecret.key`      | Name of a key in the existing secret to use for Alert Manager config                                                               | `""`                     |
+| `thanosRuler.alertmanagersConfig.config`                  | Alert Manager configuration                                                                                                        | `{}`                     |
+| `thanosRuler.alertDropLabels`                             | Configures the label names which should be dropped in Thanos Ruler alerts                                                          | `[]`                     |
+| `thanosRuler.queryConfig.existingSecret.name`             | Name of an existing secret to use for Alert Manager config                                                                         | `""`                     |
+| `thanosRuler.queryConfig.existingSecret.key`              | Key in the existing secret to use for Query config                                                                                 | `query-config.yaml`      |
+| `thanosRuler.queryConfig.config`                          |                                                                                                                                    | `[]`                     |
+| `thanosRuler.objectStorageConfig.existingSecret.name`     | Name of an existing secret to use for Object Storage config                                                                        | `""`                     |
+| `thanosRuler.objectStorageConfig.existingSecret.key`      | Key in the existing secret to use for Object Storage config                                                                        | `""`                     |
+| `thanosRuler.objectStorageConfig.config`                  |                                                                                                                                    | `{}`                     |
+| `thanosRuler.ruleNamespaceSelector`                       | Namespaces to be selected for PrometheusRules discovery                                                                            | `{}`                     |
+| `thanosRuler.ruleSelector`                                | PrometheusRule selector labels                                                                                                     | `{}`                     |
+| `thanosRuler.evalInterval`                                | How frequently to evaluate rules                                                                                                   | `1m`                     |
+| `thanosRuler.clusterName`                                 | Used to set the 'ruler_cluster' label                                                                                              | `""`                     |
+| `thanosRuler.additionalArgs`                              | Additional arguments for the ThanosRuler container.                                                                                | `[]`                     |
+| `thanosRuler.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation for Thanos Ruler                                                                   | `true`                   |
+| `thanosRuler.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                     | `""`                     |
+| `thanosRuler.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                     | `""`                     |
+| `thanosRuler.nodeSelector`                                | Node labels for Thanos Ruler pods assignment                                                                                       | `{}`                     |
+| `thanosRuler.serviceMonitor.enabled`                      | Creates a ServiceMonitor to monitor Thanos Ruler                                                                                   | `true`                   |
+| `thanosRuler.serviceMonitor.https`                        | Enable scraping Thanos Ruler over https.                                                                                           | `false`                  |
+| `thanosRuler.serviceMonitor.jobLabel`                     | The name of the label on the target service to use as the job name in prometheus.                                                  | `""`                     |
+| `thanosRuler.serviceMonitor.interval`                     | Scrape interval (use by default, falling back to Prometheus' default)                                                              | `""`                     |
+| `thanosRuler.serviceMonitor.metricRelabelings`            | Metric relabeling                                                                                                                  | `[]`                     |
+| `thanosRuler.serviceMonitor.relabelings`                  | Relabel configs                                                                                                                    | `[]`                     |
+| `thanosRuler.serviceMonitor.scrapeTimeout`                | Timeout after which the scrape is ended                                                                                            | `""`                     |
+| `thanosRuler.serviceMonitor.labels`                       | Extra labels for the ServiceMonitor                                                                                                | `{}`                     |
+| `thanosRuler.serviceMonitor.annotations`                  | Extra annotations for the ServiceMonitor                                                                                           | `{}`                     |
+| `thanosRuler.serviceMonitor.extraParameters`              | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                                   | `{}`                     |
+| `thanosRuler.serviceMonitor.sampleLimit`                  | Per-scrape limit on number of scraped samples that will be accepted.                                                               | `""`                     |
+| `thanosRuler.podAffinityPreset`                           | Prometheus Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                     | `""`                     |
+| `thanosRuler.podAntiAffinityPreset`                       | Thanos Ruler Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`                   |
+| `thanosRuler.nodeAffinityPreset.type`                     | Thanos Ruler Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                     |
+| `thanosRuler.nodeAffinityPreset.key`                      | Thanos Ruler Node label key to match. Ignored if `affinity` is set                                                                 | `""`                     |
+| `thanosRuler.nodeAffinityPreset.values`                   | Thanos Ruler Node label values to match. Ignored if `affinity` is set                                                              | `[]`                     |
+| `thanosRuler.affinity`                                    | Thanos Ruler Affinity for pod assignment                                                                                           | `{}`                     |
+| `thanosRuler.podMetadata`                                 | Standard object's metadata                                                                                                         | `{}`                     |
+| `thanosRuler.tolerations`                                 | Thanos Ruler Tolerations for pod assignment                                                                                        | `[]`                     |
+| `thanosRuler.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                                                     | `[]`                     |
+| `thanosRuler.containers`                                  | Containers allows injecting additional containers or modifying operator generated containers                                       | `[]`                     |
+| `thanosRuler.initContainers`                              | InitContainers allows adding initContainers to the pod definition                                                                  | `[]`                     |
+| `thanosRuler.priorityClassName`                           | Priority class assigned to the Pods                                                                                                | `""`                     |
+| `thanosRuler.portName`                                    | Port name used for the pods and governing service                                                                                  | `http`                   |
+| `thanosRuler.web`                                         | Defines the configuration of the ThanosRuler web server                                                                            | `{}`                     |
+| `thanosRuler.remoteWrite`                                 | Defines the list of remote write configurations                                                                                    | `{}`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -929,11 +1080,23 @@ While upgrading a chart, please note that there are certain limitations to upgra
 
 ## Upgrading
 
+### To 11.0.0
+
+This major updates the kube-state-metrics subchart to its newest major, 5.0.0. For more information, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-500).
+
+### To 10.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 ```console
 helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/kube-prometheus
 ```
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
+
+### To 10.0.0
+
+This major bump moves the crds to a local subchart called `kube-prometheus-crds`. This avoids an [installation issue](https://github.com/bitnami/charts/issues/29876) due to the size of the release secret created by helm. No issues are expected during upgrades.
 
 ### To 9.0.0
 
@@ -1085,7 +1248,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://REGISTRY_NAME/
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

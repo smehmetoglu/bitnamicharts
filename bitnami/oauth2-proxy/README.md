@@ -1,6 +1,6 @@
 <!--- app-name: OAuth2 Proxy -->
 
-# Bitnami package for OAuth2 Proxy
+# Bitnami Secure Images Helm chart for OAuth2 Proxy
 
 A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
 ```
 
-Looking to use OAuth2 Proxy in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-proxy) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -51,9 +64,9 @@ The command deploys OAuth2 Proxy on the Kubernetes cluster in the default config
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -65,7 +78,7 @@ This chart provides support for Ingress resources. If you have an ingress contro
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
-### TLS secrets
+### Securing traffic using TLS
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management.
 
@@ -127,6 +140,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitnami/oauth2-proxy) image stores the OAuth2 Proxy data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
@@ -135,12 +152,13 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -208,28 +226,29 @@ The [Bitnami OAuth2 Proxy](https://github.com/bitnami/containers/tree/main/bitna
 
 ### OAuth2 Proxy configuration parameters
 
-| Name                                                   | Description                                                                                              | Value              |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ------------------ |
-| `configuration.clientID`                               | OAuth client ID                                                                                          | `XXXXXXX`          |
-| `configuration.clientSecret`                           | OAuth client secret                                                                                      | `XXXXXXXX`         |
-| `configuration.cookieSecret`                           | OAuth cookie secret                                                                                      | `XXXXXXXXXXXXXXXX` |
-| `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret                                                      | `""`               |
-| `configuration.google.enabled`                         | Enable Google service account                                                                            | `false`            |
-| `configuration.google.adminEmail`                      | Google admin email                                                                                       | `""`               |
-| `configuration.google.groups`                          | Restrict logins to members of these google groups                                                        | `[]`               |
-| `configuration.google.serviceAccountJson`              | Google Service account JSON                                                                              | `""`               |
-| `configuration.google.existingSecret`                  | Existing secret containing Google Service Account                                                        | `""`               |
-| `configuration.content`                                | Default configuration                                                                                    | `""`               |
-| `configuration.existingConfigmap`                      | Configmap with the OAuth2 Proxy configuration                                                            | `""`               |
-| `configuration.authenticatedEmailsFile.enabled`        | Enable authenticated emails file                                                                         | `false`            |
-| `configuration.authenticatedEmailsFile.content`        | Restricted access list (one email per line)                                                              | `""`               |
-| `configuration.authenticatedEmailsFile.existingSecret` | Secret with the authenticated emails file                                                                | `""`               |
-| `configuration.htpasswdFile.enabled`                   | Enable htpasswd file                                                                                     | `false`            |
-| `configuration.htpasswdFile.existingSecret`            | Existing secret for htpasswd file                                                                        | `""`               |
-| `configuration.htpasswdFile.content`                   | htpasswd file entries (one row per user)                                                                 | `""`               |
-| `configuration.oidcIssuerUrl`                          | OpenID Connect issuer URL                                                                                | `""`               |
-| `configuration.redirectUrl`                            | OAuth Redirect URL                                                                                       | `""`               |
-| `configuration.whiteList`                              | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains | `""`               |
+| Name                                                    | Description                                                                                                         | Value              |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `configuration.clientID`                                | OAuth client ID                                                                                                     | `XXXXXXX`          |
+| `configuration.clientSecret`                            | OAuth client secret                                                                                                 | `XXXXXXXX`         |
+| `configuration.cookieSecret`                            | OAuth cookie secret                                                                                                 | `XXXXXXXXXXXXXXXX` |
+| `configuration.existingSecret`                          | Secret with the client ID, secret and cookie secret                                                                 | `""`               |
+| `configuration.google.enabled`                          | Enable Google service account                                                                                       | `false`            |
+| `configuration.google.useApplicationDefaultCredentials` | Use the application-default credentials (i.e. Workload Identity on GKE) instead of providing a service account JSON | `false`            |
+| `configuration.google.adminEmail`                       | Google admin email                                                                                                  | `""`               |
+| `configuration.google.groups`                           | Restrict logins to members of these google groups                                                                   | `[]`               |
+| `configuration.google.serviceAccountJson`               | Google Service account JSON                                                                                         | `""`               |
+| `configuration.google.existingSecret`                   | Existing secret containing Google Service Account                                                                   | `""`               |
+| `configuration.content`                                 | Default configuration                                                                                               | `""`               |
+| `configuration.existingConfigmap`                       | Configmap with the OAuth2 Proxy configuration                                                                       | `""`               |
+| `configuration.authenticatedEmailsFile.enabled`         | Enable authenticated emails file                                                                                    | `false`            |
+| `configuration.authenticatedEmailsFile.content`         | Restricted access list (one email per line)                                                                         | `""`               |
+| `configuration.authenticatedEmailsFile.existingSecret`  | Secret with the authenticated emails file                                                                           | `""`               |
+| `configuration.htpasswdFile.enabled`                    | Enable htpasswd file                                                                                                | `false`            |
+| `configuration.htpasswdFile.existingSecret`             | Existing secret for htpasswd file                                                                                   | `""`               |
+| `configuration.htpasswdFile.content`                    | htpasswd file entries (one row per user)                                                                            | `""`               |
+| `configuration.oidcIssuerUrl`                           | OpenID Connect issuer URL                                                                                           | `""`               |
+| `configuration.redirectUrl`                             | OAuth Redirect URL                                                                                                  | `""`               |
+| `configuration.whiteList`                               | Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains            | `""`               |
 
 ### OAuth2 Proxy deployment parameters
 
@@ -374,6 +393,22 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 8.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 22.0.0, which updates Redis&reg; from 8.0 to 8.2. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 7.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 21.0.0, which updates Redis&reg; from 7.4 to 8.0. [Here](https://redis.io/docs/latest/operate/oss_and_stack/install/upgrade/cluster/) you can find more information about the changes introduced in that version. No major issues are expected during the upgrade.
+
+### To 6.2.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 6.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 20.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-2000) you can find more information about the changes introduced in that version.
+
 ### To 5.0.0
 
 This major bump changes the following security defaults:
@@ -407,7 +442,7 @@ This major update the Redis&reg; subchart to its newest major, 15.0.0. [Here](ht
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

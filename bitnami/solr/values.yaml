@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -52,6 +59,9 @@ commonAnnotations: {}
 ## @param extraDeploy Extra objects to deploy (value evaluated as a template)
 ##
 extraDeploy: []
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -82,10 +92,9 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 9.6.1-debian-12-r2
+  tag: 9.9.0-debian-12-r1
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -530,7 +539,7 @@ networkPolicy:
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
-  ## @param ingress.enabled Enable ingress record generation for Apache Geode
+  ## @param ingress.enabled Enable ingress record generation for Solr
   ##
   enabled: false
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
@@ -678,6 +687,20 @@ persistence:
   ##     app: my-app
   ##
   selector: {}
+  
+## @section Persistent Volume Claim Retention Policy
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+##
+persistentVolumeClaimRetentionPolicy:
+  ## @param persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Solr Statefulset
+  ##
+  enabled: false
+  ## @param persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+  ##
+  whenScaled: Retain
+  ## @param persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+  ##
+  whenDeleted: Retain
 ## @section Volume Permissions parameters
 ##
 
@@ -698,7 +721,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -813,6 +836,9 @@ metrics:
   ## @param metrics.enabled Deploy a Solr Prometheus exporter deployment to expose metrics
   ##
   enabled: false
+  ## @param metrics.revisionHistoryLimit The number of old history to retain to allow rollback
+  ## NOTE: Explicitly setting this field to 0, will result in cleaning up all the history of your Deployment, thus that Deployment will not be able to rollback.
+  revisionHistoryLimit: 10
   ## @param metrics.configFile Config file with metrics to export by the Solr prometheus metrics. To change it mount a different file using `extraConfigMaps`
   ##
   configFile: "/opt/bitnami/solr/prometheus-exporter/conf/solr-exporter-config.xml"

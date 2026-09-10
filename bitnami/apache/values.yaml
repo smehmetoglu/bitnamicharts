@@ -8,7 +8,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -17,6 +18,7 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
   ## Compatibility adaptations for Kubernetes platforms
   ##
@@ -27,6 +29,13 @@ global:
       ## @param global.compatibility.openshift.adaptSecurityContext Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation)
       ##
       adaptSecurityContext: auto
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages By default, this chart verifies that the original container images that were designed, tested, and validated are used. This option makes the chart skip the verification step and proceed
+    ##
+    allowInsecureImages: false
+
 ## @section Common parameters
 
 ## @param kubeVersion Override Kubernetes version
@@ -62,10 +71,9 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.61-debian-12-r0
+  tag: 2.4.65-debian-12-r2
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -92,7 +100,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.45.2-debian-12-r3
+  tag: 2.51.0-debian-12-r0
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -683,7 +691,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.8-debian-12-r2
+    tag: 1.0.10-debian-12-r55
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -697,6 +705,9 @@ metrics:
     ## Enable debug mode
     ##
     debug: false
+  ## @param metrics.scrapeUri Apache Prometheus Exporter scrape_uri
+  ## Default scrape_uri is 'http://status.localhost:{{ .Values.containerPorts.http }}/server-status/?auto' if this variable is empty.
+  scrapeUri: ""
   ## @param metrics.podAnnotations [object] Additional custom annotations for Apache exporter service
   ##
   podAnnotations:

@@ -80,12 +80,15 @@ spec:
       {{- if .Values.data.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.data.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.data.shareProcessNamespace }}
+      shareProcessNamespace: {{ .Values.data.shareProcessNamespace }}
+      {{- end }}
       {{- if .Values.data.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
       {{- end }}
-      {{- if or (or .Values.initContainers .Values.data.initContainers) .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
+      {{- if or .Values.initContainers .Values.data.initContainers (and  .Values.enableDefaultInitContainers (or .Values.security.enabled .Values.sysctlImage.enabled)) (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
       initContainers:
-        {{- if .Values.sysctlImage.enabled }}
+        {{- if and .Values.sysctlImage.enabled .Values.enableDefaultInitContainers }}
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "elasticsearch.sysctl.image" . }}
@@ -105,7 +108,7 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.sysctlImage.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
-        {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled }}
+        {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled .Values.enableDefaultInitContainers }}
         - name: volume-permissions
           image: {{ include "elasticsearch.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -130,6 +133,7 @@ spec:
             - name: data
               mountPath: /bitnami/elasticsearch/data
         {{- end }}
+        {{- if .Values.enableDefaultInitContainers }}
         - name: copy-default-plugins
           image: {{ include "elasticsearch.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
@@ -161,6 +165,7 @@ spec:
             - name: empty-dir
               mountPath: /plugins
               subPath: app-plugins-dir
+        {{- end }}
         {{- if .Values.data.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
         {{- end }}
@@ -307,8 +312,15 @@ spec:
             - name: empty-dir
               mountPath: /opt/bitnami/elasticsearch/plugins
               subPath: app-plugins-dir
+            - name: empty-dir
+              mountPath: /bitnami/elasticsearch
+              subPath: app-volume-dirs
             - name: data
               mountPath: /bitnami/elasticsearch/data
+            {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+            - name: elasticsearch-secrets
+              mountPath: /opt/bitnami/elasticsearch/secrets
+            {{- end }}
             {{- if .Values.config }}
             - mountPath: /opt/bitnami/elasticsearch/config/elasticsearch.yml
               name: config
@@ -351,6 +363,17 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
+        {{- if and .Values.usePasswordFiles .Values.security.enabled }}
+        - name: elasticsearch-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ include "elasticsearch.secretName" . }}
+              {{- if or .Values.security.tls.passwordsSecret .Values.security.tls.keystorePassword .Values.security.tls.truststorePassword .Values.security.tls.keyPassword }}
+              - secret:
+                  name: {{ include "elasticsearch.tlsPasswordsSecret" . }}
+              {{- end }}
+        {{- end }}
         {{- if or .Values.config .Values.extraConfig }}
         - name: config
           configMap:
@@ -392,8 +415,15 @@ spec:
           persistentVolumeClaim:
             claimName: {{ .Values.data.persistence.existingClaim }}
   {{- else }}
+  {{- if .Values.data.persistentVolumeClaimRetentionPolicy.enabled }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.data.persistentVolumeClaimRetentionPolicy.whenScaled }}
+  {{- end }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: "data"
         {{- if or .Values.data.persistence.annotations .Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.data.persistence.annotations .Values.commonAnnotations ) "context" . ) }}

@@ -17,14 +17,14 @@ metadata:
 rules:
   {{- if and (include "common.capabilities.psp.supported" .) .Values.podSecurityPolicy.enabled }}
   - apiGroups:
-      - '{{ template "podSecurityPolicy.apiGroup" . }}'
+      - 'policy'
     resources:
       - 'podsecuritypolicies'
     verbs:
       - 'use'
-    resourceNames: [{{ printf "%s-master" (include "common.names.fullname" .) }}]
+    resourceNames: [{{ printf "%s-primary" (include "common.names.fullname" .) }}]
   {{- end }}
-  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createMaster}}
+  {{- if and .Values.sentinel.enabled .Values.sentinel.service.createPrimary}}
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["list", "patch"]

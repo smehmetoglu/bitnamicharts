@@ -1,6 +1,6 @@
 <!--- app-name: Confluent Schema Registry -->
 
-# Bitnami package for Confluent Schema Registry
+# Bitnami Secure Images Helm chart for Confluent Schema Registry
 
 Confluent Schema Registry provides a RESTful interface by adding a serving layer for your metadata on top of Kafka. It expands Kafka enabling support for Apache Avro, JSON, and Protobuf schemas.
 
@@ -14,13 +14,26 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/schema-registry
 ```
 
-Looking to use Confluent Schema Registry in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/tree/main/bitnami/schema-registry) statefulset on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -47,9 +60,9 @@ These commands deploy Schema Registry on the Kubernetes cluster with the default
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -82,6 +95,8 @@ kafka.auth.clientProtocol=sasl
 kafka.auth.jaas.clientUsers[0]=clientUser
 kafka.auth.jaas.clientPasswords[0]=clientPassword
 ```
+
+### Securing Traffic using TLS
 
 In order to configure TLS authentication/encryption, you **can** create a secret per Kafka broker you have in the cluster containing the Java Key Stores (JKS) files: the truststore (`kafka.truststore.jks`) and the keystore (`kafka.keystore.jks`). Then, you need pass the secret names with the `kafka.auth.tls.existingSecrets` parameter when deploying the chart.
 
@@ -117,12 +132,16 @@ kubectl create secret generic schema-registry-jks --from-file=schema-registry.tr
 kubectl create secret generic kafka-jks --from-file=kafka.truststore.jks=common.truststore.jks --from-file=kafka.keystore.jks=common.keystore.jks
 ```
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ### Adding extra flags
 
 In case you want to add extra environment variables to Schema Registry, you can use `extraEnvs` parameter. For instance:
 
 ```yaml
-extraEnvs:
+extraEnvVars:
   - name: FOO
     value: BAR
 ```
@@ -200,27 +219,30 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
-| `kubeVersion`                                         | Override Kubernetes version                                                                                                                                                                                                                                                                                                                                         | `""`   |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
+| `kubeVersion`                                         | Override Kubernetes version                                                                                                                                                                                                                                                                                                                                         | `""`    |
 
 ### Common parameters
 
-| Name                     | Description                                                                                          | Value           |
-| ------------------------ | ---------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override airflow.fullname template with a string (will prepend the release name) | `""`            |
-| `fullnameOverride`       | String to fully override airflow.fullname template with a string                                     | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                      | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                                | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                           | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                       | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                    | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)              | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                 | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                    | `["infinity"]`  |
+| Name                     | Description                                                                                               | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`           | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                     | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                            | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                                         | `true`          |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### Schema Registry parameters
 
@@ -354,12 +376,6 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                          | `[]`                     |
 | `networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                                | `{}`                     |
 | `networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                            | `{}`                     |
-| `ingress.enabled`                       | Enable ingress controller resource                                                                    | `false`                  |
-| `ingress.hostname`                      | Default host for the ingress resource                                                                 | `schema-registry.local`  |
-| `ingress.annotations`                   | Ingress annotations                                                                                   | `{}`                     |
-| `ingress.extraHosts`                    | An array with additional hostname(s) to be covered with the ingress record                            | `[]`                     |
-| `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
-| `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.enabled`                       | Enable ingress record generation for Schema Registry                                                  | `false`                  |
 | `ingress.pathType`                      | Ingress path type                                                                                     | `ImplementationSpecific` |
 | `ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                         | `""`                     |
@@ -374,6 +390,7 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 | `ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                   | `[]`                     |
 | `ingress.secrets`                       | Custom TLS certificates as secrets                                                                    | `[]`                     |
 | `ingress.extraRules`                    | Additional rules to be covered with this ingress record                                               | `[]`                     |
+| `httpRoutes`                            | Array of HTTPRoute resources to create.                                                               | `[]`                     |
 
 ### RBAC parameters
 
@@ -386,20 +403,20 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ### Kafka chart parameters
 
-| Name                                | Description                                                                                                                  | Value                                |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                               |
-| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                                  |
-| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                          |
-| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                               |
-| `kafka.extraConfig`                 | Additional configuration to be appended at the end of the generated Kafka configuration file.                                | `offsets.topic.replication.factor=1` |
-| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                           |
-| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                                 |
-| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]`     |
-| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                          |
-| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                               |
-| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                                 |
-| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                                 |
+| Name                                | Description                                                                                                                  | Value                            |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                           |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                              |
+| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                      |
+| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                           |
+| `kafka.overrideConfiguration`       | Kafka common configuration override                                                                                          | `{}`                             |
+| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                       |
+| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                             |
+| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                      |
+| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                           |
+| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                             |
+| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -427,6 +444,22 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/schem
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 24.0.0
+
+This major updates the Kafka subchart to its newest major, 32.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3200).
+
+### To 23.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 22.0.0
+
+This major updates the Kafka subchart to its newest major, 31.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3100).
+
+### To 21.0.0
+
+This major updates the Kafka subchart to its newest major, 30.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-3000).
 
 ### To 19.0.0
 
@@ -516,13 +549,13 @@ This version bump the version of charts used as dependency in a major. Kafka fro
 
 #### Useful links
 
-- <https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-resolve-helm2-helm3-post-migration-issues-index.html>
+- <https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-resolve-helm2-helm3-post-migration-issues-index.html>
 - <https://helm.sh/docs/topics/v2_v3_migration/>
 - <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

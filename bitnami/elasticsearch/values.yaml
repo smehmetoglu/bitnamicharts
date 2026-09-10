@@ -8,8 +8,10 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.elasticsearch.service.name Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
+## @param global.elasticsearch.service.name Elasticsearch service name to be referenced by the Kibana subchart (ignored if kibanaEnabled=false or global.elasticsearch.service.fullname is set)
+## @param global.elasticsearch.service.fullname Full Elasticsearch service name to be referenced by the Kibana subchart (ignored if kibanaEnabled=false)
 ## @param global.elasticsearch.service.ports.restAPI Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false)
 ## @param global.kibanaEnabled Whether or not to enable Kibana
 ##
@@ -20,10 +22,17 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   elasticsearch:
     service:
       name: elasticsearch
+      fullname: ""
       ports:
         restAPI: 9200
   kibanaEnabled: false
@@ -62,6 +71,9 @@ extraDeploy: []
 ## @param namespaceOverride String to fully override common.names.namespace
 ##
 namespaceOverride: ""
+## @param usePasswordFiles Mount credentials as files instead of using environment variables
+##
+usePasswordFiles: true
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -179,6 +191,9 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param enableDefaultInitContainers enables (or disables if false) the default init containers (sysctl, volume permissions, copy plugins etc...)
+##
+enableDefaultInitContainers: true
 ## @param useIstioLabels Use this variable to add Istio labels to all pods
 ##
 useIstioLabels: true
@@ -194,10 +209,9 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.14.2-debian-12-r0
+  tag: 9.1.2-debian-12-r0
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -634,6 +648,10 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param master.shareProcessNamespace Share a single process namespace between all of the containers in pod
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
   ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -832,6 +850,19 @@ master:
     ## @param master.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+  ## Master Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param master.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Master StatefulSet
+    ##
+    enabled: false
+    ## @param master.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param master.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -1027,6 +1058,10 @@ data:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param data.shareProcessNamespace Share a single process namespace between all of the containers in pod
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
   ## @param data.podAffinityPreset Pod affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1225,6 +1260,21 @@ data:
     ## @param data.persistence.size Persistent Volume Size
     ##
     size: 8Gi
+  ## Data Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param data.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Data StatefulSet
+    ##
+    enabled: false
+    ## @param data.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param data.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
+
+
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param data.serviceAccount.create Specifies whether a ServiceAccount should be created
@@ -1421,6 +1471,10 @@ coordinating:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param coordinating.shareProcessNamespace Share a single process namespace between all of the containers in pod
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
   ## @param coordinating.podAffinityPreset Pod affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -1784,6 +1838,10 @@ ingest:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
+  ## @param ingest.shareProcessNamespace Share a single process namespace between all of the containers in pod
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
   ## @param ingest.podAffinityPreset Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -2160,7 +2218,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.7.0-debian-12-r29
+    tag: 1.9.0-debian-12-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2590,7 +2648,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2637,10 +2695,9 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 12-debian-12-r24
+  tag: 12-debian-12-r50
   digest: ""
   ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
@@ -2673,6 +2730,7 @@ sysctlImage:
   ##     memory: 1024Mi
   ##
   resources: {}
+
 ## @section Kibana Parameters
 
 ## Bundled Kibana parameters

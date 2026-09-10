@@ -1,6 +1,6 @@
 <!--- app-name: WordPress -->
 
-# Bitnami package for WordPress
+# Bitnami Secure Images Helm chart for WordPress
 
 WordPress is the world's most popular blogging and content management platform. Powerful yet simple, everyone from students to global corporations use it to build beautiful, functional websites.
 
@@ -12,15 +12,28 @@ WordPress is the world's most popular blogging and content management platform. 
 helm install my-release oci://registry-1.docker.io/bitnamicharts/wordpress
 ```
 
-Looking to use WordPress in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [WordPress](https://github.com/bitnami/containers/tree/main/bitnami/wordpress) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the WordPress application, and the [Bitnami Memcached chart](https://github.com/bitnami/charts/tree/main/bitnami/memcached) that can be used to cache database queries.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -49,9 +62,38 @@ The command deploys WordPress on the Kubernetes cluster in the default configura
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Update credentials
+
+Bitnami charts configure credentials at first boot. Any further change in the secrets or credentials require manual intervention. Follow these instructions:
+
+- Update the user password following [the upstream documentation](https://wordpress.org/documentation/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORD and SMTP_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=wordpress-password=PASSWORD --from-literal=smtp-password=SMTP_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [apache-exporter](https://github.com/Lusitaniae/apache_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -115,7 +157,7 @@ Adding the TLS parameter (where available) will cause the chart to generate HTTP
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
-### TLS secrets
+### Securing traffic using TLS
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are several common use cases:
 
@@ -172,6 +214,10 @@ Some plugins permit editing the `.htaccess` file and it may be necessary to pers
     allowOverrideNone=false
     htaccessPersistenceEnabled=true
 ```
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
 
 ## Persistence
 
@@ -242,12 +288,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -260,6 +307,7 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `commonAnnotations`      | Annotations to add to all deployed resources                                                 | `{}`            |
 | `clusterDomain`          | Kubernetes Cluster Domain                                                                    | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
+| `usePasswordFiles`       | Mount credentials as files instead of using environment variables                            | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
@@ -302,6 +350,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `smtpUser`                             | SMTP username                                                                         | `""`               |
 | `smtpPassword`                         | SMTP user password                                                                    | `""`               |
 | `smtpProtocol`                         | SMTP protocol                                                                         | `""`               |
+| `smtpFromEmail`                        | SMTP from email (default is `smtpUser`)                                               | `""`               |
+| `smtpFromName`                         | SMTP from name  (default is `wordpressFirstName` and `wordpressLastName`)             | `""`               |
 | `smtpExistingSecret`                   | The name of an existing secret with SMTP credentials                                  | `""`               |
 | `allowEmptyPassword`                   | Allow the container to be started with blank passwords                                | `true`             |
 | `allowOverrideNone`                    | Configure Apache to prohibit overriding directives with htaccess files                | `false`            |
@@ -448,7 +498,6 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 | `persistence.enabled`                                       | Enable persistence using Persistent Volume Claims                                                                                                                                                                                                     | `true`                     |
 | `persistence.storageClass`                                  | Persistent Volume storage class                                                                                                                                                                                                                       | `""`                       |
 | `persistence.accessModes`                                   | Persistent Volume access modes                                                                                                                                                                                                                        | `[]`                       |
-| `persistence.accessMode`                                    | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                                                                                                                                                     | `ReadWriteOnce`            |
 | `persistence.size`                                          | Persistent Volume size                                                                                                                                                                                                                                | `10Gi`                     |
 | `persistence.dataSource`                                    | Custom PVC data source                                                                                                                                                                                                                                | `{}`                       |
 | `persistence.existingClaim`                                 | The name of an existing PVC to use for persistence                                                                                                                                                                                                    | `""`                       |
@@ -633,6 +682,36 @@ To enable the new features, it is not possible to do it by upgrading an existing
 
 ## Upgrading
 
+### To 26.0.0
+
+This major release bumps the MariaDB version to 12.0. Follow the [upstream instructions](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/upgrading) for upgrading from MariaDB 11.8 to 12.0. No major issues are expected during the upgrade.
+
+### To 25.0.4
+
+This version addresses CVE-2025-41240. For more details, please refer to the advisory at [this page](https://github.com/bitnami/charts/security/advisories/GHSA-wgg9-9qgw-529w).
+
+### To 25.0.0
+
+This major release bumps the MariaDB version to 11.8. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-4-to-mariadb-11-8/) for upgrading from MariaDB 11.4 to 11.8. No major issues are expected during the upgrade.
+
+### To 24.1.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 24.0.0
+
+This major bump updates the MariaDB subchart to version 20.0.0. This subchart updates the StatefulSet objects `serviceName` to use a headless service, as the current non-headless service attached to it was not providing DNS entries. This will cause an upgrade issue because it changes "immutable fields". To workaround it, delete the StatefulSet objects as follows (replace the RELEASE_NAME placeholder):
+
+```shell
+kubectl delete sts RELEASE_NAME-mariadb --cascade=false
+```
+
+Then execute `helm upgrade` as usual.
+
+### To 23.0.0
+
+This major release bumps the MariaDB version to 11.4. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-11-3-to-mariadb-11-4/) for upgrading from MariaDB 11.3 to 11.4. No major issues are expected during the upgrade.
+
 ### To 22.0.0
 
 This major release bumps the MariaDB chart version to [18.x.x](https://github.com/bitnami/charts/pull/24804); no major issues are expected during the upgrade.
@@ -776,7 +855,7 @@ kubectl delete statefulset wordpress-mariadb --cascade=false
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,8 +1,157 @@
 # Changelog
 
-## 4.2.7 (2024-07-04)
+## 5.1.0 (2025-08-14)
 
-* [bitnami/kube-state-metrics] Release 4.2.7 ([#27786](https://github.com/bitnami/charts/pull/27786))
+* [bitnami/kube-state-metrics] fix: OOM Killed ([#35785](https://github.com/bitnami/charts/pull/35785))
+
+## <small>5.0.16 (2025-08-13)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35843) ([77cd410](https://github.com/bitnami/charts/commit/77cd4100bb87ecebf2e675ecd8e4dcaa87b8245b)), closes [#35843](https://github.com/bitnami/charts/issues/35843)
+
+## <small>5.0.15 (2025-08-07)</small>
+
+* [bitnami/*] Adapt main README and change ascii (#35173) ([73d15e0](https://github.com/bitnami/charts/commit/73d15e03e04647efa902a1d14a09ea8657429cd0)), closes [#35173](https://github.com/bitnami/charts/issues/35173)
+* [bitnami/*] Adapt welcome message to BSI (#35170) ([e1c8146](https://github.com/bitnami/charts/commit/e1c8146831516fb35de736a6f3fd10e5e7a44286)), closes [#35170](https://github.com/bitnami/charts/issues/35170)
+* [bitnami/*] Add BSI to charts' READMEs (#35174) ([4973fd0](https://github.com/bitnami/charts/commit/4973fd08dd7e95398ddcc4054538023b542e19f2)), closes [#35174](https://github.com/bitnami/charts/issues/35174)
+* [bitnami/*] docs: update BSI warning on charts' notes (#35340) ([07483a5](https://github.com/bitnami/charts/commit/07483a5ed964b409266dc025e4b55bf2eb0f621c)), closes [#35340](https://github.com/bitnami/charts/issues/35340)
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35492) ([82a6251](https://github.com/bitnami/charts/commit/82a62515ead8d6ff94ff67f8b80f641fcdbd92aa)), closes [#35492](https://github.com/bitnami/charts/issues/35492)
+
+## <small>5.0.14 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#35064) ([ddb5f3a](https://github.com/bitnami/charts/commit/ddb5f3a4758e5d9eb7859d0159fe0c84c289d218)), closes [#35064](https://github.com/bitnami/charts/issues/35064)
+
+## <small>5.0.13 (2025-07-15)</small>
+
+* [bitnami/kube-state-metrics] ci: VIB verify (#35059) ([510c479](https://github.com/bitnami/charts/commit/510c4795f26cd2c7e6f19691fc1d1edb28df22da)), closes [#35059](https://github.com/bitnami/charts/issues/35059)
+
+## <small>5.0.12 (2025-07-09)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34914) ([855aade](https://github.com/bitnami/charts/commit/855aade37218f200274e7d71e4ecaf53062b31bf)), closes [#34914](https://github.com/bitnami/charts/issues/34914)
+
+## <small>5.0.11 (2025-06-25)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34628) ([64929a5](https://github.com/bitnami/charts/commit/64929a5757f4c7a55ac792b2edd94e6735158757)), closes [#34628](https://github.com/bitnami/charts/issues/34628)
+
+## <small>5.0.10 (2025-06-13)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34456) ([279aed1](https://github.com/bitnami/charts/commit/279aed1243da476dac60740fef48bcebab1cc1e1)), closes [#34456](https://github.com/bitnami/charts/issues/34456)
+
+## <small>5.0.9 (2025-06-06)</small>
+
+* [bitnami/kube-state-metrics] :zap: :arrow_up: Update dependency references (#34182) ([3ad7b94](https://github.com/bitnami/charts/commit/3ad7b9420066eb156d354d363a06383ecb893b5c)), closes [#34182](https://github.com/bitnami/charts/issues/34182)
+* [bitnami/kubeapps] Deprecation followup (#33579) ([77e312c](https://github.com/bitnami/charts/commit/77e312c1772d4d7c4dc5d3ac0e80f4e452e3a062)), closes [#33579](https://github.com/bitnami/charts/issues/33579)
+
+## <small>5.0.8 (2025-05-07)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.8 (#33532) ([f1de57e](https://github.com/bitnami/charts/commit/f1de57ebb454042196f7bd581dd793e454838f20)), closes [#33532](https://github.com/bitnami/charts/issues/33532)
+
+## <small>5.0.7 (2025-05-06)</small>
+
+* [bitnami/kube-state-metrics] chore: :recycle: :arrow_up: Update common and remove k8s < 1.23 referen ([7c5ec69](https://github.com/bitnami/charts/commit/7c5ec69cea44d08859d87ac51eeedd23b6ccf2e8)), closes [#33388](https://github.com/bitnami/charts/issues/33388)
+
+## <small>5.0.6 (2025-05-02)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.6 (#33295) ([f90ae20](https://github.com/bitnami/charts/commit/f90ae20419304eda7ade6fefff0745675dfe8bc0)), closes [#33295](https://github.com/bitnami/charts/issues/33295)
+
+## <small>5.0.5 (2025-04-02)</small>
+
+* [bitnami/*] Add tanzuCategory annotation (#32409) ([a8fba5c](https://github.com/bitnami/charts/commit/a8fba5cb01f6f4464ca7f69c50b0fbe97d837a95)), closes [#32409](https://github.com/bitnami/charts/issues/32409)
+* [bitnami/kube-state-metrics] Release 5.0.5 (#32745) ([923099a](https://github.com/bitnami/charts/commit/923099aaf08be9df766b3399efa49b16a6b20f73)), closes [#32745](https://github.com/bitnami/charts/issues/32745)
+
+## <small>5.0.4 (2025-03-05)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.4 (#32297) ([b141399](https://github.com/bitnami/charts/commit/b14139969db1e24805425b679c490a7bdc268212)), closes [#32297](https://github.com/bitnami/charts/issues/32297)
+
+## <small>5.0.3 (2025-02-19)</small>
+
+* [bitnami/*] Use CDN url for the Bitnami Application Icons (#31881) ([d9bb11a](https://github.com/bitnami/charts/commit/d9bb11a9076b9bfdcc70ea022c25ef50e9713657)), closes [#31881](https://github.com/bitnami/charts/issues/31881)
+* [bitnami/kube-state-metrics] Release 5.0.3 (#32010) ([e15f092](https://github.com/bitnami/charts/commit/e15f0928a9521e308e6975805fa801f26200ecac)), closes [#32010](https://github.com/bitnami/charts/issues/32010)
+
+## <small>5.0.2 (2025-02-04)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.2 (#31763) ([89d1993](https://github.com/bitnami/charts/commit/89d1993add6aa3bd7fb897adb101c40deb692f5d)), closes [#31763](https://github.com/bitnami/charts/issues/31763)
+
+## <small>5.0.1 (2025-02-03)</small>
+
+* [bitnami/kube-state-metrics] Release 5.0.1 (#31712) ([5d2bf0f](https://github.com/bitnami/charts/commit/5d2bf0f99ba64f2b39f72fb2ad65750d4c5d673b)), closes [#31712](https://github.com/bitnami/charts/issues/31712)
+
+## 5.0.0 (2025-02-03)
+
+* [bitnami/kube-state-metrics] Remove resource VPA no longer available since v2.9.0 (#31689) ([bbf5101](https://github.com/bitnami/charts/commit/bbf510172dc4a2835fb3620a17309be8a8b6ffaf)), closes [#31689](https://github.com/bitnami/charts/issues/31689)
+
+## 4.4.0 (2025-02-03)
+
+* [bitnami/kube-state-metrics] allow creation of custom resource state (#31687) ([e77870b](https://github.com/bitnami/charts/commit/e77870b5c15230186ce3091f2b620b7de986999f)), closes [#31687](https://github.com/bitnami/charts/issues/31687)
+* Update copyright year (#31682) ([e9f02f5](https://github.com/bitnami/charts/commit/e9f02f5007068751f7eb2270fece811e685c99b6)), closes [#31682](https://github.com/bitnami/charts/issues/31682)
+
+## <small>4.3.4 (2025-01-24)</small>
+
+* [bitnami/kube-state-metrics] Release 4.3.4 (#31562) ([62970ac](https://github.com/bitnami/charts/commit/62970acb89b03bd6169fc418e5562c5e186bbc07)), closes [#31562](https://github.com/bitnami/charts/issues/31562)
+
+## <small>4.3.3 (2025-01-17)</small>
+
+* [bitnami/kube-state-metrics] Release 4.3.3 (#31428) ([c9f8c99](https://github.com/bitnami/charts/commit/c9f8c996cc05e44bc6db425dcfaefdf24d0237cf)), closes [#31428](https://github.com/bitnami/charts/issues/31428)
+
+## <small>4.3.2 (2025-01-13)</small>
+
+* [bitnami/*] Fix typo in README (#31052) ([b41a51d](https://github.com/bitnami/charts/commit/b41a51d1bd04841fc108b78d3b8357a5292771c8)), closes [#31052](https://github.com/bitnami/charts/issues/31052)
+* [bitnami/kube-state-metrics] Release 4.3.2 (#31317) ([a0c2fe7](https://github.com/bitnami/charts/commit/a0c2fe7e76e93b29f8b944b9c7fcb13001da8a5a)), closes [#31317](https://github.com/bitnami/charts/issues/31317)
+
+## <small>4.3.1 (2024-12-10)</small>
+
+* [bitnami/kube-state-metrics] Fix typo in NOTES.txt (#30930) ([c2474c7](https://github.com/bitnami/charts/commit/c2474c7583d5d0dcc953bbc38a3a300e4f84ddaf)), closes [#30930](https://github.com/bitnami/charts/issues/30930)
+
+## 4.3.0 (2024-12-10)
+
+* [bitnami/*] Add Bitnami Premium to NOTES.txt (#30854) ([3dfc003](https://github.com/bitnami/charts/commit/3dfc00376df6631f0ce54b8d440d477f6caa6186)), closes [#30854](https://github.com/bitnami/charts/issues/30854)
+* [bitnami/kube-state-metrics] Detect non-standard images (#30913) ([ad6e78f](https://github.com/bitnami/charts/commit/ad6e78f46b05f345be2b8b03f288ba3cc64ead3a)), closes [#30913](https://github.com/bitnami/charts/issues/30913)
+
+## <small>4.2.17 (2024-12-04)</small>
+
+* [bitnami/*] docs: :memo: Add "Backup & Restore" section (#30711) ([35ab536](https://github.com/bitnami/charts/commit/35ab5363741e7548f4076f04da6e62d10153c60c)), closes [#30711](https://github.com/bitnami/charts/issues/30711)
+* [bitnami/kube-state-metrics] Release 4.2.17 (#30759) ([7ac7caa](https://github.com/bitnami/charts/commit/7ac7caa6377a085be8d07a5cfc18be367ad266fd)), closes [#30759](https://github.com/bitnami/charts/issues/30759)
+
+## <small>4.2.16 (2024-11-08)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.16 (#30365) ([decfaea](https://github.com/bitnami/charts/commit/decfaea1cd0a5e2d6c8caa33301946b03e2fbbd4)), closes [#30365](https://github.com/bitnami/charts/issues/30365)
+
+## <small>4.2.15 (2024-11-07)</small>
+
+* [bitnami/*] Remove wrong comment about imagePullPolicy (#30107) ([a51f9e4](https://github.com/bitnami/charts/commit/a51f9e4bb0fbf77199512d35de7ac8abe055d026)), closes [#30107](https://github.com/bitnami/charts/issues/30107)
+* [bitnami/kube-state-metrics] Release 4.2.15 (#30277) ([068ec88](https://github.com/bitnami/charts/commit/068ec88147390ea823af22ead339ab4e0e5b42d8)), closes [#30277](https://github.com/bitnami/charts/issues/30277)
+* Update documentation links to techdocs.broadcom.com (#29931) ([f0d9ad7](https://github.com/bitnami/charts/commit/f0d9ad78f39f633d275fc576d32eae78ded4d0b8)), closes [#29931](https://github.com/bitnami/charts/issues/29931)
+
+## <small>4.2.14 (2024-10-02)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.14 (#29702) ([ae112cf](https://github.com/bitnami/charts/commit/ae112cfdf05f6648bdbc0725e7d75ec26a1abd55)), closes [#29702](https://github.com/bitnami/charts/issues/29702)
+
+## <small>4.2.13 (2024-09-06)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.13 (#29242) ([f7b9ec5](https://github.com/bitnami/charts/commit/f7b9ec5f70e160a861a8d8cae03a47aeeb403e80)), closes [#29242](https://github.com/bitnami/charts/issues/29242)
+
+## <small>4.2.12 (2024-08-07)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.12 (#28725) ([544c85d](https://github.com/bitnami/charts/commit/544c85d2396aac0091327cf2f42f28007622e5ce)), closes [#28725](https://github.com/bitnami/charts/issues/28725)
+
+## <small>4.2.11 (2024-07-25)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.11 (#28427) ([c59ea22](https://github.com/bitnami/charts/commit/c59ea22f8bdfe4014bba24cf7f1418fd075ca2d9)), closes [#28427](https://github.com/bitnami/charts/issues/28427)
+
+## <small>4.2.10 (2024-07-24)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.10 (#28294) ([2c42d07](https://github.com/bitnami/charts/commit/2c42d07e8dff4ca3f97d46d23402255a0f5030df)), closes [#28294](https://github.com/bitnami/charts/issues/28294)
+
+## <small>4.2.9 (2024-07-19)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.9 (#28180) ([97befff](https://github.com/bitnami/charts/commit/97befffecc115b9f269f89256eb3a033e215fbda)), closes [#28180](https://github.com/bitnami/charts/issues/28180)
+
+## <small>4.2.8 (2024-07-18)</small>
+
+* [bitnami/kube-state-metrics] Remove global.storageClass (#28044) ([0814a4a](https://github.com/bitnami/charts/commit/0814a4a6390761fb68dfc9265c57e047794a5618)), closes [#28044](https://github.com/bitnami/charts/issues/28044)
+
+## <small>4.2.7 (2024-07-04)</small>
+
+* [bitnami/kube-state-metrics] Release 4.2.7 (#27786) ([096c1cd](https://github.com/bitnami/charts/commit/096c1cd92bdbf4d5870f5dc9852fd4686f3d062d)), closes [#27786](https://github.com/bitnami/charts/issues/27786)
 
 ## <small>4.2.6 (2024-07-03)</small>
 
@@ -752,7 +901,7 @@
 
 ## 0.3.0 (2020-06-08)
 
-* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781) [/github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go#L28](https://github.com//github.com/kubernetes/kube-state-metrics/blob/release-1.9/pkg/options/collector.go/issues/L28)
+* [bitnami/kube-state-metrics] Add missing collectors (#2781) ([93a4afe](https://github.com/bitnami/charts/commit/93a4afed8cd8713c2726e761dec45e1af0dd8dbc)), closes [#2781](https://github.com/bitnami/charts/issues/2781)
 
 ## <small>0.2.3 (2020-06-03)</small>
 

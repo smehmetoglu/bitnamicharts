@@ -9,7 +9,8 @@
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.defaultStorageClass Global default StorageClass for Persistent Volume(s)
+## @param global.storageClass DEPRECATED: use global.defaultStorageClass instead
 ##
 global:
   imageRegistry: ""
@@ -18,7 +19,13 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
+  defaultStorageClass: ""
   storageClass: ""
+  ## Security parameters
+  ##
+  security:
+    ## @param global.security.allowInsecureImages Allows skipping image verification
+    allowInsecureImages: false
   ## Compatibility adaptations for Kubernetes platforms
   ##
   compatibility:
@@ -90,10 +97,9 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.27.0-debian-12-r14
+    tag: 0.28.1-debian-12-r15
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -224,7 +230,7 @@ alertmanager:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -675,10 +681,9 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.53.0-debian-12-r3
+    tag: 3.5.0-debian-12-r3
     digest: ""
     ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: http://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
@@ -690,6 +695,12 @@ server:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## @param server.scrapePrometheusHost Specifies whether to include prometheus host scraping job
+  ##
+  scrapePrometheusHost: true
+  ## @param server.scrapeAlertmanagerHost Specifies whether to include alertmanager host scraping job
+  ##
+  scrapeAlertmanagerHost: true
   ## @param server.configuration [string] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
   ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
@@ -713,9 +724,11 @@ server:
     remote_write: {{- include "common.tplvalues.render" (dict "value" .Values.server.remoteWrite "context" $) | nindent 4 }}
     {{- end }}
     scrape_configs:
+    {{- if .Values.server.scrapePrometheusHost }}
       - job_name: prometheus
       {{- include "prometheus.scrape_config" (dict "component" "server" "context" $) | nindent 4 }}
-    {{- if .Values.alertmanager.enabled }}
+    {{- end }}
+    {{- if and .Values.alertmanager.enabled .Values.server.scrapeAlertmanagerHost }}
       - job_name: alertmanager
         {{- include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
     {{- end }}
@@ -728,9 +741,18 @@ server:
         {{- if .Values.server.alertingEndpoints }}
         {{- include "common.tplvalues.render" (dict "value" .Values.server.alertingEndpoints "context" $) | nindent 4 }}
         {{- end }}
+        {{- if and .Values.alertmanager.enabled }}
         - scheme: HTTP
           static_configs:
+          {{- if gt (int .Values.alertmanager.replicaCount) 1 }}
+            - targets:
+              {{- range $i := until (int .Values.alertmanager.replicaCount) }}
+                - "{{ printf "%s-%d.%s-headless.%s.svc.%s:%d" (include "prometheus.alertmanager.fullname" $) $i (include "prometheus.alertmanager.fullname" $) (include "common.names.namespace" $) $.Values.clusterDomain (int $.Values.alertmanager.containerPorts.http) }}"
+              {{- end }}
+          {{- else }}
             - targets: [ "{{ printf "%s.%s.svc.%s:%d" (include "prometheus.alertmanager.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain (int .Values.alertmanager.service.ports.http) }}" ]
+          {{- end }}
+        {{- end }}
     rule_files:
       - rules.yaml
     {{- end }}
@@ -742,6 +764,9 @@ server:
   ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##
   extraScrapeConfigs: []
+  ## @param server.useStatefulSet Whether to use a StatefulSet or a Deployment to deploy Prometheus server
+  ##
+  useStatefulSet: false
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
   replicaCount: 1
@@ -848,7 +873,7 @@ server:
   ##
   containerSecurityContext:
     enabled: true
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 1001
     runAsGroup: 1001
     runAsNonRoot: true
@@ -1069,9 +1094,8 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.35.1-debian-12-r2
+      tag: 0.39.2-debian-12-r2
       digest: ""
-      ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
@@ -1098,7 +1122,7 @@ server:
     ##
     containerSecurityContext:
       enabled: true
-      seLinuxOptions: null
+      seLinuxOptions: {}
       runAsUser: 1001
       runAsGroup: 1001
       runAsNonRoot: true
@@ -1128,6 +1152,19 @@ server:
     objectStorageConfig:
       secretName: ""
       secretKey: thanos.yaml
+    ## @param server.thanos.extraEnvVars Array with extra environment variables to add to the thanos sidecar container
+    ## e.g:
+    ## extraEnvVars:
+    ##   - name: FOO
+    ##     value: "bar"
+    ##
+    extraEnvVars: []
+    ## @param server.thanos.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsCM: ""
+    ## @param server.thanos.extraEnvVarsSecret Name of existing Secret containing extra env vars for the thanos sidecar container
+    ##
+    extraEnvVarsSecret: ""
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `server.volumes` for thanos sidecar container
     ## extraVolumeMounts:
@@ -1643,6 +1680,10 @@ server:
     ## @param server.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## @param server.rbac.includeDefaultRules Specifies whether to include default rules from official prometheus helm chart
+    ## ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/templates/clusterrole.yaml
+    ##
+    includeDefaultRules: true
     ## @param server.rbac.rules Custom RBAC rules to set
     ## e.g:
     ## rules:
@@ -1677,7 +1718,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 12-debian-12-r24
+    tag: 12-debian-12-r50
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1713,5 +1754,5 @@ volumePermissions:
   ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
   ##
   containerSecurityContext:
-    seLinuxOptions: null
+    seLinuxOptions: {}
     runAsUser: 0

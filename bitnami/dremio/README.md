@@ -1,6 +1,6 @@
 <!--- app-name: Dremio -->
 
-# Bitnami package for Dremio
+# Bitnami Secure Images Helm chart for Dremio
 
 Dremio is an open-source self-service data access tool that provides high-performance queries for interactive analytics on data lakes.
 
@@ -16,11 +16,26 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/dremio
 
 Looking to use dremio in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
+
 ## Introduction
 
 This chart bootstraps a [Dremio](https://github.com/bitnami/containers/tree/main/bitnami/dremio) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -44,7 +59,7 @@ The command deploys dremio on the Kubernetes cluster in the default configuratio
 
 ## Configuration and installation details
 
-### [Rolling VS Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### [Rolling VS Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -217,7 +232,7 @@ For configuring AWS as distributed storage, use the `externalS3` section (replac
 
 ```yaml
 dremio:
-  distStorageType: minio
+  distStorageType: aws
 
 minio:
   enabled: false
@@ -226,7 +241,19 @@ externalS3:
   accessKeyID: DREMIO_ACCESS_KEY_ID
   accessKeySecret: DREMIO_ACCESS_KEY_SECRET
   bucket: DREMIO_BUCKET
-  regien: DREMIO_REGION
+  region: DREMIO_REGION
+```
+
+If a role needs to be assumed to access s3, append this configuration to your deployment
+
+```yaml
+dremio:
+  coreSite:
+    appendConfiguration: |
+      <property>
+        <name>fs.s3a.assumed.role.arn</name>
+        <value>ROLE_TO_ASSUME</value>
+      </property>
 ```
 
 #### Azure Storage as distributed storage
@@ -303,6 +330,24 @@ minio:
   enabled: false
 ```
 
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [jmx_exporter](https://github.com/prometheus/jmx_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
 ### User authentication
 
 When the `dremio.auth.enabled` parameter is set to true, the chart will create a Job that automatically bootstraps a user using Dremio internal authentication mechanisms. The user is customized with the following parameters:
@@ -327,7 +372,7 @@ externalZookeeper.hosts[0]=myexternalhost
 externalZookeeper.port=2181
 ```
 
-### TLS secrets
+### Securing traffic using TLS
 
 TLS support for the Web interface can be enabled in the chart by specifying the `dremio.tls.enabled=true`while creating a release. Two possible options are available:
 
@@ -374,7 +419,7 @@ It is also possible to rely on the chart certificate auto-generation capabilitie
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize it to serve your application.To enable Ingress integration, set `ingress.enabled` to `true`.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize it to serve your application. To enable Ingress integration, set `ingress.enabled` to `true`.
 
 The most common scenario is to have one host name mapped to the deployment. In this case, the `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host.
 
@@ -382,7 +427,7 @@ However, it is also possible to have more than one host. To facilitate this, the
 
 > NOTE: For each host specified in the `ingress.extraHosts` parameter, it is necessary to set a name, path, and any annotations that the Ingress controller should know about. Not all annotations are supported by all Ingress controllers, but [this annotation reference document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md) lists the annotations supported by many popular Ingress controllers.
 
-Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the  application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
+Adding the TLS parameter (where available) will cause the chart to generate HTTPS URLs, and the application will be available on port 443. The actual TLS secrets do not have to be generated by this chart. However, if TLS is enabled, the Ingress record will not work until the TLS secret exists.
 
 [Learn more about Ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
 
@@ -506,6 +551,10 @@ This chart allows you to set your custom affinity using the `affinity` parameter
 
 As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Persistence
 
 The [Bitnami dremio](https://github.com/bitnami/containers/tree/main/bitnami/dremio) image stores the dremio data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
@@ -520,18 +569,20 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`           | String to partially override common.names.name                                          | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
@@ -542,7 +593,7 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the chart release                                 | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the chart release                                    | `["infinity"]`  |
-| `usePasswordFile`        | Mount secrets as files                                                                  | `true`          |
+| `usePasswordFiles`       | Mount secrets as files                                                                  | `true`          |
 
 ### Dremio common configuration settings
 
@@ -1141,6 +1192,18 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `defaultInitContainers.volumePermissions.containerSecurityContext.enabled`                | Enabled init container' Security Context                                                                                                                                                                                                            | `true`                     |
 | `defaultInitContainers.volumePermissions.containerSecurityContext.seLinuxOptions`         | Set SELinux options in init container                                                                                                                                                                                                               | `{}`                       |
 | `defaultInitContainers.volumePermissions.containerSecurityContext.runAsUser`              | Set init container's Security Context runAsUser                                                                                                                                                                                                     | `0`                        |
+| `defaultInitContainers.importMinIOCert.resourcesPreset`                                   | Set init container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if volumePermissions.resources is set (volumePermissions.resources is recommended for production). | `nano`                     |
+| `defaultInitContainers.importMinIOCert.resources`                                         | Set init container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                              | `{}`                       |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.enabled`                  | Enabled Init container' Security Context                                                                                                                                                                                                            | `true`                     |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.seLinuxOptions`           | Set SELinux options in Init container                                                                                                                                                                                                               | `{}`                       |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.runAsUser`                | Set runAsUser in Init container' Security Context                                                                                                                                                                                                   | `1001`                     |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.runAsGroup`               | Set runAsGroup in Init container' Security Context                                                                                                                                                                                                  | `1001`                     |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot in Init container' Security Context                                                                                                                                                                                                | `true`                     |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.readOnlyRootFilesystem`   | Set readOnlyRootFilesystem in Init container' Security Context                                                                                                                                                                                      | `true`                     |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.privileged`               | Set privileged in Init container' Security Context                                                                                                                                                                                                  | `false`                    |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation in Init container' Security Context                                                                                                                                                                                    | `false`                    |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped in Init container                                                                                                                                                                                                | `["ALL"]`                  |
+| `defaultInitContainers.importMinIOCert.containerSecurityContext.seccompProfile.type`      | Set seccomp profile in Init container                                                                                                                                                                                                               | `RuntimeDefault`           |
 
 ### MinIO&reg; chart parameters
 
@@ -1155,13 +1218,14 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 | `minio.defaultBuckets`             | Comma, semi-colon or space separated list of MinIO&reg; buckets to create                                                         | `dremio`                                            |
 | `minio.provisioning.enabled`       | Enable/disable MinIO&reg; provisioning job                                                                                        | `true`                                              |
 | `minio.provisioning.extraCommands` | Extra commands to run on MinIO&reg; provisioning job                                                                              | `["mc anonymous set download provisioning/dremio"]` |
-| `minio.tls.enabled`                | Enable/disable MinIO&reg; TLS support                                                                                             | `true`                                              |
-| `minio.tls.autoGenerated`          | Autogenerate TLS certificates                                                                                                     | `true`                                              |
+| `minio.tls.enabled`                | Enable TLS configuration for MinIO&reg;                                                                                           | `true`                                              |
+| `minio.tls.autoGenerated.enabled`  | Enable automatic generation of TLS certificates                                                                                   | `true`                                              |
 | `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                         |
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `9000`                                              |
+| `minio.console.enabled`            | Enable MinIO&reg; Console                                                                                                         | `false`                                             |
 
-### Prometheus metrics
+### Prometheus metrics parameters
 
 | Name                                                        | Description                                                                                                                                                                                                                | Value                          |
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
@@ -1269,9 +1333,19 @@ helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/dremi
 
 ## Troubleshooting
 
+## Upgrading
+
+### To 3.0.0
+
+This major updates the `minio` subchart to its newest major, 17.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1700).
+
+### To 1.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
+
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

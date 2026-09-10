@@ -1,12 +1,12 @@
 <!--- app-name: MongoDB&reg; -->
 
-# MongoDB(R) packaged by Bitnami
+# MongoDB&reg; packaged by Bitnami
 
-MongoDB(R) is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
+MongoDB&reg; is a relational open source NoSQL database. Easy to use, it stores data in JSON-like documents. Automated scalability and high-performance. Ideal for developing cloud native applications.
 
 [Overview of MongoDB&reg;](http://www.mongodb.org)
 
-Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
+Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB&reg; is run and maintained by MongoDB, which is a completely separate project from Bitnami.
 
 ## TL;DR
 
@@ -14,13 +14,26 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
-Looking to use MongoDBreg; in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [MongoDB(&reg;)](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Architecture
 
@@ -121,9 +134,27 @@ The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default conf
 
 Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
 
-To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcePreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-### [Rolling vs Immutable tags](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-understand-rolling-tags-containers-index.html)
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `metrics.enabled` to `true`. This will deploy a sidecar container with [mongodb_exporter](https://github.com/percona/mongodb_exporter) in all pods and a `metrics` service, which can be configured under the `metrics.service` section. This `metrics` service will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### [Rolling vs Immutable tags](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-understand-rolling-tags-containers-index.html)
 
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
@@ -286,7 +317,84 @@ initContainers:
 
 Learn more about [sidecar containers](https://kubernetes.io/docs/concepts/workloads/pods/) and [init containers](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/).
 
-### Backup and restore MongoDB(R) deployments
+### Update credentials
+
+Bitnami charts, with its default settings, configure credentials at first boot. Any further change in the secrets or credentials can be done using one of the following methods:
+
+#### Manual update of the passwords and secrets
+
+- Update the user password following [the upstream documentation](https://www.mongodb.com/docs/manual/reference/method/db.changeUserPassword/)
+- Update the password secret with the new values (replace the SECRET_NAME, PASSWORDS and ROOT_PASSWORD placeholders)
+
+```shell
+kubectl create secret generic SECRET_NAME --from-literal=mongodb-passwords=PASSWORD --from-literal=mongodb-root-password=ROOT_PASSWORD --dry-run -o yaml | kubectl apply -f -
+```
+
+#### Automated update using a password update job
+
+The Bitnami MongoDB provides a password update job that will automatically change the MongoDB passwords when running helm upgrade. To enable the job set `passwordUpdateJob.enabled=true`. This job requires:
+
+- The new passwords: this is configured using either `auth.rootPassword`, `auth.passwords` and `metrics.passwords` (if applicable) or setting `auth.existingSecret`.
+- The previous root password: This value is taken automatically from already deployed secret object. If you are using `auth.existingSecret` or `helm template` instead of `helm upgrade`, then set either `passwordUpdateJob.previousPasswords.rootPassword` or  setting `passwordUpdateJob.previousPasswords.existingSecret`.
+
+In the following example we update only the root password via values.yaml in a MongoDB installation:
+
+```yaml
+auth:
+  rootPassword: "newRootPassword123"
+passwordUpdateJob:
+  enabled: true
+```
+
+In the following example we update the password via values.yaml in a MongoDB installation with replication and several usernames and databases (including metrics).
+
+```yaml
+architecture: "replicaset"
+
+auth:
+  usernames:
+    - "user1"
+    - "user2"
+  rootPassword: "newRootPassword123"
+  passwords:
+    - "newUserPassword123"
+    - "newUserPassword144"
+  databases:
+    - "userdatabase"
+    - "userdatabase2"
+
+metrics:
+  username: "metricsuser"
+  password: "newMetricsPassword"
+
+passwordUpdateJob:
+  enabled: true
+```
+
+In this example we use two existing secrets (`new-password-secret` and `previous-password-secret`) to update several users and passwords (including metrics):
+
+```yaml
+auth:
+  usernames:
+    - "user1"
+    - "user2"
+  databases:
+    - "userdatabase"
+    - "userdatabase2"
+  existingSecret: new-password-secret
+
+metrics:
+  username: "metricsuser"
+
+passwordUpdateJob:
+  enabled: true
+  previousPasswords:
+    existingSecret: previous-password-secret
+```
+
+You can add extra update commands using the `passwordUpdateJob.extraCommands` value.
+
+### Backup and restore
 
 Two different approaches are available to back up and restore Bitnami MongoDB&reg; Helm chart deployments on Kubernetes:
 
@@ -318,7 +426,7 @@ This method involves the following steps:
 - Use Velero to restore the backed-up PVs on the destination cluster.
 - Create a new deployment on the destination cluster with the same chart, deployment name, credentials and other parameters as the original. This new deployment will use the restored PVs and hence the original data.
 
-Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://docs.vmware.com/en/VMware-Tanzu-Application-Catalog/services/tutorials/GUID-backup-restore-data-mongodb-kubernetes-index.html), which covers both these approaches, for more information.
+Refer to our detailed [tutorial on backing up and restoring MongoDB&reg; chart deployments on Kubernetes](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-data-mongodb-kubernetes-index.html), which covers both these approaches, for more information.
 
 ### Use custom Prometheus rules
 
@@ -341,7 +449,7 @@ Custom Prometheus rules can be defined for the Prometheus Operator by using the 
               summary: High request latency
 ```
 
-### Enable SSL/TLS
+### Securing traffic using TLS
 
 This chart supports enabling SSL/TLS between nodes in the cluster, as well as between MongoDB(&reg;) clients and nodes, by setting the `MONGODB_EXTRA_FLAGS` and `MONGODB_CLIENT_EXTRA_FLAGS` container environment variables, together with the correct `MONGODB_ADVERTISED_HOSTNAME`. To enable full TLS encryption, set the `tls.enabled` parameter to `true`.
 
@@ -400,13 +508,15 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.namespaceOverride`                            | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride                                                                                                                                                                                                                                              | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.storageClass`                                 | DEPRECATED: use global.defaultStorageClass instead                                                                                                                                                                                                                                                                                                                  | `""`    |
+| `global.namespaceOverride`                            | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride                                                                                                                                                                                                                                              | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
@@ -423,6 +533,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
 | `enableServiceLinks`      | Whether information about services should be injected into pod's environment variable                     | `true`          |
+| `usePasswordFiles`        | Mount credentials as files instead of using environment variables                                         | `true`          |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -592,6 +703,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                                                                                                                                            | `None`                    |
 | `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                                                                                                                                                 | `{}`                      |
 | `service.headless.annotations`                                | Annotations for the headless service.                                                                                                                                                                                                                                       | `{}`                      |
+| `service.publishNotReadyAddresses`                            | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready                                                                                                                                                    | `false`                   |
 | `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                                                                                                                                                        | `false`                   |
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                                                                                                                                                          | `false`                   |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                                                                                                                                                | `REGISTRY_NAME`           |
@@ -643,6 +755,49 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                                                                                                                                            | `None`                    |
 | `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                                                                                                                                                 | `{}`                      |
 
+### Password update job
+
+| Name                                                                  | Description                                                                                                                                                                                                                                           | Value            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `passwordUpdateJob.enabled`                                           | Enable password update job                                                                                                                                                                                                                            | `false`          |
+| `passwordUpdateJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                                                                                                                          | `10`             |
+| `passwordUpdateJob.command`                                           | Override default container command on mysql Primary container(s) (useful when using custom images)                                                                                                                                                    | `[]`             |
+| `passwordUpdateJob.args`                                              | Override default container args on mysql Primary container(s) (useful when using custom images)                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                                                                                                                          | `""`             |
+| `passwordUpdateJob.previousPasswords.rootPassword`                    | Previous root password (set if the password secret was already changed)                                                                                                                                                                               | `""`             |
+| `passwordUpdateJob.previousPasswords.existingSecret`                  | Name of a secret containing the previous passwords (set if the password secret was already changed)                                                                                                                                                   | `""`             |
+| `passwordUpdateJob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                                                                  | `true`           |
+| `passwordUpdateJob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                                                      | `{}`             |
+| `passwordUpdateJob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                                                            | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                                           | `1001`           |
+| `passwordUpdateJob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                                                         | `true`           |
+| `passwordUpdateJob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                                                           | `false`          |
+| `passwordUpdateJob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                                                               | `true`           |
+| `passwordUpdateJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                                                             | `false`          |
+| `passwordUpdateJob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                                                    | `["ALL"]`        |
+| `passwordUpdateJob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                                      | `RuntimeDefault` |
+| `passwordUpdateJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                                                                                                                    | `true`           |
+| `passwordUpdateJob.podSecurityContext.fsGroupChangePolicy`            | Set filesystem group change policy                                                                                                                                                                                                                    | `Always`         |
+| `passwordUpdateJob.podSecurityContext.sysctls`                        | Set kernel settings using the sysctl interface                                                                                                                                                                                                        | `[]`             |
+| `passwordUpdateJob.podSecurityContext.supplementalGroups`             | Set filesystem extra groups                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                                                                                                                                | `1001`           |
+| `passwordUpdateJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                                                                                                                  | `[]`             |
+| `passwordUpdateJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                                                                                                                              | `""`             |
+| `passwordUpdateJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                                                                                                                     | `""`             |
+| `passwordUpdateJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                                                                                                                       | `[]`             |
+| `passwordUpdateJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                                                                                                                             | `[]`             |
+| `passwordUpdateJob.initContainers`                                    | Add additional init containers for the mysql Primary pod(s)                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if passwordUpdateJob.resources is set (passwordUpdateJob.resources is recommended for production). | `micro`          |
+| `passwordUpdateJob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                                                     | `{}`             |
+| `passwordUpdateJob.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                                                                                                                                                   | `{}`             |
+| `passwordUpdateJob.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                                                                                                                                                  | `{}`             |
+| `passwordUpdateJob.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                                                                                                                                                    | `{}`             |
+| `passwordUpdateJob.automountServiceAccountToken`                      | Mount Service Account token in pod                                                                                                                                                                                                                    | `false`          |
+| `passwordUpdateJob.hostAliases`                                       | Add deployment host aliases                                                                                                                                                                                                                           | `[]`             |
+| `passwordUpdateJob.annotations`                                       | Add annotations to the job                                                                                                                                                                                                                            | `{}`             |
+| `passwordUpdateJob.podLabels`                                         | Additional pod labels                                                                                                                                                                                                                                 | `{}`             |
+| `passwordUpdateJob.podAnnotations`                                    | Additional pod annotations                                                                                                                                                                                                                            | `{}`             |
+
 ### Network policy parameters
 
 | Name                                               | Description                                                                                                                           | Value               |
@@ -677,39 +832,43 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 
 ### Backup parameters
 
-| Name                                                               | Description                                                                                                                           | Value               |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`             |
-| `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`            |
-| `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                           | `Allow`             |
-| `backup.cronjob.failedJobsHistoryLimit`                            | Set the cronjob parameter failedJobsHistoryLimit                                                                                      | `1`                 |
-| `backup.cronjob.successfulJobsHistoryLimit`                        | Set the cronjob parameter successfulJobsHistoryLimit                                                                                  | `3`                 |
-| `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                     | `""`                |
-| `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
-| `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
-| `backup.cronjob.backoffLimit`                                      | Set the cronjob parameter backoffLimit                                                                                                | `6`                 |
-| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                  | `true`              |
-| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                      | `{}`                |
-| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                            | `1001`              |
-| `backup.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                           | `1001`              |
-| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                         | `true`              |
-| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                           | `false`             |
-| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                               | `true`              |
-| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                             | `false`             |
-| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                    | `["ALL"]`           |
-| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                      | `RuntimeDefault`    |
-| `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                 | `[]`                |
-| `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                |
-| `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                |
-| `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
-| `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
-| `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                          | `""`                |
-| `backup.cronjob.storage.accessModes`                               | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
-| `backup.cronjob.storage.size`                                      | PVC Storage Request for the backup data volume                                                                                        | `8Gi`               |
-| `backup.cronjob.storage.annotations`                               | PVC annotations                                                                                                                       | `{}`                |
-| `backup.cronjob.storage.mountPath`                                 | Path to mount the volume at                                                                                                           | `/backup/mongodb`   |
-| `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                |
-| `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
+| Name                                                               | Description                                                                                                                                                                                                       | Value               |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                                                                                               | `false`             |
+| `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                                                                                                | `@daily`            |
+| `backup.cronjob.timeZone`                                          | Set the cronjob parameter timeZone                                                                                                                                                                                | `""`                |
+| `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                                                                                                       | `Allow`             |
+| `backup.cronjob.failedJobsHistoryLimit`                            | Set the cronjob parameter failedJobsHistoryLimit                                                                                                                                                                  | `1`                 |
+| `backup.cronjob.successfulJobsHistoryLimit`                        | Set the cronjob parameter successfulJobsHistoryLimit                                                                                                                                                              | `3`                 |
+| `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                                                                                                 | `""`                |
+| `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                                                                                                 | `""`                |
+| `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                                                                                                           | `OnFailure`         |
+| `backup.cronjob.backoffLimit`                                      | Set the cronjob parameter backoffLimit                                                                                                                                                                            | `6`                 |
+| `backup.cronjob.serviceAccount.name`                               | Set the cronjob parameter serviceAccountName. If you change from the default values make sure that the SA already exists.                                                                                         | `default`           |
+| `backup.cronjob.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                                                                                                              | `true`              |
+| `backup.cronjob.containerSecurityContext.seLinuxOptions`           | Set SELinux options in container                                                                                                                                                                                  | `{}`                |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                                                                                                                        | `1001`              |
+| `backup.cronjob.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                       | `1001`              |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                                                                                                                     | `true`              |
+| `backup.cronjob.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                                                                                                                       | `false`             |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                                                                                                           | `true`              |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                                                                                                         | `false`             |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                                                                                                | `["ALL"]`           |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                  | `RuntimeDefault`    |
+| `backup.cronjob.resourcesPreset`                                   | Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production). | `none`              |
+| `backup.cronjob.resources`                                         | Set container requests and limits for different resources like CPU or memory (essential for production workloads)                                                                                                 | `{}`                |
+| `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                                                                                             | `[]`                |
+| `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                                                                                            | `{}`                |
+| `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                                                                                                       | `{}`                |
+| `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                                                                                                 | `""`                |
+| `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted                                                                             | `""`                |
+| `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                                                                                                      | `""`                |
+| `backup.cronjob.storage.accessModes`                               | PV Access Mode                                                                                                                                                                                                    | `["ReadWriteOnce"]` |
+| `backup.cronjob.storage.size`                                      | PVC Storage Request for the backup data volume                                                                                                                                                                    | `8Gi`               |
+| `backup.cronjob.storage.annotations`                               | PVC annotations                                                                                                                                                                                                   | `{}`                |
+| `backup.cronjob.storage.mountPath`                                 | Path to mount the volume at                                                                                                                                                                                       | `/backup/mongodb`   |
+| `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                                                                                            | `""`                |
+| `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                                                                                                | `{}`                |
 
 ### RBAC parameters
 
@@ -921,6 +1080,7 @@ If you encounter errors when working with persistent volumes, refer to our [trou
 | `hidden.persistence.volumeClaimTemplates.selector`         | A label query over volumes to consider for binding (e.g. when using local volumes)                                                                                                                                              | `{}`                |
 | `hidden.persistence.volumeClaimTemplates.requests`         | Custom PVC requests attributes                                                                                                                                                                                                  | `{}`                |
 | `hidden.persistence.volumeClaimTemplates.dataSource`       | Set volumeClaimTemplate dataSource                                                                                                                                                                                              | `{}`                |
+| `hidden.service.nameOverride`                              | The hidden service name                                                                                                                                                                                                         | `""`                |
 | `hidden.service.portName`                                  | MongoDB(&reg;) service port name                                                                                                                                                                                                | `mongodb`           |
 | `hidden.service.ports.mongodb`                             | MongoDB(&reg;) service port                                                                                                                                                                                                     | `27017`             |
 | `hidden.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                                                                                                                                                  | `[]`                |
@@ -1026,6 +1186,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 16.4.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
 If authentication is enabled, it's necessary to set the `auth.rootPassword` (also `auth.replicaSetKey` when using a replicaset architecture) when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
@@ -1034,6 +1198,10 @@ helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mongodb --set auth.r
 
 > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
+
+### To 16.0.0
+
+To upgrade to MongoDB `8.0` from a `7.0` deployment, the `7.0` deployment must have `featureCompatibilityVersion` set to `7.0`. Please refer to the [official documentation](https://www.mongodb.com/docs/manual/release-notes/8.0/#upgrade-procedures).
 
 ### To 15.0.0
 
@@ -1159,7 +1327,7 @@ extraDeploy:
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 <!--- app-name: MLflow -->
 
-# Bitnami package for MLflow
+# Bitnami Secure Images Helm chart for MLflow
 
 MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It allows you to track experiments, package code into reproducible runs, and share and deploy models.
 
@@ -14,15 +14,28 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 helm install my-release oci://registry-1.docker.io/bitnamicharts/mlflow
 ```
 
-Looking to use MLflow in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the commercial edition of the Bitnami catalog.
+## Why use Bitnami Secure Images?
+
+Those are hardened, minimal CVE images built and maintained by Bitnami. Bitnami Secure Images are based on the cloud-optimized, security-hardened enterprise [OS Photon Linux](https://vmware.github.io/photon/). Why choose BSI images?
+
+- Hardened secure images of popular open source software with Near-Zero Vulnerabilities
+- Vulnerability Triage & Prioritization with VEX Statements, KEV and EPSS Scores
+- Compliance focus with FIPS, STIG, and air-gap options, including secure bill of materials (SBOM)
+- Software supply chain provenance attestation through in-toto
+- First class support for the internet’s favorite Helm charts
+
+Each image comes with valuable security metadata. You can view the metadata in [our public catalog here](https://app-catalog.vmware.com/bitnami/apps). Note: Some data is only available with [commercial subscriptions to BSI](https://bitnami.com/).
+
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%201.png?raw=true "Application details")
+![Alt text](https://github.com/bitnami/containers/blob/main/BSI%20UI%202.png?raw=true "Packaging report")
+
+If you are looking for our previous generation of images based on Debian Linux, please see the [Bitnami Legacy registry](https://hub.docker.com/u/bitnamilegacy).
 
 ## Introduction
 
 This chart bootstraps a [MLflow](https://github.com/bitnami/containers/tree/main/bitnami/mlflow) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Python is built for full integration into Python that enables you to use it with its libraries and main packages.
-
-Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -45,22 +58,61 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 > **Tip**: List all releases using `helm list`
 
+## Configuration and installation details
+
+### Resource requests and limits
+
+Bitnami charts allow setting resource requests and limits for all containers inside the chart deployment. These are inside the `resources` value (check parameter table). Setting requests is essential for production workloads and these should be adapted to your specific use case.
+
+To make this process easier, the chart contains the `resourcesPreset` values, which automatically sets the `resources` section according to different presets. Check these presets in [the bitnami/common chart](https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15). However, in production workloads using `resourcesPreset` is discouraged as it may not fully adapt to your specific needs. Find more information on container resource management in the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
+### Prometheus metrics
+
+This chart can be integrated with Prometheus by setting `tracking.metrics.enabled` to `true`. This will expose MLFlow native Prometheus endpoint in the service. It will have the necessary annotations to be automatically scraped by Prometheus.
+
+#### Prometheus requirements
+
+It is necessary to have a working installation of Prometheus or Prometheus Operator for the integration to work. Install the [Bitnami Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/prometheus) or the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) to easily have a working Prometheus in your cluster.
+
+#### Integration with Prometheus Operator
+
+The chart can deploy `ServiceMonitor` objects for integration with Prometheus Operator installations. To do so, set the value `tracking.metrics.serviceMonitor.enabled=true`. Ensure that the Prometheus Operator `CustomResourceDefinitions` are installed in the cluster or it will fail with the following error:
+
+```text
+no matches for kind "ServiceMonitor" in version "monitoring.coreos.com/v1"
+```
+
+Install the [Bitnami Kube Prometheus helm chart](https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus) for having the necessary CRDs and the Prometheus Operator.
+
+### Securing traffic using TLS
+
+MLflow can encrypt communications by setting `tracking.tls.enabled=true`. The chart allows two configuration options:
+
+- Provide your own secret using the `tracking.tls.certificatesSecret` value. Also set the correct name of the certificate files using the `tracking.tls.certFilename`, `tracking.tls.certKeyFilename` and ``tracking.tls.certCAFilename`` values.
+- Have the chart auto-generate the certificates using `tracking.tls.autoGenerated=true`.
+
+### Backup and restore
+
+To back up and restore Helm chart deployments on Kubernetes, you need to back up the persistent volumes from the source deployment and attach them to a new deployment using [Velero](https://velero.io/), a Kubernetes backup/restore tool. Find the instructions for using Velero in [this guide](https://techdocs.broadcom.com/us/en/vmware-tanzu/application-catalog/tanzu-application-catalog/services/tac-doc/apps-tutorials-backup-restore-deployments-velero-index.html).
+
 ## Parameters
 
 ### Global parameters
 
-| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`   |
-| `global.storageClass`                                 | Global StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                        | `""`   |
-| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto` |
+| Name                                                  | Description                                                                                                                                                                                                                                                                                                                                                         | Value   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `global.imageRegistry`                                | Global Docker image registry                                                                                                                                                                                                                                                                                                                                        | `""`    |
+| `global.imagePullSecrets`                             | Global Docker registry secret names as an array                                                                                                                                                                                                                                                                                                                     | `[]`    |
+| `global.defaultStorageClass`                          | Global default StorageClass for Persistent Volume(s)                                                                                                                                                                                                                                                                                                                | `""`    |
+| `global.security.allowInsecureImages`                 | Allows skipping image verification                                                                                                                                                                                                                                                                                                                                  | `false` |
+| `global.compatibility.openshift.adaptSecurityContext` | Adapt the securityContext sections of the deployment to make them compatible with Openshift restricted-v2 SCC: remove runAsUser, runAsGroup and fsGroup and let the platform use their allowed default IDs. Possible values: auto (apply if the detected running cluster is Openshift), force (perform the adaptation always), disabled (do not perform adaptation) | `auto`  |
 
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
 | ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
 | `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
+| `apiVersions`            | Override Kubernetes API versions reported by .Capabilities                              | `[]`            |
 | `nameOverride`           | String to partially override common.names.name                                          | `""`            |
 | `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
 | `namespaceOverride`      | String to fully override common.names.namespace                                         | `""`            |
@@ -94,6 +146,7 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `tracking.enabled`                                           | Enable Tracking server                                                                                                                                                                                                              | `true`           |
 | `tracking.replicaCount`                                      | Number of mlflow replicas to deploy                                                                                                                                                                                                 | `1`              |
+| `tracking.host`                                              | mlflow tracking listening host. Set to "[::]" to use ipv6.                                                                                                                                                                          | `0.0.0.0`        |
 | `tracking.containerPorts.http`                               | mlflow HTTP container port                                                                                                                                                                                                          | `5000`           |
 | `tracking.livenessProbe.enabled`                             | Enable livenessProbe on mlflow containers                                                                                                                                                                                           | `true`           |
 | `tracking.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                                                             | `5`              |
@@ -129,16 +182,18 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `tracking.containerSecurityContext.runAsGroup`               | Set containers' Security Context runAsGroup                                                                                                                                                                                         | `1001`           |
 | `tracking.containerSecurityContext.privileged`               | Set containers' Security Context privileged                                                                                                                                                                                         | `false`          |
 | `tracking.containerSecurityContext.runAsNonRoot`             | Set containers' Security Context runAsNonRoot                                                                                                                                                                                       | `true`           |
-| `tracking.containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context runAsNonRoot                                                                                                                                                                                       | `true`           |
+| `tracking.containerSecurityContext.readOnlyRootFilesystem`   | Set containers' Security Context readOnlyRootFilesystem                                                                                                                                                                             | `true`           |
 | `tracking.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                                                                                                | `false`          |
 | `tracking.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                                                                                                       | `["ALL"]`        |
 | `tracking.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                                                                                                                    | `RuntimeDefault` |
 | `tracking.auth.enabled`                                      | Enable basic authentication                                                                                                                                                                                                         | `true`           |
 | `tracking.auth.username`                                     | Admin username                                                                                                                                                                                                                      | `user`           |
 | `tracking.auth.password`                                     | Admin password                                                                                                                                                                                                                      | `""`             |
+| `tracking.auth.flaskServerSecretKey`                         | Flask server secret key (required for enabling CSRF protection)                                                                                                                                                                     | `""`             |
 | `tracking.auth.existingSecret`                               | Name of a secret containing the admin password                                                                                                                                                                                      | `""`             |
 | `tracking.auth.existingSecretUserKey`                        | Key inside the secret containing the admin password                                                                                                                                                                                 | `""`             |
 | `tracking.auth.existingSecretPasswordKey`                    | Key inside the secret containing the admin password                                                                                                                                                                                 | `""`             |
+| `tracking.auth.existingSecretFlaskServerSecretKey`           | Key inside the secret containing the flask server secret key                                                                                                                                                                        | `""`             |
 | `tracking.auth.extraOverrides`                               | Add extra settings to the basic_auth.ini file                                                                                                                                                                                       | `{}`             |
 | `tracking.auth.overridesConfigMap`                           | Name of a ConfigMap containing overrides to the basic_auth.ini file                                                                                                                                                                 | `""`             |
 | `tracking.tls.enabled`                                       | Enable TLS traffic support                                                                                                                                                                                                          | `false`          |
@@ -223,6 +278,13 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `tracking.ingress.extraTls`                      | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `tracking.ingress.secrets`                       | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `tracking.ingress.extraRules`                    | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| `tracking.httproute.enabled`                     | Enable Gateway API HTTPRoute record generation for mlflow tracking                                                               | `false`                  |
+| `tracking.httproute.hostname`                    | Default hostname for the HTTPRoute                                                                                               | `mlflow.local`           |
+| `tracking.httproute.path`                        | Default path for the HTTPRoute                                                                                                   | `/`                      |
+| `tracking.httproute.annotations`                 | Additional annotations for the HTTPRoute resource                                                                                | `{}`                     |
+| `tracking.httproute.parentRefs`                  | List of Gateway parentRefs the HTTPRoute should attach to                                                                        | `[]`                     |
+| `tracking.httproute.extraHostnames`              | An array with additional hostnames to be covered with the HTTPRoute                                                              | `[]`                     |
+| `tracking.httproute.extraRules`                  | Additional rules to be added to the HTTPRoute                                                                                    | `[]`                     |
 | `tracking.networkPolicy.enabled`                 | Enable creation of NetworkPolicy resources                                                                                       | `true`                   |
 | `tracking.networkPolicy.allowExternal`           | The Policy model to apply                                                                                                        | `true`                   |
 | `tracking.networkPolicy.allowExternalEgress`     | Allow the pod to access any range of port and all destinations.                                                                  | `true`                   |
@@ -233,19 +295,21 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 
 ### MLflow Tracking Persistence Parameters
 
-| Name                                 | Description                                                                                             | Value               |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `tracking.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
-| `tracking.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/mlflow`   |
-| `tracking.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
-| `tracking.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
-| `tracking.persistence.labels`        | Persistent Volume labels                                                                                | `{}`                |
-| `tracking.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
-| `tracking.persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
-| `tracking.persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
-| `tracking.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
-| `tracking.persistence.selector`      | Selector to match an existing Persistent Volume for MLflow data PVC                                     | `{}`                |
-| `tracking.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
+| Name                                               | Description                                                                                             | Value               |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
+| `tracking.persistence.enabled`                     | Enable persistence using Persistent Volume Claims                                                       | `true`              |
+| `tracking.persistence.mountPath`                   | Path to mount the volume at.                                                                            | `/bitnami/mlflow`   |
+| `tracking.persistence.subPath`                     | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
+| `tracking.persistence.storageClass`                | Storage class of backing PVC                                                                            | `""`                |
+| `tracking.persistence.labels`                      | Persistent Volume labels                                                                                | `{}`                |
+| `tracking.persistence.annotations`                 | Persistent Volume Claim annotations                                                                     | `{}`                |
+| `tracking.persistence.accessModes`                 | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
+| `tracking.persistence.size`                        | Size of data volume                                                                                     | `8Gi`               |
+| `tracking.persistence.existingClaim`               | The name of an existing PVC to use for persistence                                                      | `""`                |
+| `tracking.persistence.selector`                    | Selector to match an existing Persistent Volume for MLflow data PVC                                     | `{}`                |
+| `tracking.persistence.dataSource`                  | Custom PVC data source                                                                                  | `{}`                |
+| `tracking.tmpVolume.ephemeral.enabled`             | Use a generic ephemeral volume for `/tmp` instead of `emptyDir`                                         | `false`             |
+| `tracking.tmpVolume.ephemeral.volumeClaimTemplate` | Custom `volumeClaimTemplate` for the ephemeral volume (YAML map)                                        | `{}`                |
 
 ### MLflow Tracking Other Parameters
 
@@ -442,22 +506,52 @@ The command deploys mlflow on the Kubernetes cluster in the default configuratio
 | `minio.service.type`               | MinIO&reg; service type                                                                                                           | `ClusterIP`                                         |
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                |
+| `minio.console.enabled`            | Enable MinIO&reg; Console                                                                                                         | `false`                                             |
 
 ### External S3 parameters
 
-| Name                                      | Description                                                        | Value           |
-| ----------------------------------------- | ------------------------------------------------------------------ | --------------- |
-| `externalS3.host`                         | External S3 host                                                   | `""`            |
-| `externalS3.port`                         | External S3 port number                                            | `443`           |
-| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                | `true`          |
-| `externalS3.accessKeyID`                  | External S3 access key ID                                          | `""`            |
-| `externalS3.accessKeySecret`              | External S3 access key secret                                      | `""`            |
-| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials  | `""`            |
-| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID     | `root-user`     |
-| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret | `root-password` |
-| `externalS3.protocol`                     | External S3 protocol                                               | `https`         |
-| `externalS3.bucket`                       | External S3 bucket                                                 | `mlflow`        |
-| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                | `true`          |
+| Name                                      | Description                                                                                                                                                                 | Value           |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `externalS3.host`                         | External S3 host. When using AWS S3, include appropriate [regional code](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_region), e.g. "eu-central-1.amazonaws.com | `""`            |
+| `externalS3.port`                         | External S3 port number                                                                                                                                                     | `443`           |
+| `externalS3.useCredentialsInSecret`       | Whether to use a secret to store the S3 credentials                                                                                                                         | `true`          |
+| `externalS3.accessKeyID`                  | External S3 access key ID                                                                                                                                                   | `""`            |
+| `externalS3.accessKeySecret`              | External S3 access key secret                                                                                                                                               | `""`            |
+| `externalS3.existingSecret`               | Name of an existing secret resource containing the S3 credentials                                                                                                           | `""`            |
+| `externalS3.existingSecretAccessKeyIDKey` | Name of an existing secret key containing the S3 access key ID                                                                                                              | `root-user`     |
+| `externalS3.existingSecretKeySecretKey`   | Name of an existing secret key containing the S3 access key secret                                                                                                          | `root-password` |
+| `externalS3.protocol`                     | External S3 protocol                                                                                                                                                        | `https`         |
+| `externalS3.bucket`                       | External S3 bucket                                                                                                                                                          | `mlflow`        |
+| `externalS3.serveArtifacts`               | Whether artifact serving is enabled                                                                                                                                         | `true`          |
+
+### External Google Cloud Storage parameters
+
+| Name                                 | Description                                                                                                               | Value   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `externalGCS.bucket`                 | GCS bucket name. Activate gcs artifact storage if set                                                                     | `""`    |
+| `externalGCS.googleCloudProject`     | Google Cloud Project to use (optional, needed when using "default application credentials")                               | `""`    |
+| `externalGCS.useCredentialsInSecret` | Whether to read the GCS application credentials from a secret                                                             | `false` |
+| `externalGCS.existingSecret`         | Name of an existing secret key containing the application credentials file (required when useCredentialsInSecret is true) | `""`    |
+| `externalGCS.existingSecretKey`      | Key in the existing secret containing the application credentials (required when useCredentialsInSecret is true)          | `""`    |
+| `externalGCS.serveArtifacts`         | Whether artifact serving is enabled                                                                                       | `true`  |
+
+### External Azure Blob Storage parameters
+
+| Name                                            | Description                                                                                                                   | Value    |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `externalAzureBlob.storageAccount`              | Azure Blob Storage account name. Activate azure artifact storage if set,                                                      | `""`     |
+| `externalAzureBlob.accessKey`                   | Azure Blob Storage access key. Optional if connectionString is set                                                            | `""`     |
+| `externalAzureBlob.connectionString`            | Azure Blob Storage connection string. Optional if accessKey is set.                                                           | `""`     |
+| `externalAzureBlob.containerName`               | Azure Blob Storage container name                                                                                             | `mlflow` |
+| `externalAzureBlob.clientId`                    | Azure Blob Storage client ID                                                                                                  | `""`     |
+| `externalAzureBlob.tenantId`                    | Azure Blob Storage tenant ID                                                                                                  | `""`     |
+| `externalAzureBlob.clientSecret`                | Azure Blob Storage client secret                                                                                              | `""`     |
+| `externalAzureBlob.useCredentialsInSecret`      | Whether to read the Azure Blob Storage credentials from a secret                                                              | `false`  |
+| `externalAzureBlob.existingSecret`              | Name of an existing secret key containing the Azure Blob Storage credentials (required when useCredentialsInSecret is true)   | `""`     |
+| `externalAzureBlob.existingAccessKeyKey`        | Key in the existing secret containing the Azure Blob Storage access key (required when useCredentialsInSecret is true)        | `""`     |
+| `externalAzureBlob.existingConnectionStringKey` | Key in the existing secret containing the Azure Blob Storage connection string (required when useCredentialsInSecret is true) | `""`     |
+| `externalAzureBlob.clientSecretKey`             | Key in the existing secret containing the Azure Blob Storage client secret (required when useCredentialsInSecret is true)     | `""`     |
+| `externalAzureBlob.serveArtifacts`              | Whether artifact serving is enabled                                                                                           | `true`   |
 
 The MLflow chart supports three different ways to load your files in the `run` deployment. In order of priority, they are:
 
@@ -485,6 +579,22 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the `minio` subchart to its newest major, 17.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1700).
+
+### To 3.0.0
+
+This major updates the `minio` subchart to its newest major, 16.0.0. For more information on this subchart's major, please refer to [minio upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/minio#to-1600).
+
+### To 2.3.0
+
+This version introduces image verification for security purposes. To disable it, set `global.security.allowInsecureImages` to `true`. More details at [GitHub issue](https://github.com/bitnami/charts/issues/30850).
+
+### To 2.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 16.0.0, which uses PostgreSQL 17.x.  Follow the [official instructions](https://www.postgresql.org/docs/17/upgrading.html) to upgrade to 17.x.
+
 ### To 1.0.0
 
 This major bump changes the following security defaults:
@@ -496,7 +606,7 @@ This could potentially break any customization or init scripts used in your depl
 
 ## License
 
-Copyright &copy; 2024 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+Copyright &copy; 2025 Broadcom. The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
